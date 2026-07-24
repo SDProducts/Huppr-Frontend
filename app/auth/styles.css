@@ -1,0 +1,94 @@
+@reference "../globals.css";
+
+.layout {
+    @apply grid md:grid-cols-2 overflow-clip;
+
+    grid-template-columns:
+        [full-start info-start] 1fr
+        [info-end form-start] 1fr
+        [form-end full-end];
+
+    & > aside {
+        @apply grid place-content-center gap-4 grow max-h-[100dvh] text-white text-center *:mx-auto z-50;
+
+        background-image: linear-gradient(
+            180deg,
+            var(--primary) 0%,
+            var(--primary-badge) 35%,
+            #7c6cf8 75%,
+            var(--accent-brand) 100%
+        );
+
+        transform-origin: center;
+        will-change: transform, opacity;
+        animation: resize 2s linear forwards;
+
+        grid-area: info;
+
+        > .info {
+            @apply grid place-content-center gap-4 grow max-h-[100dvh] text-white text-center *:mx-auto;
+
+            transform-origin: center;
+            will-change: transform, opacity;
+            animation: appear 2.5s linear forwards;
+            animation-delay: 3s;
+
+            opacity: 0;
+            width: 0;
+            height: 0;
+            margin-block-start: 75%;
+        }
+
+        .logo {
+            transform-origin: center;
+            animation: shrink 2s linear forwards;
+            /*animation-delay: 2s;*/
+        }
+
+        p {
+            @apply font-light tracking-widest w-[42ch];
+        }
+    }
+
+    & > .content {
+        grid-area: form;
+
+        @apply min-h-dvh grid place-content-center overflow-y-auto min-h-svh bg-white;
+    }
+}
+
+@keyframes resize {
+    from {
+        grid-area: full;
+    }
+
+    to {
+        grid-area: info;
+    }
+}
+
+@keyframes shrink {
+    from {
+        height: 5rem;
+    }
+
+    to {
+        height: 1.75rem;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        margin-block-start: 75%;
+    }
+
+    to {
+        opacity: 1;
+        width: auto;
+        height: auto;
+        margin-block-start: 0;
+    }
+}

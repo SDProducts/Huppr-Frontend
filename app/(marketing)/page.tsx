@@ -1,26 +1,30 @@
 // app/page.js
-import Hero from '@/components/Hero';
-import Stats from '@/components/Stats';
-import ApplicantsOverview from '@/components/ApplicantsOverview';
-import Features from '@/components/Features';
-import JobListings from '@/components/JobListings';
-import Pricing from '@/components/Pricing';
-import Testimonials from '@/components/Testimonials';
-import FAQ from '@/components/FAQ';
-import CTA from '@/components/CTA';
+
+import ApplicantsOverview from "./_components/ApplicantsOverview";
+import CTA from "./_components/CTA";
+import FAQ from "./_components/FAQ";
+import Features from "./_components/Features";
+import Hero from "./_components/Hero";
+import HRManagement from "./_components/HRManagement";
+import DiscoverOpportunities from "./_components/DiscoverOpportunities";
+import Pricing from "./_components/Pricing";
+import RecruitSmarter from "./_components/RecruitSmarter";
+import Stats from "./_components/Stats";
+import Testimonials from "./_components/Testimonials";
 
 export default function Home() {
-    return (
-        <>
-            <Hero />
-            <Stats />
-            <ApplicantsOverview />
-            <Features />
-            <JobListings />
-            <Pricing />
-            <Testimonials />
-            <FAQ />
-            <CTA />
-        </>
-    );
+  return (
+    <>
+      <Hero />
+      <Stats />
+      <RecruitSmarter />
+      <HRManagement />
+      <Features />
+      <DiscoverOpportunities />
+      <Pricing />
+      <Testimonials />
+      <FAQ />
+      <CTA />
+    </>
+  );
 }

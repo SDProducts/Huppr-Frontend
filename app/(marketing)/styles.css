@@ -1,0 +1,106 @@
+@reference "../globals.css";
+
+.page-layout {
+    @apply grid min-h-dvh;
+    grid-template-columns:
+        [full-start] 1fr
+        [bleed-start] 1fr
+        [body-start] minmax(0, 1600px)
+        [body-end] 1fr
+        [bleed-end] 1fr
+        [full-end];
+
+    grid-template-rows:
+        [header-start] auto
+        [header-end body-start] 1fr
+        [body-end footer-start] auto
+        [footer-end];
+
+    > header {
+        grid-row: header;
+        @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100;
+    }
+
+    > main {
+        grid-row: body;
+    }
+
+    > footer {
+        grid-row: footer;
+        @apply bg-gray-900 text-gray-300;
+    }
+
+    .full-start {
+        grid-column-start: full-start;
+    }
+    .full-end {
+        grid-column-end: full-end;
+    }
+    .bleed {
+        grid-column: bleed;
+    }
+    .bleed-start {
+        grid-column-start: bleed-start;
+    }
+    .bleed-end {
+        grid-column-end: bleed-end;
+    }
+    .full-bleed {
+        grid-column: full-start / bleed-end;
+    }
+    .full-bleed-start {
+        grid-column-start: bleed-start;
+        grid-column-end: full-end;
+    }
+    .full-bleed-end {
+        grid-column-end: bleed-end;
+        grid-column-start: full-start;
+    }
+
+    .body-start {
+        grid-column-start: body-start;
+    }
+
+    .body-end {
+        grid-column-end: body-end;
+    }
+
+    .body {
+        grid-column: body;
+    }
+
+    [class^="layout-"],
+    .full,
+    section {
+        @apply overflow-x-clip;
+        grid-column: full;
+    }
+
+    [class^="layout-"],
+    section,
+    .full-bleed,
+    .full,
+    .full-start,
+    .full-end,
+    .full-bleed-start,
+    .full-bleed-end,
+    .bleed,
+    .bleed-start,
+    .bleed-end {
+        @apply grid grid-cols-subgrid;
+        > *:not(
+                section,
+                .full-bleed,
+                .full,
+                .full-start,
+                .full-end,
+                .full-bleed-start,
+                .full-bleed-end,
+                .bleed,
+                .bleed-start,
+                .bleed-end
+            ) {
+            grid-column: body;
+        }
+    }
+}
