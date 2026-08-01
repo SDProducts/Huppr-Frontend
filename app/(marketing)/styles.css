@@ -2,12 +2,14 @@
 
 .page-layout {
     @apply grid min-h-dvh;
+    --page_width: min(95dvw - 2rem, 1600px);
+    --bleed_width: calc((95dvw - var(--page_width)) / 4);
     grid-template-columns:
-        [full-start] 1fr
-        [bleed-start] 1fr
-        [body-start] minmax(0, 1600px)
-        [body-end] 1fr
-        [bleed-end] 1fr
+        [full-start] minmax(var(--bleed_width), 4rem)
+        [bleed-start] minmax(var(--bleed_width), 1fr)
+        [body-start] var(--page_width)
+        [body-end] minmax(var(--bleed_width), 1fr)
+        [bleed-end] minmax(var(--bleed_width), 4rem)
         [full-end];
 
     grid-template-rows:
@@ -27,7 +29,12 @@
 
     > footer {
         grid-row: footer;
-        @apply bg-gray-900 text-gray-300;
+        &.layout-footer {
+            @apply bg-gray-900 text-light;
+        }
+        &:not(.layout-footer) {
+            @apply hidden;
+        }
     }
 
     .full-start {

@@ -22,25 +22,25 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition"
             >
               Home
             </Link>
             <Link
               href="/jobs"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition"
             >
               Jobs
             </Link>
             <Link
               href="pricing"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition"
             >
               Pricing
             </Link>
             <Link
               href="resources"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition"
             >
               Resources
             </Link>
@@ -75,25 +75,25 @@ export default function Header() {
           <div className="flex flex-col gap-3">
             <Link
               href="/"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition px-3 py-2 rounded-lg hover:bg-gray-50"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition px-3 py-2 rounded-lg hover:bg-gray-50"
             >
               Home
             </Link>
             <Link
               href="/jobs"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition px-3 py-2 rounded-lg hover:bg-gray-50"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition px-3 py-2 rounded-lg hover:bg-gray-50"
             >
               Jobs
             </Link>
             <Link
               href="/pricing"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition px-3 py-2 rounded-lg hover:bg-gray-50"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition px-3 py-2 rounded-lg hover:bg-gray-50"
             >
               Pricing
             </Link>
             <Link
               href="/resources"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition px-3 py-2 rounded-lg hover:bg-gray-50"
+              className="text-sm font-medium text-secondary-brand hover:text-primary/75 active:text-primary transition px-3 py-2 rounded-lg hover:bg-gray-50"
             >
               Resources
             </Link>

@@ -1,7 +1,7 @@
 @reference "../globals.css";
 
 .layout {
-    @apply grid md:grid-cols-2 overflow-clip;
+    @apply grid md:grid-cols-2 relative;
 
     grid-template-columns:
         [full-start info-start] 1fr
@@ -9,7 +9,7 @@
         [form-end full-end];
 
     & > aside {
-        @apply grid place-content-center gap-4 grow max-h-[100dvh] text-white text-center *:mx-auto z-50;
+        @apply grid place-content-center gap-4 grow max-h-[100dvh] sticky top-0 text-white text-center *:mx-auto z-50;
 
         background-image: linear-gradient(
             180deg,
@@ -20,8 +20,7 @@
         );
 
         transform-origin: center;
-        will-change: transform, opacity;
-        animation: resize 2s linear forwards;
+        animation: bg_resize 2s linear forwards;
 
         grid-area: info;
 
@@ -30,8 +29,8 @@
 
             transform-origin: center;
             will-change: transform, opacity;
-            animation: appear 2.5s linear forwards;
-            animation-delay: 3s;
+            animation: info_appear 2.5s linear forwards;
+            animation-delay: 1s;
 
             opacity: 0;
             width: 0;
@@ -41,7 +40,7 @@
 
         .logo {
             transform-origin: center;
-            animation: shrink 2s linear forwards;
+            animation: logo_shrink 2s linear forwards;
             /*animation-delay: 2s;*/
         }
 
@@ -53,11 +52,11 @@
     & > .content {
         grid-area: form;
 
-        @apply min-h-dvh grid place-content-center overflow-y-auto min-h-svh bg-white;
+        @apply min-h-dvh grid place-content-center bg-light;
     }
 }
 
-@keyframes resize {
+@keyframes bg_resize {
     from {
         grid-area: full;
     }
@@ -67,7 +66,7 @@
     }
 }
 
-@keyframes shrink {
+@keyframes logo_shrink {
     from {
         height: 5rem;
     }
@@ -77,7 +76,7 @@
     }
 }
 
-@keyframes appear {
+@keyframes info_appear {
     from {
         opacity: 0;
         width: 0;

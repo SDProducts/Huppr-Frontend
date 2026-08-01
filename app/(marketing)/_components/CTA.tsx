@@ -15,13 +15,13 @@ export default function CTA() {
           Join 3,500+ high-performing teams. No credit card required to start.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
-          <Button size="lg" className="shadow-indigo-200 px-4">
+          <Button size="lg" className="shadow-indigo-200 p-[1.5rem]">
             Get Started for Free
           </Button>
           <Button
             size="lg"
-            variant="secondary"
-            className="px-4 backdrop-blur-sm bg-white/20 text-white hover:bg-white/10"
+            // variant="secondary"
+            className="p-[1.5rem] backdrop-blur-sm bg-white/20 text-white hover:bg-white/10"
           >
             Book a Demo
           </Button>

@@ -2,7 +2,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Users, Building2, Briefcase, TrendingUp } from "lucide-react";
+import {
+  Users,
+  Building2,
+  Briefcase,
+  TrendingUp,
+  UsersRound,
+  Sparkles,
+} from "lucide-react";
+import FeatureCard from "@/components/FeatureCard";
 
 const stats = [
   {
@@ -31,10 +39,44 @@ const stats = [
   // },
 ];
 
-export default function Stats() {
+export default function WhyUpgrade() {
   const [counts, setCounts] = useState(stats.map(() => 0));
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
+  const features = [
+    {
+      icon: (
+        <span className="p-2 bg-light rounded w-fit grid place-content-center">
+          <UsersRound size="1.5rem" className="text-primary-badge" />
+        </span>
+      ),
+      title: (
+        <div className="text-xl text-white">Manage Your Entire Workforce</div>
+      ),
+      description:
+        "Transition from just hiring to managing. Keep all your employee data, leave records, and documents in one secure place.",
+    },
+    {
+      icon: (
+        <span className="p-2 bg-light rounded w-fit grid place-content-center">
+          <Sparkles size="1.5rem" className="text-primary-badge" />
+        </span>
+      ),
+      title: <div className="text-xl text-white">Save Time with AI</div>,
+      description:
+        "Automate repetitive HR tasks with our AI Assistant. Generate job descriptions and get performance insights in seconds.",
+    },
+    {
+      icon: (
+        <span className="p-2 bg-light rounded w-fit grid place-content-center">
+          <TrendingUp size="1.5rem" className="text-primary-badge" />
+        </span>
+      ),
+      title: <div className="text-xl text-white">Scale with Confidence</div>,
+      description:
+        "Gain visibility with advanced reporting and analytics. Make data-driven decisions that help your culture and bottom line grow.",
+    },
+  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -74,18 +116,22 @@ export default function Stats() {
   return (
     <section ref={ref} className="py-16 bg-[#0F172A] border-y border-gray-100">
       <div className="grid gap-[1.5rem] px-4 sm:px-6 lg:px-8  text-white">
-        <h3 className="text-center font-bold text-white ">
-          TRUSTED BY FAST-GROWING COMPANIES
-        </h3>
-        <div className="h-8 bg-dark/25"></div>
+        <div className="grid gap-2 mx-auto">
+          <h2 className="text-4xl text-center font-bold text-white ">
+            Why upgrade to a paid plan?
+          </h2>
+
+          <p className="leading-relaxed max-w-[58ch] mx-auto text-center">
+            Unlock the full power of HeyHR to scale your business effortlessly.
+          </p>
+        </div>
+
         <div className="px-auto grid md:grid-cols-3 gap-8">
-          {stats.map((stat, index) => (
-            <StatsCard
-              value={counts[index].toLocaleString()}
-              key={index}
-              suffix={stat.suffix}
-              label={stat.label}
-              className="text-center bg-white rounded-[2rem] p-[1rem]"
+          {features.map((feat, idx) => (
+            <FeatureCard
+              key={idx}
+              {...feat}
+              className=" bg-current/10 text-white rounded-[2rem] px-[1.5rem] py-[2rem]"
             />
           ))}
         </div>

@@ -1,3 +1,7 @@
 export default function Jobs() {
-  return <>Jobs</>;
+  return (
+    <>
+      <div>Jobs</div>
+    </>
+  );
 }

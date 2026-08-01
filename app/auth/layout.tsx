@@ -16,7 +16,12 @@ export default function AuthLayout({
         </Link>
         <Info />
       </aside>
-      <section className="content">{children}</section>
+      <section className="content">
+        {children}
+        <small className="text-center py-5">
+          © 2026 Hoopr Technologies Inc. All rights reserved.
+        </small>
+      </section>
     </main>
   );
 }

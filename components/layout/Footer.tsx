@@ -1,3 +1,8 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { Icon } from "@iconify/react";
+import { cn } from "@/lib/utils";
 import {
   Mail,
   MapPin,
@@ -22,8 +27,10 @@ const legalLinks = [
 ];
 
 export default function Footer() {
+  // const pathname = usePathname();
+  // const isJobs = pathname === "/jobs" || pathname.startsWith(`/jobs/`);
   return (
-    <footer className="layout-footer text-white">
+    <footer className="layout-footer mt-10">
       <div className="px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         <div className="grid md:grid-cols-5 gap-8">
           {/* Brand */}
@@ -38,15 +45,15 @@ export default function Footer() {
             <div className="flex items-center gap-4 mt-4">
               <a href="#" className="text-gray-400 hover:text-white transition">
                 {/*<Twitter className="w-4 h-4" />*/}
-                Twitter
+                <Icon icon="bi:twitter-x" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition">
                 {/*<Linkedin className="w-4 h-4" />*/}
-                LinkedIn
+                <Icon icon="bi:linkedin" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition">
                 {/*<Github className="w-4 h-4" />*/}
-                Github
+                <Icon icon="bi:github" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition">
                 {/*<Youtube className="w-4 h-4" />*/}

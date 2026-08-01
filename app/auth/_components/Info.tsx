@@ -5,6 +5,10 @@ import { usePathname } from "next/navigation";
 export default function Info() {
   const pathname = usePathname();
   const isLogin = pathname === "/login" || pathname === "/auth/login";
+  const isOnboarding =
+    pathname === "/onboarding" || pathname === "/auth/onboarding";
+
+  if (isOnboarding) return;
 
   return (
     <div className="info grid place-content-center gap-4 grow max-h-[100dvh] text-white text-center *:mx-auto ">

@@ -82,11 +82,11 @@ export default function Testimonials() {
           }}
           className="items-center overflow-x-clip overflow-y-visible full"
         >
-          <CarouselContent className="">
+          <CarouselContent className="h-full py-2">
             {testimonials.map((testimonial, idx) => (
               <CarouselItem
                 key={idx}
-                className="basis-1/1 md:basis-1/2 lg:basis-1/3 **:transition-200 grid place-content-center"
+                className="basis-auto **:transition-200 grid place-content-center h-full"
               >
                 <TestimonialCard {...testimonial} />
               </CarouselItem>
@@ -144,17 +144,19 @@ export const TestimonialCard = ({
   photo,
   role,
 }: TestimonialProps) => (
-  <Card className=" hover:bg-primary hover:**:text-white self-center m-1">
-    <CardContent className="grid gap-4 p-6 relative">
+  <Card className=" hover:bg-primary hover:**:text-white self-center m-1 w-full max-w-[28rem] h-full">
+    <CardContent className="grid gap-4 p-6 relative h-full">
       <QuoteIcon className="absolute top-0 right-8 aspect-auto w-8 text-primary/50" />
       <p className="text-gray-700 text-sm leading-relaxed italic">"{quote}"</p>
       <div className="grid gap-2 grid-cols-[auto_1fr] items-center">
         <Avatar size="lg">
           <AvatarImage src={photo} alt="@shadcn" />
-          <AvatarFallback>{author[0].toLocaleUpperCase()}</AvatarFallback>
+          <AvatarFallback className="text-gray-200">
+            {author[0].toLocaleUpperCase()}
+          </AvatarFallback>
         </Avatar>
         <div className="grid gap-1 items-center">
-          <div className="font-semibold text-gray-900 text-sm">{author}</div>
+          <strong className="font-semibold text-sm">{author}</strong>
           <div className="text-xs text-gray-500">{role}</div>
         </div>
       </div>

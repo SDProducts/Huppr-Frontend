@@ -38,6 +38,7 @@
     --color-light-bg: var(--light-bg);
     --color-title: var(--title);
     --color-secondary: var(--secondary);
+    --color-secondary-brand: var(--secondary-brand);
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
     --color-primary-100: var(--primary-100);
@@ -222,3 +223,10 @@
         @apply border-border outline-ring/50;
     }
 }*/
+
+.snippet {
+}
+
+* {
+    @apply placeholder:text-current/50;
+}

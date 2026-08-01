@@ -41,12 +41,15 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
-              <Button className="shadow-lg shadow-indigo-200 px-4" size="lg">
+              <Button
+                className="shadow-lg shadow-indigo-200 p-[1.5rem]"
+                size="lg"
+              >
                 Create Job
               </Button>
               <Button
-                variant="outline"
-                className="bg-white border-[#C4C5D9] px-4"
+                variant="secondary"
+                className="bg-white border-[#C4C5D9] p-[1.5rem]"
                 size="lg"
               >
                 Find Jobs
@@ -60,28 +63,28 @@ export default function Hero() {
                     src="https://github.com/shadcn.png"
                     alt="@shadcn"
                   />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback className="text-gray-200">CN</AvatarFallback>
                 </Avatar>
                 <Avatar size="lg">
                   <AvatarImage
                     src="https://github.com/maxleiter.png"
                     alt="@maxleiter"
                   />
-                  <AvatarFallback>LR</AvatarFallback>
+                  <AvatarFallback className="text-gray-200">LR</AvatarFallback>
                 </Avatar>
                 <Avatar size="lg">
                   <AvatarImage
                     src="https://github.com/evilrabbit.png"
                     alt="@evilrabbit"
                   />
-                  <AvatarFallback>ER</AvatarFallback>
+                  <AvatarFallback className="text-gray-200">ER</AvatarFallback>
                 </Avatar>
                 <Avatar size="lg">
                   <AvatarImage
                     src="https://github.com/evilrabbit.png"
                     alt="@evilrabbit"
                   />
-                  <AvatarFallback>ER</AvatarFallback>
+                  <AvatarFallback className="text-gray-200">ER</AvatarFallback>
                 </Avatar>
                 {/*<AvatarGroupCount size="lg">+3</AvatarGroupCount>*/}
               </AvatarGroup>
