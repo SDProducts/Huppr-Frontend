@@ -11,9 +11,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { TrendingUp, Users } from "lucide-react";
+import { Search, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BuildYourTeam from "./_components/BuildYourTeam";
+import { Input } from "@/components/ui/input";
 const categories = [
   {
     name: "Hiring",
@@ -86,6 +87,18 @@ export default function Pricing() {
               Explore practical guides, insights, templates and expert advice
               designed for employers and professionals.
             </p>
+
+            <form className="w-full max-w-[40rem] md:min-w-[28rem] flex gap-2 items-center bg-white p-2 rounded-lg shadow shadow-brand/25">
+              <Search />
+              <Input
+                type="text"
+                placeholder="Search articles, guides, templates..."
+                className="bg-transparent border-none shadow-none"
+              />
+              <Button type="submit" className="p-[1rem]">
+                Search
+              </Button>
+            </form>
           </div>
         </div>
       </HeroWithBackground>

@@ -77,7 +77,7 @@ export default function Stats() {
         <h3 className="text-center font-bold text-white ">
           TRUSTED BY FAST-GROWING COMPANIES
         </h3>
-        <div className="h-8 bg-dark/25"></div>
+        <div className="h-8 bg-white"></div>
         <div className="px-auto grid md:grid-cols-3 gap-8">
           {stats.map((stat, index) => (
             <StatsCard

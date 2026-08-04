@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import Logo from "@/components/ui/logo";
+// import Logo from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Logo from "@/assets/huppr_logo.png";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +17,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/">
-            <Logo className="h-[2rem]" />
+            <Image
+              src={Logo}
+              alt="Huppr Logo"
+              loading="eager"
+              className="h-[4rem] w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -54,9 +61,12 @@ export default function Header() {
             >
               Log In
             </Link>
-            <Button className="ml-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition shadow-sm">
+            <Link
+              href="/employers/jobs/create"
+              className="ml-2 px-4 py-2 text-sm font-semibold text-white bg-primary-heading rounded-lg hover:bg-primary-heading/75 transition shadow-sm"
+            >
               Create Job
-            </Button>
+            </Link>
           </div>
           {/* Mobile Menu Button */}
           <button
@@ -104,9 +114,12 @@ export default function Header() {
             >
               Log In
             </Link>
-            <Button className="ml-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition shadow-sm">
+            <Link
+              href="/employers/jobs/create"
+              className="ml-2 px-4 py-2 text-sm font-semibold text-white bg-primary-heading rounded-lg hover:bg-primary-heading/75 transition shadow-sm"
+            >
               Create Job
-            </Button>
+            </Link>
           </div>
         </div>
       )}

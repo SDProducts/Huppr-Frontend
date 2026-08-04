@@ -79,18 +79,18 @@ export default function Pricing() {
 }
 
 const SubscriptionCard = (sub: Subscription) => (
-  <Card className="@container rounded-[2.5rem] relative isolate hover:bg-primary hover:text-white hover:**:text-white transition-all hover:scale-101 hover:[.cta]:bg-white  hover:[.cta]:text-primary">
+  <Card className="@container rounded-[2.5rem] relative isolate hover:bg-primary hover:text-white hover:**:text-white transition-all hover:scale-101">
     {sub.tag && (
       <Badge className="absolute top-[1rem] right-[1rem] text-current bg-current/10">
         {sub.tag}{" "}
       </Badge>
     )}
-    <CardContent className="">
+    <CardContent className="h-full">
       <div className="flex flex-col h-full">
-        <strong className="text-[clamp(1.2rem,_25cqi_+0.025rem_,2.25rem)]">
+        <strong className="text-[clamp(1.2rem,_25cqi_+0.025rem_,2.25rem)] mb-2">
           {sub.name}
         </strong>
-        <strong className="text-[clamp(1.5rem,_30cqi_+0.125rem_,3rem)]">
+        <strong className="text-[clamp(1.5rem,_30cqi_+0.125rem_,3rem)] leading-[1.5ch]">
           {sub.price_amount != 0 &&
           typeof sub.price_amount !== "number" &&
           Number(sub.price_amount).toString().toLowerCase() === "nan"
@@ -101,17 +101,20 @@ const SubscriptionCard = (sub: Subscription) => (
                 style: "currency",
               }).format(Number(sub.price_amount))}
         </strong>
-        <span>{sub.period && `/${sub.period}`}</span>
-        <p>{sub.description}</p>
+        <span>/{sub.period ?? "month"}</span>
+        <p className="max-w-[70cqi] my-3">{sub.description}</p>
 
-        <ul className="grow">
+        <ul className="grow my-3 space-y-2">
           {sub.benefits.map((ben, idx) => (
-            <li key={idx} className="flex items-center">
-              <CheckCircle2 /> {ben}
+            <li key={idx} className="flex items-center gap-2">
+              <CheckCircle2 className="text-primary" /> {ben}
             </li>
           ))}
         </ul>
-        <Button className="cta bg-white p-[1.5rem]" variant="outline">
+        <Button
+          className="cta !bg-white p-[1.5rem] !text-primary border-primary border-[2px] mt-5 fon-semibold "
+          variant="outline"
+        >
           {sub.cta}
         </Button>
       </div>

@@ -2,17 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Icon } from "@iconify/react";
 
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
@@ -79,7 +73,7 @@ export function SignUpForm({
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <div>
+      <div className="text-center">
         <h2 className="text-[clamp(1.5rem,_2cqi_+_0.025rem,_2rem)] font-semibold tracking-normal ">
           Create Your Employer Account
         </h2>
@@ -93,7 +87,14 @@ export function SignUpForm({
         variant="secondary"
         onClick={() => handleSocialLogin("google")}
       >
-        {isLoading ? "Logging in..." : "Continue with Google"}
+        {isLoading ? (
+          "Logging in..."
+        ) : (
+          <span className="flex items-center gap-2">
+            <Icon icon="material-icon-theme:google" />
+            <span>Continue with Google</span>
+          </span>
+        )}
       </Button>
 
       <div className="grid grid-cols-[1fr_auto_1fr] gap-2 place-content-center items-center text-muted">
@@ -110,6 +111,7 @@ export function SignUpForm({
               id="email"
               type="email"
               placeholder="name@company.com"
+              className="bg-white"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -124,6 +126,7 @@ export function SignUpForm({
               type="password"
               required
               value={password}
+              className="bg-white"
               placeholder="Min. 8 characters"
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -138,6 +141,7 @@ export function SignUpForm({
               required
               value={repeatPassword}
               placeholder="Repeat your password"
+              className="bg-white"
               onChange={(e) => setRepeatPassword(e.target.value)}
             />
           </div>

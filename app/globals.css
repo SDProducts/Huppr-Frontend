@@ -216,6 +216,13 @@
         @apply box-border text-inherit;
         interpolate-size: allow-keywords;
     }
+    button,
+    input,
+    [data-slot="input"],
+    [data-slot="button"],
+    textarea {
+        @apply p-[1.5rem];
+    }
 }
 
 /*@layer base {
@@ -229,4 +236,14 @@
 
 * {
     @apply placeholder:text-current/50;
+}
+
+.brand-gradient {
+    background-image: linear-gradient(
+        180deg,
+        var(--primary) 0%,
+        var(--primary-badge) 35%,
+        #7c6cf8 75%,
+        var(--accent-brand) 100%
+    );
 }

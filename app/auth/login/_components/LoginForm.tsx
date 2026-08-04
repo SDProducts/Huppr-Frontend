@@ -2,17 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Icon } from "@iconify/react";
 
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
@@ -79,12 +73,19 @@ export function LoginForm({
 
       <Button
         type="button"
-        className="w-full bg-white shadow shadow-primary/5 p-[1.5rem]"
+        className="w-full bg-white shadow shadow-primary/5 p-[1.5rem] flex items-center gap-2"
         disabled={isLoading}
         variant="secondary"
         onClick={() => handleSocialLogin("google")}
       >
-        {isLoading ? "Logging in..." : "Continue with Google"}
+        {isLoading ? (
+          "Logging in..."
+        ) : (
+          <span className="flex items-center gap-2">
+            <Icon icon="material-icon-theme:google" />
+            <span>Continue with Google</span>
+          </span>
+        )}
       </Button>
 
       <div className="grid grid-cols-[1fr_auto_1fr] gap-2 place-content-center items-center text-muted">

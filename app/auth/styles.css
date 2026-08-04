@@ -52,7 +52,11 @@
     & > .content {
         grid-area: form;
 
-        @apply min-h-dvh grid place-content-center bg-light;
+        @apply min-h-dvh grid place-content-center bg-light px-4 py-16;
+
+        > * {
+            @apply w-full max-w-[30rem] md:min-w-[28rem];
+        }
     }
 }
 
