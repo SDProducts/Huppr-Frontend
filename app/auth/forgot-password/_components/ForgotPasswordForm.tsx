@@ -1,21 +1,15 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { useState } from "react";
 
-import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
+import { createClient } from "@/lib/client";
+import { cn } from "@/lib/utils";
 import { ArrowRight, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 
 export function ForgotPasswordForm({
   className,
@@ -50,7 +44,7 @@ export function ForgotPasswordForm({
     <div className={cn("grid gap-6", className)} {...props}>
       {success ? (
         <div>
-          <h2 className="text-[clamp(1.5rem,_2cqi_+_0.025rem,_2rem)] font-semibold tracking-normal ">
+          <h2 className="text-[clamp(1.5rem,2cqi+0.025rem,2rem)] font-semibold tracking-normal ">
             Check Your Email
           </h2>
           <p className="text-sm text-muted-foreground">
@@ -61,7 +55,7 @@ export function ForgotPasswordForm({
       ) : (
         <>
           <div>
-            <h2 className="text-[clamp(1.5rem,_2cqi_+_0.025rem,_2rem)] font-semibold tracking-normal ">
+            <h2 className="text-[clamp(1.5rem,2cqi+0.025rem,2rem)] font-semibold tracking-normal ">
               Reset Your Password
             </h2>
             <p>

@@ -11,7 +11,7 @@ export default function Info() {
   if (isOnboarding) return;
 
   return (
-    <div className="info grid place-content-center gap-4 grow max-h-[100dvh] text-white text-center *:mx-auto ">
+    <div className="info grid place-content-center gap-4 grow max-h-dvh text-white text-center *:mx-auto ">
       {isLogin ? <LoginInfo /> : <DefaultInfo />}
     </div>
   );
@@ -19,7 +19,7 @@ export default function Info() {
 
 const DefaultInfo = () => (
   <>
-    <h1 className="w-[12ch] text-[clamp(2rem,_3.5cqi_+_0.25rem,_3.75rem)] font-bold leading-[1.1] tracking-tight text-white">
+    <h1 className="w-[12ch] text-[clamp(2rem,3.5cqi+0.25rem,3.75rem)] font-bold leading-[1.1] tracking-tight text-white">
       Hire Smarter. Grow Faster.
     </h1>
     <p className="">
@@ -31,7 +31,7 @@ const DefaultInfo = () => (
 
 const LoginInfo = () => (
   <>
-    <h1 className="w-[7ch] text-[clamp(2rem,_3.5cqi_+_0.25rem,_3.75rem)] font-bold leading-[1.1] tracking-tight text-white">
+    <h1 className="w-[7ch] text-[clamp(2rem,3.5cqi+0.25rem,3.75rem)] font-bold leading-[1.1] tracking-tight text-white">
       Welcome Back.
     </h1>
     <p className="">

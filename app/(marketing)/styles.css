@@ -5,33 +5,27 @@
     --page_width: min(95dvw - 2rem, 1600px);
     --bleed_width: calc((95dvw - var(--page_width)) / 4);
     grid-template-columns:
-        [full-start] minmax(var(--bleed_width), 4rem)
-        [bleed-start] minmax(var(--bleed_width), 1fr)
-        [body-start] var(--page_width)
-        [body-end] minmax(var(--bleed_width), 1fr)
-        [bleed-end] minmax(var(--bleed_width), 4rem)
-        [full-end];
+        [full-start] minmax(var(--bleed_width), 4rem) [bleed-start] minmax(var(--bleed_width), 1fr) [body-start] var(--page_width) [body-end] minmax(var(--bleed_width), 1fr) [bleed-end] minmax(var(--bleed_width), 4rem) [full-end];
 
     grid-template-rows:
-        [header-start] auto
-        [header-end body-start] 1fr
-        [body-end footer-start] auto
-        [footer-end];
+        [header-start] auto [header-end body-start] 1fr [body-end footer-start] auto [footer-end];
 
-    > header {
+    >header {
         grid-row: header;
-        @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100;
+        @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-50;
     }
 
-    > main {
+    >main {
         grid-row: body;
     }
 
-    > footer {
+    >footer {
         grid-row: footer;
+
         &.layout-footer {
             @apply bg-gray-900 text-light;
         }
+
         &:not(.layout-footer) {
             @apply hidden;
         }
@@ -40,25 +34,32 @@
     .full-start {
         grid-column-start: full-start;
     }
+
     .full-end {
         grid-column-end: full-end;
     }
+
     .bleed {
         grid-column: bleed;
     }
+
     .bleed-start {
         grid-column-start: bleed-start;
     }
+
     .bleed-end {
         grid-column-end: bleed-end;
     }
+
     .full-bleed {
         grid-column: full-start / bleed-end;
     }
+
     .full-bleed-start {
         grid-column-start: bleed-start;
         grid-column-end: full-end;
     }
+
     .full-bleed-end {
         grid-column-end: bleed-end;
         grid-column-start: full-start;
@@ -95,18 +96,17 @@
     .bleed-start,
     .bleed-end {
         @apply grid grid-cols-subgrid;
-        > *:not(
-                section,
-                .full-bleed,
-                .full,
-                .full-start,
-                .full-end,
-                .full-bleed-start,
-                .full-bleed-end,
-                .bleed,
-                .bleed-start,
-                .bleed-end
-            ) {
+
+        >*:not(section,
+            .full-bleed,
+            .full,
+            .full-start,
+            .full-end,
+            .full-bleed-start,
+            .full-bleed-end,
+            .bleed,
+            .bleed-start,
+            .bleed-end) {
             grid-column: body;
         }
     }

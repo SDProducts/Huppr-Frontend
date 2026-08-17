@@ -1,10 +1,12 @@
+/* eslint-disable react/no-unescaped-entities */
+import Pricing from "@/app/(marketing)/_components/Pricing";
 import { Badge } from "@/components/ui/badge";
-import HeroWithBackground from "../_components/HeroWithBackground";
-import FAQ from "../_components/FAQ";
 import CTA from "../_components/CTA";
+import FAQ from "../_components/FAQ";
+import HeroWithBackground from "../_components/HeroWithBackground";
 import WhyUpgrade from "../_components/WhyUpgrade";
 
-export default function Pricing() {
+export default function PricingPage() {
   return (
     <>
       <HeroWithBackground>
@@ -14,19 +16,20 @@ export default function Pricing() {
               PRICING PLANS
             </Badge>
 
-            <h1 className="text-[clamp(2rem,_3.5cqi_+_0.25rem,_3.75rem)] font-bold leading-[1.1] tracking-tight md:max-w-[20ch] text-center">
+            <h1 className="text-[clamp(2rem,3.5cqi+0.25rem,3.75rem)] font-bold leading-[1.1] tracking-tight md:max-w-[20ch] text-center">
               Simple Pricing That{" "}
               <span className="text-primary-heading"> Grows </span> With{" "}
               <span className="text-primary-heading">Your Business</span>{" "}
             </h1>
 
-            <p className="text-[clamp(1rem,_1cqi_+0.0125rem,_1.125rem)] text-gray-600 max-w-lg leading-relaxed text-center">
+            <p className="text-[clamp(1rem,1cqi+0.0125rem,1.125rem)] text-gray-600 max-w-lg leading-relaxed text-center">
               Start hiring for free. Upgrade when you're ready to manage your
               entire workforce from one intelligent platform.
             </p>
           </div>
         </div>
       </HeroWithBackground>
+      <Pricing />
       <WhyUpgrade />
       <FAQ />
       <CTA />

@@ -1,19 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 // import Logo from "@/components/ui/logo";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Logo from "@/assets/huppr_logo.png";
+import Image from "next/image";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="layout-header">
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8 py-0.5">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/">

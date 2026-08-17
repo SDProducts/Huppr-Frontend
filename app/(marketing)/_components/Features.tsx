@@ -1,17 +1,17 @@
+/* eslint-disable react/no-unescaped-entities */
 // components/Features.js
+import FeatureCard from "@/components/FeatureCard";
 import {
-  Brain,
   BadgeCheck,
-  Users,
+  Brain,
+  Calendar,
   FileText,
   Filter,
-  Calendar,
+  Heart,
   Shield,
   Sparkles,
-  Heart,
-  BarChart3,
+  Users,
 } from "lucide-react";
-import FeatureCard from "@/components/FeatureCard";
 
 const recruitFeatures = [
   {
@@ -117,7 +117,7 @@ export default function Features() {
           build better cultures.
         </p>
 
-        <div className="grid gap-3 grid-cols-[repeat(auto-fit,_minmax(min(20rem,_100%),_1fr))] grid-rows-[auto_auto_auto]">
+        <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(min(20rem,100%),1fr))] grid-rows-[auto_auto_auto]">
           {features.map((feat, idx) => (
             <FeatureCard
               {...feat}

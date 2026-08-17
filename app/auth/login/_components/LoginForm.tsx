@@ -1,14 +1,14 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Icon } from "@iconify/react";
 
-import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createClient } from "@/lib/client";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export function LoginForm({
@@ -21,25 +21,25 @@ export function LoginForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSocialLogin = async (provider: string) => {
-    const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
+  // const handleSocialLogin = async (provider: string) => {
+  //   const supabase = createClient();
+  //   setIsLoading(true);
+  //   setError(null);
 
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
-        },
-      });
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider: provider,
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
+  //       },
+  //     });
 
-      if (error) throw error;
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-      setIsLoading(false);
-    }
-  };
+  //     if (error) throw error;
+  //   } catch (error: unknown) {
+  //     setError(error instanceof Error ? error.message : "An error occurred");
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +65,7 @@ export function LoginForm({
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <div>
-        <h2 className="text-[clamp(1.5rem,_2cqi_+_0.025rem,_2rem)] font-semibold tracking-normal ">
+        <h2 className="text-[clamp(1.5rem,2cqi+0.025rem,2rem)] font-semibold tracking-normal ">
           Log In to Your Account
         </h2>
         <p>Enter your details to continue where you left off.</p>
@@ -76,7 +76,7 @@ export function LoginForm({
         className="w-full bg-white shadow shadow-primary/5 p-[1.5rem] flex items-center gap-2"
         disabled={isLoading}
         variant="secondary"
-        onClick={() => handleSocialLogin("google")}
+        // onClick={() => handleSocialLogin("google")}
       >
         {isLoading ? (
           "Logging in..."
@@ -89,9 +89,9 @@ export function LoginForm({
       </Button>
 
       <div className="grid grid-cols-[1fr_auto_1fr] gap-2 place-content-center items-center text-muted">
-        <span className="h-[1px] bg-muted" />
+        <span className="h-px bg-muted" />
         <small>OR</small>
-        <span className="h-[1px] bg-muted" />
+        <span className="h-px bg-muted" />
       </div>
 
       <form onSubmit={handleLogin} className="space-y-4">
@@ -111,12 +111,6 @@ export function LoginForm({
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
-              <Link
-                href="/auth/forgot-password"
-                className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-primary font-semibold"
-              >
-                Forgot password?
-              </Link>
             </div>
             <Input
               id="password"
@@ -126,6 +120,12 @@ export function LoginForm({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <Link
+              href="/auth/forgot-password"
+              className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-primary font-semibold"
+            >
+              Forgot password?
+            </Link>
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
           <Button

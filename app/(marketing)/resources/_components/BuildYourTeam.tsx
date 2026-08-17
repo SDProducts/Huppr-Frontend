@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function BuildYourTeam() {
   return (

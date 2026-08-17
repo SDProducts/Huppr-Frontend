@@ -8,8 +8,8 @@ export default function HeroWithBackground({
       <div className="relative isolate">
         {children}
 
-        <div className="rounded-full aspect-square w-[10rem] absolute -bottom-[2rem] left-0 bg-primary/15 -z-10 blur-3xl"></div>
-        <div className="rounded-full aspect-square w-[15rem] absolute -top-[2rem] right-0 bg-accent -z-10 blur-3xl"></div>
+        <div className="rounded-full aspect-square w-[10rem] absolute bottom-[-2rem] -left-10 bg-primary/70 -z-10 blur-3xl"></div>
+        <div className="rounded-full aspect-square w-[15rem] absolute top-[-2rem] right-0 bg-accent -z-10 blur-3xl"></div>
       </div>
     </section>
   );

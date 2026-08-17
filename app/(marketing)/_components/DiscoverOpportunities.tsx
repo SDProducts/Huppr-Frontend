@@ -1,54 +1,16 @@
-import {
-  MapPin,
-  Briefcase,
-  DollarSign,
-  ExternalLink,
-  ArrowRight,
-} from "lucide-react";
-import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Job } from "@/types";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { jobs } from "@/data/constants";
 import { getInitials } from "@/lib/utils";
-
-const jobs: Job[] = [
-  {
-    id: "job-00001-000000",
-    title: "Senior Product Designer",
-    company_name: "Lumina Creative",
-    location_state: "New York, NY",
-    work_mode: "remote",
-
-    department: "DESIGN",
-    description: "",
-    employment_type: "Full time",
-
-    salary_min: 120000,
-    salary_max: 160000,
-    salary_currency: "NGN",
-    salary_period: "month",
-
-    requirements: [],
-    responsibilities: [],
-    preferred_qualifications: [],
-    skills: [],
-    benefits: [],
-
-    openings: 1,
-    application_deadline: "25-08-2026",
-
-    internal_notes: "",
-    created_by: "",
-    created_at: "25-07-2026",
-    updated_at: "29-08-2026",
-  },
-];
+import { formatNumber } from "@/utils/currency.utils";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function DiscoverOpportunities() {
   return (
@@ -74,7 +36,7 @@ export default function DiscoverOpportunities() {
         </div>
 
         {/* Jobs Grid */}
-        <div className="grid grid-cols-[repeat(auto-fill,_minmax(min(25rem,_100%),_1fr))] gap-6">
+        <div className="grid sm:grid-cols-3 gap-6">
           {jobs.map((job, idx) => (
             // <div
             //   key={idx}
@@ -169,17 +131,8 @@ const JobCard = (job: Job) => (
     <CardFooter>
       <div className="flex flex-wrap gap-1 justify-between border-t-2 border-gray-200 w-full pt-4">
         <span className="font-semibold">
-          {new Intl.NumberFormat("en", {
-            currency: job.salary_currency ?? "NGN",
-            notation: "compact",
-            style: "currency",
-          }).format(job.salary_min)}{" "}
-          -{" "}
-          {new Intl.NumberFormat("en", {
-            currency: job.salary_currency ?? "NGN",
-            notation: "compact",
-            style: "currency",
-          }).format(job.salary_max)}{" "}
+          {formatNumber({ amount: job.salary_min, notation: "compact" })} -{" "}
+          {formatNumber({ amount: job.salary_max, notation: "compact" })}{" "}
         </span>
         <Link
           href={job.apply_url ?? `/jobs/${job.id}`}

@@ -1,14 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import {
-  TrendingUp,
-  Users,
-  Award,
-  Clock,
-  Sparkles,
-  LucideBarChartBig,
-} from "lucide-react";
-import Image from "next/image";
 import DashboardMockup from "@/assets/Background+Border+Shadow.png";
+import { Badge } from "@/components/ui/badge";
+import { LucideBarChartBig, Sparkles } from "lucide-react";
+import Image from "next/image";
 
 export default function RecruitSmarter() {
   return (

@@ -1,14 +1,14 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Icon } from "@iconify/react";
 
-import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createClient } from "@/lib/client";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export function SignUpForm({
@@ -22,25 +22,25 @@ export function SignUpForm({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSocialLogin = async (provider: string) => {
-    const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
+  // const handleSocialLogin = async (provider: string) => {
+  //   const supabase = createClient();
+  //   setIsLoading(true);
+  //   setError(null);
 
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
-        },
-      });
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider: provider,
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
+  //       },
+  //     });
 
-      if (error) throw error;
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-      setIsLoading(false);
-    }
-  };
+  //     if (error) throw error;
+  //   } catch (error: unknown) {
+  //     setError(error instanceof Error ? error.message : "An error occurred");
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +74,7 @@ export function SignUpForm({
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <div className="text-center">
-        <h2 className="text-[clamp(1.5rem,_2cqi_+_0.025rem,_2rem)] font-semibold tracking-normal ">
+        <h2 className="text-[clamp(1.5rem,2cqi+0.025rem,2rem)] font-semibold tracking-normal ">
           Create Your Employer Account
         </h2>
         <p>Start hiring in minutes.</p>
@@ -85,7 +85,7 @@ export function SignUpForm({
         className="w-full bg-white shadow shadow-primary/5 p-[1.5rem]"
         disabled={isLoading}
         variant="secondary"
-        onClick={() => handleSocialLogin("google")}
+        // onClick={() => handleSocialLogin("google")}
       >
         {isLoading ? (
           "Logging in..."
@@ -98,9 +98,9 @@ export function SignUpForm({
       </Button>
 
       <div className="grid grid-cols-[1fr_auto_1fr] gap-2 place-content-center items-center text-muted">
-        <span className="h-[1px] bg-muted" />
+        <span className="h-px bg-muted" />
         <small>OR</small>
-        <span className="h-[1px] bg-muted" />
+        <span className="h-px bg-muted" />
       </div>
 
       <form onSubmit={handleSignUp}>

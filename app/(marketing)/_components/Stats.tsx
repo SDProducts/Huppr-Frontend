@@ -1,8 +1,8 @@
 // components/Stats.js
 "use client";
 
+import { Briefcase, Building2, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Users, Building2, Briefcase, TrendingUp } from "lucide-react";
 
 const stats = [
   {
@@ -43,7 +43,7 @@ export default function Stats() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.2 }
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -85,7 +85,7 @@ export default function Stats() {
               key={index}
               suffix={stat.suffix}
               label={stat.label}
-              className="text-center bg-white rounded-[2rem] p-[1rem]"
+              // className="text-center bg-white rounded-[2rem] p-[1rem]"
             />
           ))}
         </div>
@@ -95,12 +95,10 @@ export default function Stats() {
 }
 
 const StatsCard = ({
-  icon,
   value,
   label,
   suffix,
 }: {
-  icon: any;
   value: string | number;
   label: string;
   suffix: string;

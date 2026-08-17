@@ -1,16 +1,16 @@
 // components/Stats.js
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import {
-  Users,
-  Building2,
-  Briefcase,
-  TrendingUp,
-  UsersRound,
-  Sparkles,
-} from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
+import {
+  Briefcase,
+  Building2,
+  Sparkles,
+  TrendingUp,
+  Users,
+  UsersRound,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const stats = [
   {
@@ -50,9 +50,7 @@ export default function WhyUpgrade() {
           <UsersRound size="1.5rem" className="text-primary-badge" />
         </span>
       ),
-      title: (
-        <div className="text-xl text-white">Manage Your Entire Workforce</div>
-      ),
+      title: "Manage Your Entire Workforce",
       description:
         "Transition from just hiring to managing. Keep all your employee data, leave records, and documents in one secure place.",
     },
@@ -62,7 +60,7 @@ export default function WhyUpgrade() {
           <Sparkles size="1.5rem" className="text-primary-badge" />
         </span>
       ),
-      title: <div className="text-xl text-white">Save Time with AI</div>,
+      title: "Save Time with AI",
       description:
         "Automate repetitive HR tasks with our AI Assistant. Generate job descriptions and get performance insights in seconds.",
     },
@@ -72,7 +70,7 @@ export default function WhyUpgrade() {
           <TrendingUp size="1.5rem" className="text-primary-badge" />
         </span>
       ),
-      title: <div className="text-xl text-white">Scale with Confidence</div>,
+      title: "Scale with Confidence",
       description:
         "Gain visibility with advanced reporting and analytics. Make data-driven decisions that help your culture and bottom line grow.",
     },
@@ -85,7 +83,7 @@ export default function WhyUpgrade() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.2 }
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -141,12 +139,10 @@ export default function WhyUpgrade() {
 }
 
 const StatsCard = ({
-  icon,
   value,
   label,
   suffix,
 }: {
-  icon: any;
   value: string | number;
   label: string;
   suffix: string;

@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Subscription } from "@/types";
-import { Check, Sparkles, Building2, Rocket, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 const plans: Subscription[] = [
   {
@@ -68,7 +68,7 @@ export default function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-[repeat(auto-fill,_minmax(min(25rem,_100%),_1fr))] gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {plans.map((plan, idx) => (
             <SubscriptionCard {...plan} key={idx} />
           ))}
@@ -87,10 +87,10 @@ const SubscriptionCard = (sub: Subscription) => (
     )}
     <CardContent className="h-full">
       <div className="flex flex-col h-full">
-        <strong className="text-[clamp(1.2rem,_25cqi_+0.025rem_,2.25rem)] mb-2">
+        <strong className="text-[clamp(1.2rem,25cqi+0.025rem,2.25rem)] mb-2">
           {sub.name}
         </strong>
-        <strong className="text-[clamp(1.5rem,_30cqi_+0.125rem_,3rem)] leading-[1.5ch]">
+        <strong className="text-[clamp(1.5rem,30cqi+0.125rem,2rem)] leading-[1.5ch]">
           {sub.price_amount != 0 &&
           typeof sub.price_amount !== "number" &&
           Number(sub.price_amount).toString().toLowerCase() === "nan"
@@ -112,7 +112,7 @@ const SubscriptionCard = (sub: Subscription) => (
           ))}
         </ul>
         <Button
-          className="cta !bg-white p-[1.5rem] !text-primary border-primary border-[2px] mt-5 fon-semibold "
+          className="cta bg-white! p-[1.5rem] text-primary! border-primary border-2 mt-5 fon-semibold "
           variant="outline"
         >
           {sub.cta}

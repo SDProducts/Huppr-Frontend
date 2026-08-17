@@ -1,12 +1,11 @@
 // app/page.js
 
-import ApplicantsOverview from "./_components/ApplicantsOverview";
 import CTA from "./_components/CTA";
+import DiscoverOpportunities from "./_components/DiscoverOpportunities";
 import FAQ from "./_components/FAQ";
 import Features from "./_components/Features";
 import Hero from "./_components/Hero";
 import HRManagement from "./_components/HRManagement";
-import DiscoverOpportunities from "./_components/DiscoverOpportunities";
 import Pricing from "./_components/Pricing";
 import RecruitSmarter from "./_components/RecruitSmarter";
 import Stats from "./_components/Stats";

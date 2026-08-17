@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -28,11 +26,11 @@ const faqs = [
 ];
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState(null);
+  // const [openIndex, setOpenIndex] = useState(null);
 
-  const toggle = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  // const toggle = (index:unknown) => {
+  //   setOpenIndex(openIndex === index ? null : index);
+  // };
 
   return (
     <section className="py-10 bg-white">
@@ -50,7 +48,10 @@ export default function FAQ() {
               key={idx}
               className="border border-gray-100 rounded-2xl overflow-hidden bg-white w-full shadow-sm hover:shadow-md transition px-6"
             >
-              <AccordionTrigger className="font-medium text-gray-900">
+              <AccordionTrigger
+                className="font-medium text-gray-900"
+                // onClick={toggle}
+              >
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="text-gray-600 text-sm leading-relaxed">

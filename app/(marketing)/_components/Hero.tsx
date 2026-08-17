@@ -1,15 +1,14 @@
-import { ArrowRight, Sparkles, Zap, Users, BarChart3 } from "lucide-react";
 import DashboardMockup from "@/assets/Dashboard.png";
-import Image from "next/image";
 import {
   Avatar,
   AvatarFallback,
   AvatarGroup,
-  AvatarGroupCount,
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
 export default function Hero() {
   return (
@@ -26,7 +25,7 @@ export default function Hero() {
               New: AI-Powered Candidate Screening
             </Badge>
 
-            <h1 className="text-[clamp(2rem,_3.5cqi_+_0.25rem,_3.75rem)] font-bold leading-[1.1] tracking-tight md:max-w-[15ch]">
+            <h1 className="text-[clamp(2rem,3.5cqi+0.25rem,3.75rem)] font-bold leading-[1.1] tracking-tight md:max-w-[15ch]">
               Everything you need to{" "}
               <span className="text-primary-heading">
                 Hire, manage and Grow
@@ -34,7 +33,7 @@ export default function Hero() {
               Your workforce
             </h1>
 
-            <p className="text-[clamp(1rem,_1cqi_+0.0125rem,_1.125rem)] text-gray-600 max-w-lg leading-relaxed">
+            <p className="text-[clamp(1rem,1cqi+0.0125rem,1.125rem)] text-gray-600 max-w-lg leading-relaxed">
               Recruit top talent, streamline HR operations and build
               high-performing teams from one intelligent platform designed for
               growing businesses.
@@ -104,8 +103,8 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="rounded-full aspect-square w-[10rem] absolute -bottom-[2rem] left-0 bg-primary/15 -z-50 blur-3xl"></div>
-        <div className="rounded-full aspect-square w-[15rem] absolute -bottom-[2rem] right-0 bg-accent -z-50 blur-3xl"></div>
+        <div className="rounded-full aspect-square w-[10rem] absolute bottom-[-2rem] left-0 bg-primary/15 -z-50 blur-3xl"></div>
+        <div className="rounded-full aspect-square w-[15rem] absolute bottom-[-2rem] right-0 bg-accent -z-50 blur-3xl"></div>
       </div>
     </section>
   );
