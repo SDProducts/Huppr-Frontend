@@ -38,7 +38,7 @@ function SideNavBar() {
                   : "text-black hover:bg-primary/40 hover:text-white"
               }`}
             >
-              <item.icon />
+              <item.icon strokeWidth={2.5} />
               {item.label}
             </Link>
           ))}
@@ -56,7 +56,7 @@ function SideNavBar() {
                   : "text-black hover:bg-primary/40 hover:text-white"
               }`}
             >
-              <item.icon />
+              <item.icon strokeWidth={2.5} />
               {item.label}
             </Link>
           ))}

@@ -2,8 +2,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import { TodayActivities } from "@/app/dashboard/_components/Activities";
 import { AttendanceCard } from "@/app/dashboard/_components/AttendanceChartCard";
+import AwayToday from "@/app/dashboard/_components/AwayToday";
+import DepartmentOverview from "@/app/dashboard/_components/DepartmentOverview";
+import LeaveOverview from "@/app/dashboard/_components/LeaveOverview";
 import { MetricCard } from "@/app/dashboard/_components/MetricCard";
 import { CompanyCalendar } from "@/app/dashboard/_components/MiniCalendar";
+import UpcomingInterviews from "@/app/dashboard/_components/UpcomingInterviews";
+import UpcomingBirthdays from "@/app/dashboard/_components/UpcommingBirthdays";
+import WorkAnniversaries from "@/app/dashboard/_components/WorkAnniversary";
 import {
   BadgeDollarSign,
   CalendarDays,
@@ -169,9 +175,73 @@ const PageWrapper = () => {
             // onNextMonth={() => console.log("next")}
             // onViewCalendar={() => console.log("view calendar")}
           />
+          <DepartmentOverview
+            departments={[
+              {
+                name: "Engineering",
+                employees: 42,
+                attendance: 96,
+              },
+              {
+                name: "Marketing",
+                employees: 18,
+                attendance: 88,
+              },
+              {
+                name: "Finance",
+                employees: 12,
+                attendance: 100,
+              },
+            ]}
+          />
+          <WorkAnniversaries />
+          <UpcomingBirthdays />
+          <LeaveOverview />
         </div>
-        <div className="">
+        <div className="space-y-2">
           <AttendanceCard total={159} items={attendance} />
+          <UpcomingInterviews
+            interviews={[
+              {
+                time: "10:00",
+                period: "AM",
+                title: "Product Designer",
+                interviewer: "Alex Morgan",
+                candidates: 2,
+              },
+              {
+                time: "11:30",
+                period: "AM",
+                title: "Frontend Developer",
+                interviewer: "Marcus Lee",
+                candidates: 3,
+              },
+              {
+                time: "02:00",
+                period: "PM",
+                title: "UX Researcher",
+                interviewer: "Sophie Turner",
+                candidates: 2,
+              },
+            ]}
+          />
+          <AwayToday
+            totalAway={12}
+            employees={[
+              {
+                name: "James Wilson",
+                leaveType: "Annual Leave",
+                department: "Engineering",
+                image: "/images/james-wilson.jpg",
+              },
+              {
+                name: "Maria Rodriguez",
+                leaveType: "Medical",
+                department: "Operations",
+                image: "/images/maria-rodriguez.jpg",
+              },
+            ]}
+          />
         </div>
       </div>
     </div>

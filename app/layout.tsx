@@ -1,4 +1,5 @@
 import { poppins } from "@/app/fonts";
+import Modal from "@/components/global/Modal";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -38,7 +39,10 @@ export default function RootLayout({
         poppins.className
       )}
     >
-      <body className="">{children}</body>
+      <body className="">
+        <Modal />
+        {children}
+      </body>
     </html>
   );
 }

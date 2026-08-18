@@ -123,7 +123,7 @@ export function CompanyCalendar({
             {/* Date */}
             <div
               className={cn(
-                "relative flex h-[120px] flex-col rounded-[15px] border-2 p-4",
+                "relative flex h-[120px] flex-col rounded-[15px] border-2 p-2",
                 day.isToday
                   ? "border-blue-600 bg-white"
                   : "border-transparent bg-slate-100"
