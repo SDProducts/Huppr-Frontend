@@ -49,21 +49,19 @@ export default function UpcomingInterviews({
   return (
     <section
       className={cn(
-        "w-full rounded-[28px] border border-[#dfe3e8] bg-white px-7 py-8",
+        "w-full rounded-[28px] border border-[#dfe3e8] bg-white px-5 py-8",
         className
       )}
     >
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
-        <h2 className="text-[17px] font-extrabold tracking-[0.08em] text-[#596474]">
-          UPCOMING INTERVIEWS
-        </h2>
+        <h2 className=" font-bold text-[#596474]">UPCOMING INTERVIEWS</h2>
 
         <Button
           type="button"
           variant="ghost"
           onClick={onViewAll}
-          className="h-auto p-0 text-[13px] font-bold text-[#2864e8] hover:bg-transparent hover:text-[#1749b5]"
+          className="h-auto p-0 text-xs font-semibold text-[#2864e8] hover:bg-transparent hover:text-[#1749b5]"
         >
           View all
         </Button>
@@ -82,11 +80,11 @@ export default function UpcomingInterviews({
             >
               {/* Time */}
               <div className="w-[57px] shrink-0 pr-3 pt-1 text-right">
-                <p className="text-[14px] font-extrabold leading-[18px] text-[#2864e8]">
+                <p className="text-[14px] font-bold leading-[18px] text-[#2864e8]">
                   {interview.time}
                 </p>
 
-                <p className="text-[14px] font-extrabold leading-[18px] text-[#2864e8]">
+                <p className="text-[14px] font-bold leading-[18px] text-[#2864e8]">
                   {interview.period}
                 </p>
               </div>
@@ -95,12 +93,12 @@ export default function UpcomingInterviews({
               <div className="relative z-10 mt-[18px] h-2 w-2 shrink-0 rounded-full bg-white" />
 
               {/* Interview card */}
-              <div className="ml-[17px] flex min-h-[74px] flex-1 flex-col justify-center rounded-[20px] bg-[#f1f3f6] px-4">
-                <h3 className="text-[16px] font-extrabold leading-tight text-[#171a1f]">
+              <div className="ml-1.5 flex min-h-[74px] flex-1 flex-col justify-center rounded-[20px] bg-[#f1f3f6] px-4">
+                <h3 className="text-sm font-semibold leading-tight text-[#171a1f]">
                   {interview.title}
                 </h3>
 
-                <p className="mt-1 text-[12px] font-medium text-[#697586]">
+                <p className="text-[11px] font-medium text-[#697586]">
                   {interview.interviewer} • {interview.candidates} Candidates
                 </p>
               </div>

@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 // import Logo from "@/components/ui/logo";
-import Logo from "@/assets/huppr_logo.png";
+import Logo from "@/assets/huppr_without_bg.png";
 import Image from "next/image";
 
 export default function Header() {
@@ -12,15 +12,15 @@ export default function Header() {
 
   return (
     <header className="layout-header">
-      <div className="px-4 sm:px-6 lg:px-8 py-0.5">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/">
+          <Link href="/" className="">
             <Image
               src={Logo}
               alt="Huppr Logo"
               loading="eager"
-              className="h-[4rem] w-auto"
+              className="h-16 w-auto"
             />
           </Link>
 
@@ -62,7 +62,7 @@ export default function Header() {
             </Link>
             <Link
               href="/employers/jobs/create"
-              className="ml-2 px-4 py-2 text-sm font-semibold text-white bg-primary-heading rounded-lg hover:bg-primary-heading/75 transition shadow-sm"
+              className="ml-2 px-4 py-2.5 text-sm font-semibold text-white bg-primary-heading rounded-lg hover:bg-primary-heading/75 transition shadow-sm"
             >
               Create Job
             </Link>

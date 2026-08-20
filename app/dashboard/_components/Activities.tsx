@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
+import Link from "next/link";
 
 export type ActivityColor = "orange" | "green" | "blue" | "red" | "yellow";
 
@@ -16,7 +17,6 @@ export interface Activity {
 interface TodayActivitiesProps {
   activities: Activity[];
   title?: string;
-  onViewAll?: () => void;
   className?: string;
 }
 
@@ -52,7 +52,6 @@ const colorStyles: Record<
 export function TodayActivities({
   activities,
   title = "Today's Activities",
-  onViewAll,
   className,
 }: TodayActivitiesProps) {
   return (
@@ -68,13 +67,12 @@ export function TodayActivities({
           {title}
         </h2>
 
-        <button
-          type="button"
-          onClick={onViewAll}
+        <Link
+          href={`/dashboard/activity-timeline`}
           className="text-[14px] font-bold text-blue-600 transition-colors hover:text-blue-700"
         >
           View all
-        </button>
+        </Link>
       </div>
 
       {/* Activities */}

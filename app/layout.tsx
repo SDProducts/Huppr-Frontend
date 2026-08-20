@@ -17,7 +17,7 @@ import "./globals.css";
 // });
 
 export const metadata: Metadata = {
-  title: "Hoopr",
+  title: "Huppr",
   description: "Everything you need to Hire, manage and Grow Your workforce",
 };
 

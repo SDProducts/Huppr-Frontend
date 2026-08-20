@@ -112,7 +112,7 @@ const SubscriptionCard = (sub: Subscription) => (
           ))}
         </ul>
         <Button
-          className="cta bg-white! p-[1.5rem] text-primary! border-primary border-2 mt-5 fon-semibold "
+          className="cta bg-white! p-[1.5rem] text-primary! border-primary border-2 mt-5 fon-semibold rounded-2xl"
           variant="outline"
         >
           {sub.cta}

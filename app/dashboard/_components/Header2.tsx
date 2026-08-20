@@ -1,6 +1,13 @@
 "use client";
 
-import { Bell, Search } from "lucide-react";
+import {
+  Bell,
+  Building2,
+  CalendarDays,
+  ChevronDown,
+  Search,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 
@@ -15,24 +22,46 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { Button } from "@/components/ui/button";
+
 export function NavigationMenuDemo() {
   return (
-    <header className="w-full border-b border-gray-200 bg-white">
-      <div className="flex h-[72px] w-full items-center justify-between">
-        {/* Left navigation */}
-        <NavigationMenu className="px-4">
-          <NavigationMenuList className="gap-4">
-            <NavigationMenuItem className={""}>
-              <Link
-                href="/"
-                className=" shrink-0 text-xl font-extrabold tracking-tight text-gray-900"
-              >
-                Logo
-              </Link>
-            </NavigationMenuItem>
+    <header className="w-full border-b border-gray-200">
+      <div className="flex h-[72px] w-full items-center px-5">
+        {/* ------------------------------------------------ */}
+        {/* Company / Logo */}
+        {/* ------------------------------------------------ */}
+
+        <div className="flex shrink-0 items-center">
+          <button
+            type="button"
+            className="flex h-[36px] items-center gap-2 rounded-[10px] bg-white px-3 text-[13px] font-semibold text-[#20242a] transition hover:bg-gray-100"
+          >
+            <Building2 size={15} strokeWidth={2.2} className="text-[#2864e8]" />
+
+            <span>Sterling Tech</span>
+
+            <ChevronDown size={14} strokeWidth={2} className="text-[#20242a]" />
+          </button>
+        </div>
+
+        {/* ------------------------------------------------ */}
+        {/* Navigation */}
+        {/* ------------------------------------------------ */}
+
+        <NavigationMenu className="ml-8 max-w-none">
+          <NavigationMenuList className="gap-1">
             {/* Teams */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="h-10 bg-transparent px-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 data-[state=open]:bg-gray-100">
+              <NavigationMenuTrigger
+                className="
+                  h-9
+                  bg-transparent
+                  px-3
+                  text-[13px]
+                  font-medium
+                "
+              >
                 Teams
               </NavigationMenuTrigger>
 
@@ -59,7 +88,15 @@ export function NavigationMenuDemo() {
 
             {/* Departments */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="h-10 bg-transparent px-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 data-[state=open]:bg-gray-100">
+              <NavigationMenuTrigger
+                className="
+                  h-9
+                  bg-transparent
+                  px-3
+                  text-[13px]
+                  font-medium
+                "
+              >
                 Departments
               </NavigationMenuTrigger>
 
@@ -86,45 +123,150 @@ export function NavigationMenuDemo() {
           </NavigationMenuList>
         </NavigationMenu>
 
+        {/* ------------------------------------------------ */}
         {/* Search */}
-        <div className="ml-8 flex min-w-0 flex-1 justify-center">
+        {/* ------------------------------------------------ */}
+
+        <div className="flex min-w-0 flex-1 justify-center px-8">
           <div className="relative w-full max-w-[420px]">
             <Search
-              size={18}
+              size={17}
               strokeWidth={2}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#59616d]"
             />
 
             <input
               type="search"
-              placeholder="Search employees..."
-              className="h-10 w-full rounded-full border border-gray-200 bg-gray-50 pl-10 pr-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/10"
+              placeholder="Search employees, jobs, documents or ask Vita..."
+              className="
+                h-[38px]
+                w-full
+                rounded-full
+                border
+                border-[#e1e4e8]
+                bg-[#f7f8fa]
+                pl-10
+                pr-4
+                text-[12px]
+                font-medium
+                text-[#20242a]
+                outline-none
+                transition
+                placeholder:text-[#858c97]
+                focus:border-[#2864e8]
+                focus:bg-white
+                focus:ring-2
+                focus:ring-[#2864e8]/10
+              "
             />
           </div>
         </div>
 
+        {/* ------------------------------------------------ */}
         {/* Right actions */}
-        <div className="ml-8 flex shrink-0 items-center gap-5">
-          {/* Notification */}
-          <div
-            className="relative flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition hover:bg-gray-100"
-            aria-label="Notifications"
-          >
-            <Bell size={20} strokeWidth={2} color="black" />
+        {/* ------------------------------------------------ */}
 
-            {/* Notification indicator */}
-            <span className="absolute right-[9px] top-[8px] h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
-          </div>
-
-          {/* User */}
+        <div className="flex shrink-0 items-center gap-4">
+          {/* Calendar */}
           <button
             type="button"
-            className="flex items-center gap-2 rounded-full outline-none"
+            className="
+              flex
+              h-9
+              items-center
+              gap-2
+              rounded-lg
+              px-2
+              text-[12px]
+              font-semibold
+              text-[#747b86]
+              transition
+              hover:bg-primary/5
+            "
           >
-            <Avatar className="h-10 w-10 border border-gray-200">
-              <AvatarImage src="/images/avatar.jpg" alt="User" />
+            <CalendarDays size={16} strokeWidth={2} />
 
-              <AvatarFallback className="bg-gray-100 text-sm font-semibold text-gray-700">
+            <span>Calendar</span>
+          </button>
+
+          {/* Vita AI */}
+          <Button
+            type="button"
+            className="
+              h-[36px]
+              rounded-[10px]
+              bg-[#e7ecff]
+              px-3
+              text-[12px]
+              font-bold
+              text-[#2864e8]
+              shadow-none
+              hover:bg-[#dbe3ff]
+            "
+          >
+            <Sparkles size={14} strokeWidth={2.5} />
+            Vita AI
+          </Button>
+
+          {/* Notification */}
+          <div
+            // type="button"
+            aria-label="Notifications"
+            className="
+              relative
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+              rounded-full
+              text-[#737a86]
+              transition
+              hover:bg-primary/5
+            "
+          >
+            <Bell size={18} strokeWidth={2} />
+
+            {/* Notification count */}
+            <span
+              className="
+                absolute
+                -right-0.5
+                -top-0.5
+                flex
+                h-[17px]
+                min-w-[17px]
+                items-center
+                justify-center
+                rounded-full
+                bg-[#e31b23]
+                px-1
+                text-[9px]
+                font-bold
+                leading-none
+                text-white
+                ring-2
+                ring-[#050505]
+              "
+            >
+              3
+            </span>
+          </div>
+
+          {/* User avatar */}
+          <button
+            type="button"
+            aria-label="Open user menu"
+            className="rounded-full outline-none ring-offset-[#050505] focus-visible:ring-2 focus-visible:ring-[#2864e8]"
+          >
+            <Avatar className="h-[34px] w-[34px] border border-[#454950]">
+              <AvatarImage
+                src="/images/avatar.jpg"
+                alt="User"
+                className="object-cover"
+              />
+
+              <AvatarFallback className="bg-[#25282d] text-[11px] font-bold text-white">
                 JW
               </AvatarFallback>
             </Avatar>
@@ -149,7 +291,7 @@ function ListItem({
         render={
           <Link
             href={href}
-            className="block rounded-lg transition-colors hover:bg-gray-50"
+            className="block rounded-lg p-3 transition-colors hover:bg-gray-50"
           >
             <div className="flex flex-col gap-1 text-sm">
               <div className="font-semibold leading-none text-gray-900">

@@ -48,11 +48,9 @@ export default function AwayToday({
     >
       {/* Header */}
       <div className="mb-7 flex items-center justify-between">
-        <h2 className="text-[17px] font-extrabold tracking-[0.08em] text-[#596474]">
-          AWAY TODAY
-        </h2>
+        <h2 className="font-bold text-[#596474]">AWAY TODAY</h2>
 
-        <span className="text-[13px] font-bold text-[#2864e8]">
+        <span className="text-sm font-semibold text-[#2864e8]">
           {totalAway} People
         </span>
       </div>
@@ -76,11 +74,11 @@ export default function AwayToday({
             </Avatar>
 
             <div className="min-w-0">
-              <h3 className="text-[16px] font-bold leading-tight text-[#171a1f]">
+              <h3 className="text-[16px] font-semibold leading-tight text-[#171a1f]">
                 {employee.name}
               </h3>
 
-              <p className="mt-1 text-[12px] font-medium text-[#697586]">
+              <p className="text-xs font-medium text-[#697586]">
                 {employee.leaveType} • {employee.department}
               </p>
             </div>
