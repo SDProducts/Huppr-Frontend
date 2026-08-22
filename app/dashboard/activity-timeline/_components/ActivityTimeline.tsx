@@ -46,7 +46,7 @@ const defaultActivities: Activity[] = [
     description:
       "Proposed dates: Oct 12 – Oct 18 (5 work days). Project workload is currently green for this period.",
     time: "10m ago",
-    action: "Approve →",
+    action: "Approve",
     secondaryAction: "Decline",
   },
   {
@@ -118,7 +118,7 @@ export default function ActivityTimeline({
       </div>
 
       {/* Activities */}
-      <div className="space-y-8">
+      <div className="space-y-4">
         {activities.map((activity) => (
           <ActivityCard
             key={activity.id}
@@ -138,6 +138,7 @@ interface ActivityCardProps {
 
 function ActivityCard({ activity, onAction }: ActivityCardProps) {
   const isUrgent = activity.type === "urgent";
+  const handleAction = () => {};
 
   return (
     <article
@@ -187,7 +188,7 @@ function ActivityCard({ activity, onAction }: ActivityCardProps) {
           {(activity.action || activity.secondaryAction) && (
             <div className="mt-5 flex items-center gap-7">
               {activity.action && (
-                <ActivityAction activity={activity} onAction={onAction} />
+                <ActivityAction activity={activity} onAction={handleAction} />
               )}
 
               {activity.secondaryAction && (

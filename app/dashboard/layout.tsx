@@ -18,9 +18,6 @@ const dashboardlayout: React.FC<Prop> = ({ children }) => {
         <NavigationMenuDemo />
         <div className="py-2 px-6">{children}</div>
       </main>
-      {/* <div className="md:block fixed bottom-0 w-full">
-        <MobileNavContainer />
-      </div> */}
     </div>
   );
 };

@@ -78,13 +78,11 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className="w-full text-left">
-      {label && (
-        <div className="text-xs text-gray-600 capitalize mb-0.5">{label}</div>
-      )}
+      {label && <div className="text-gray-600 capitalize mb-0.5">{label}</div>}
       <div
         className={`w-full relative flex ${
           isTextarea ? "flex-col" : "flex-row"
-        } border rounded-lg py-3 ${
+        } border rounded-lg py-0 ${
           hasError
             ? "border-red-500"
             : theme === "dark"

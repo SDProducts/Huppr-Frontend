@@ -45,34 +45,34 @@ const Modal = () => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center p-2 bg-black/50 backdrop-blur-md z-50"
+      className="fixed inset-0 flex items-center justify-center p-2 bg-black/50 backdrop-blur-md z-99"
       // onClick={close}
     >
       <div
-        className={`relative space-y-1 p-2 ${size} w-full ${
+        className={`relative space-y-1 p-2 w-full ${size} ${
           isTransModal ? "bg-transparent" : "bg-white shadow-lg"
-        } rounded-lg`}
+        } rounded-2xl`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-white rounded-lg flex items-start">
-          <button
-            className="h-7 w-7  border-r border-gray-200 hover:bg-gray-100"
+        <div className="bg-white flex items-start">
+          <div
+            className="h-7 w-7 sm:h-10 sm:w-10 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center"
             onClick={goBack}
           >
             <ChevronLeft size={20} />
-          </button>
+          </div>
           <div className="flex-1 font-bold mx-2 text-lg overflow-x-scroll uppercase text-nowrap scrollbar-hide">
             {title}
           </div>
 
           {isCloseable && (
-            <button
-              className="bg-white rounded-lg border border-gray-200 text-gray-600 hover:text-gray-900 cursor-pointer h-7 w-7 flex justify-center items-center"
+            <div
+              className="bg-white rounded-full border border-gray-200 text-gray-600 hover:text-gray-900 cursor-pointer h-7 w-7 sm:h-10 sm:w-10 flex justify-center items-center"
               onClick={close}
               aria-label="Close Modal"
             >
               <X size={20} />
-            </button>
+            </div>
           )}
         </div>
         <div className={`max-h-[70vh] overflow-y-auto scrollbar-hide`}>
