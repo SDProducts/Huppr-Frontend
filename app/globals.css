@@ -215,8 +215,8 @@
     }
 
     button,
-    input,
-    [data-slot="input"],
+    /* input, */
+    /* [data-slot="input"], */
     [data-slot="button"],
     textarea {
         @apply p-[1.5rem];

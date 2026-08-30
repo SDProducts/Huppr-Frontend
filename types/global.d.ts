@@ -147,3 +147,46 @@ type Job = {
   created_at: Date | string; // DEFAULT NOW(),
   updated_at: Date | string; // DEFAULT NOW()
 };
+
+type AuthStep = "sign-up" | "verify";
+
+interface LoginPayload {
+  email: string;
+  password: string;
+}
+interface RegisterPayload {
+  email: string;
+  password: string;
+  role?: string;
+}
+interface LoginResponse {
+  token: string;
+  user: User;
+}
+
+interface ErrorMsg {
+  message: string;
+}
+type LoginError = {
+  statusCode: string;
+  message: string | string[];
+  error: string;
+  path: string;
+  requestId: string;
+  timestamp: string;
+};
+interface ErrorResponse {
+  detail: string;
+}
+type RegisterError = {
+  statusCode: string;
+  message: string[];
+  error: string;
+  path: string;
+  requestId: string;
+  timestamp: string;
+};
+
+interface NewPasswordPayload {
+  password: string;
+}

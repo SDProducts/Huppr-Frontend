@@ -1,16 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import Logo from "@/assets/huppr_without_bg.png";
 import { Icon } from "@iconify/react";
-import { cn } from "@/lib/utils";
-import {
-  Mail,
-  MapPin,
-  Phone,
-  // Twitter, Linkedin, Github, Youtube
-} from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import Logo from "../ui/logo";
 
 const productLinks = [
   "Recruitment",
@@ -36,7 +29,12 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <Logo color="white" className="h-[2rem]" />
+              <Image
+                src={Logo}
+                alt="Huppr Logo"
+                loading="eager"
+                className="h-16 w-auto"
+              />
             </div>
             <p className="text-sm max-w-xs leading-relaxed">
               The intelligent workforce platform for hiring, managing, and

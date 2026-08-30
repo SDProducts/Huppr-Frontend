@@ -1,31 +1,27 @@
 @reference "../globals.css";
 
-.layout {
-    @apply grid md:grid-cols-2 relative;
+/* .layout {
+    @apply grid md: grid-cols-2 relative;
 
     grid-template-columns:
-        [full-start info-start] 1fr
-        [info-end form-start] 1fr
-        [form-end full-end];
+        [full-start info-start] 1fr [info-end form-start] 1fr [form-end full-end];
 
-    & > aside {
-        @apply grid place-content-center gap-4 grow max-h-[100dvh] sticky top-0 text-white text-center *:mx-auto z-50;
+    &>aside {
+        @apply grid place-content-center gap-4 grow max-h-[100dvh] sticky top-0 text-white text-center *: mx-auto z-50;
 
-        background-image: linear-gradient(
-            180deg,
-            var(--primary) 0%,
-            var(--primary-badge) 35%,
-            #7c6cf8 75%,
-            var(--accent-brand) 100%
-        );
+        background-image: linear-gradient(180deg,
+                var(--primary) 0%,
+                var(--primary-badge) 35%,
+                #7c6cf8 75%,
+                var(--accent-brand) 100%);
 
         transform-origin: center;
         animation: bg_resize 2s linear forwards;
 
         grid-area: info;
 
-        > .info {
-            @apply grid place-content-center gap-4 grow max-h-[100dvh] text-white text-center *:mx-auto;
+        >.info {
+            @apply grid place-content-center gap-4 grow max-h-[100dvh] text-white text-center *: mx-auto;
 
             transform-origin: center;
             will-change: transform, opacity;
@@ -41,7 +37,6 @@
         .logo {
             transform-origin: center;
             animation: logo_shrink 2s linear forwards;
-            /*animation-delay: 2s;*/
         }
 
         p {
@@ -49,16 +44,16 @@
         }
     }
 
-    & > .content {
+    &>.content {
         grid-area: form;
 
         @apply min-h-dvh grid place-content-center bg-light px-4 py-16;
 
-        > * {
-            @apply w-full max-w-[30rem] md:min-w-[28rem];
+        >* {
+            @apply w-full max-w-[30rem] md: min-w-[28rem];
         }
     }
-}
+} */
 
 @keyframes bg_resize {
     from {

@@ -1,7 +1,9 @@
 import { poppins } from "@/app/fonts";
 import Modal from "@/components/global/Modal";
+import { QCProvider } from "@/components/global/QueryClientProvider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 // const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -39,10 +41,22 @@ export default function RootLayout({
         poppins.className
       )}
     >
-      <body className="">
-        <Modal />
-        {children}
-      </body>
+      <QCProvider>
+        <body className="">
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                borderRadius: "10px",
+                fontSize: 14,
+              },
+            }}
+          />
+
+          <Modal />
+          {children}
+        </body>
+      </QCProvider>
     </html>
   );
 }

@@ -30,6 +30,7 @@ interface InputProps {
   icon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   className?: string;
+  LabelClassName?: string;
   rows?: number;
   theme?: string;
   formatMoney?: boolean;
@@ -44,6 +45,7 @@ const Input: React.FC<InputProps> = ({
   icon,
   rightIcon,
   className = "",
+  LabelClassName = "",
   rows = 6,
   theme = "light",
   formatMoney = false,
@@ -78,11 +80,15 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className="w-full text-left">
-      {label && <div className="text-gray-600 capitalize mb-0.5">{label}</div>}
+      {label && (
+        <div className={`text-gray-800 capitalize mb-0.5 ${LabelClassName}`}>
+          {label}
+        </div>
+      )}
       <div
         className={`w-full relative flex ${
           isTextarea ? "flex-col" : "flex-row"
-        } border rounded-lg py-0 ${
+        } border rounded-lg py-3.5 ${
           hasError
             ? "border-red-500"
             : theme === "dark"
@@ -92,7 +98,7 @@ const Input: React.FC<InputProps> = ({
       >
         {/* Left Icon */}
         {icon && !isTextarea && (
-          <div className="flex items-center px-3">{icon}</div>
+          <div className="flex items-center pl-3">{icon}</div>
         )}
 
         {/* Field */}

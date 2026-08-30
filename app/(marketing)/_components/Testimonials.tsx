@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -86,7 +87,7 @@ export default function Testimonials() {
             {testimonials.map((testimonial, idx) => (
               <CarouselItem
                 key={idx}
-                className="basis-auto **:transition-200 grid place-content-center h-full"
+                className="basis-auto **:transition-200 min-h-full"
               >
                 <TestimonialCard {...testimonial} />
               </CarouselItem>

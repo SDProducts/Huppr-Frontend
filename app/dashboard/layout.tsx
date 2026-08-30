@@ -1,4 +1,4 @@
-import { NavigationMenuDemo } from "@/app/dashboard/_components/Header2";
+import { HeaderMenu } from "@/app/dashboard/_components/Header";
 import SideNavBar from "@/app/dashboard/_components/SideNavBar";
 import React from "react";
 interface Prop {
@@ -14,8 +14,7 @@ const dashboardlayout: React.FC<Prop> = ({ children }) => {
 
       {/* Main Content */}
       <main className="pt-17.5 md:pt-0 flex-1 overflow-y-auto md:mb-0 py-5 px-2 md:px-0 scrollbar-hide">
-        {/* <Header /> */}
-        <NavigationMenuDemo />
+        <HeaderMenu />
         <div className="py-2 px-6">{children}</div>
       </main>
     </div>

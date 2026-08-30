@@ -1,5 +1,5 @@
-import { SignUpForm } from "./_components/SignUpForm";
+import PageWrapper from "@/app/auth/sign-up/_components/PageWrapper";
 
 export default function Page() {
-  return <SignUpForm />;
+  return <PageWrapper />;
 }
