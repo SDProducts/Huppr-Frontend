@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import Input from "@/components/form/Input";
+import RadioGroup from "@/components/form/RadioGroup";
 import { Button } from "@/components/ui/button";
 import { useRegister } from "@/hooks/auth/useAuth";
 import { cn } from "@/lib/utils";
@@ -22,11 +23,23 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
   const [showPassword2, setshowPassword2] = useState(false);
   const { mutate: register, isPending } = useRegister();
   const router = useRouter();
+  const ROLES: Option[] = [
+    {
+      label: "a Job Seeker",
+      value: "job_seeker",
+      description: "Looking to get hired for new jobs or career growth",
+    },
+    {
+      label: "an Employer",
+      value: "employer",
+      description: "Looking to hire and manage my organisation & employees",
+    },
+  ];
 
   const initialValues = {
     email: "",
     password: "",
-    confirm_password: "",
+    // confirm_password: "",
     role: "employer",
   };
   const togglePassword1 = () => {
@@ -56,14 +69,7 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
   // };
 
   const handleSignUp = async (values: typeof initialValues) => {
-    const { confirm_password, ...payload } = values;
-    register(payload, {
-      onSuccess() {
-        // router.push("/dashboard");
-      },
-    });
-    setstep("verify");
-    setEmail(payload.email);
+    register(values);
   };
 
   return (
@@ -125,7 +131,18 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
                   )
                 }
               />
-              <Input
+              <RadioGroup
+                label="Continue as:"
+                options={ROLES}
+                //   hideIcon
+                name="role"
+                orientation="horizontal"
+                size="sm"
+                labelClassName=""
+                optionClassName="font-medium min-w-[calc(48%)] max-w-[calc(48%)]"
+              />
+
+              {/* <Input
                 label="Confirm Password"
                 name="confirm_password"
                 placeholder="Repeat your password"
@@ -137,7 +154,7 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
                     <Eye onClick={togglePassword2} size={18} />
                   )
                 }
-              />
+              /> */}
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button
                 type="submit"

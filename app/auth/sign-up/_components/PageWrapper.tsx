@@ -1,5 +1,5 @@
 "use client";
-import OTPForm from "@/app/auth/otp/_components/OTPForm";
+import OTPForm from "@/app/auth/confirm-email/_components/OTPForm";
 import SignUpForm from "@/app/auth/sign-up/_components/SignUpForm";
 import { useState } from "react";
 const PageWrapper = () => {

@@ -10,6 +10,7 @@ import { CompanyCalendar } from "@/app/dashboard/_components/MiniCalendar";
 import UpcomingInterviews from "@/app/dashboard/_components/UpcomingInterviews";
 import UpcomingBirthdays from "@/app/dashboard/_components/UpcommingBirthdays";
 import WorkAnniversaries from "@/app/dashboard/_components/WorkAnniversary";
+import { useGetMyDetails } from "@/hooks/auth/useAuth";
 import {
   BadgeDollarSign,
   CalendarDays,
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 
 const PageWrapper = () => {
+  useGetMyDetails();
   const metrics = [
     {
       icon: Users,

@@ -2,21 +2,16 @@
 /* eslint-disable react/no-unescaped-entities */
 import { MailCheck, RefreshCcw } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Field, FieldDescription } from "@/components/ui/field";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { Field } from "@/components/ui/field";
 import { useResendOTP } from "@/hooks/auth/useAuth";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-interface Prop {
-  email: string;
-}
-const OTPForm: React.FC<Prop> = ({ email }) => {
+
+const VerifyEmail: React.FC = () => {
   const { mutate: resend, isPending: isResending } = useResendOTP();
+  const email = Cookies.get("user_email");
   const [timer, settimer] = useState(60);
+
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => settimer((prev) => prev - 1), 1000);
@@ -25,7 +20,7 @@ const OTPForm: React.FC<Prop> = ({ email }) => {
   }, [timer]);
 
   const handleResend = () => {
-    if (!isResending) {
+    if (!isResending && email) {
       settimer(60);
       resend(email);
     }
@@ -41,27 +36,15 @@ const OTPForm: React.FC<Prop> = ({ email }) => {
           Verify Your Email
         </h2>
         <p className="mt-2">
-          We've sent a verification code to{" "}
+          We've sent a verification link to{" "}
           <span className="font-medium">{email}</span>.
         </p>
-        <p className="">Enter six-digit code below to contnue.</p>
+        <p className="">Login to your email account to verify email.</p>
       </div>
-      <div>
-        <Field>
-          <div className="flex justify-center">
-            <InputOTP maxLength={6} id="otp-verification" required>
-              <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-16 *:data-[slot=input-otp-slot]:w-16 *:data-[slot=input-otp-slot]:text-xl space-x-2">
-                <InputOTPSlot index={0} className="border rounded-md!" />
-                <InputOTPSlot index={1} className="border rounded-md!" />
-                <InputOTPSlot index={2} className="border rounded-md!" />
-                <InputOTPSlot index={3} className="border rounded-md!" />
-                <InputOTPSlot index={4} className="border rounded-md!" />
-                <InputOTPSlot index={5} className="border rounded-md!" />
-              </InputOTPGroup>
-            </InputOTP>
-          </div>
-          <FieldDescription className="font-semibold text-center space-x-1 flex items-center justify-center">
-            <span className="">Didn't recieve a code?</span>
+      <div className="space-y-2">
+        <div className="">
+          <div className="font-semibold text-center space-x-1 flex items-center justify-center">
+            <span className="">Didn't recieve a mail?</span>
             {timer > 0 ? (
               <span className="text-primary cursor-not-allowed">
                 Resend in {timer}s
@@ -80,14 +63,9 @@ const OTPForm: React.FC<Prop> = ({ email }) => {
                 )}
               </span>
             )}
-          </FieldDescription>
-        </Field>
-      </div>
-      <div className="">
+          </div>
+        </div>
         <Field>
-          <Button type="submit" className="w-full text-xl font-normal">
-            Verify Email
-          </Button>
           <div className="text-sm text-muted-foreground text-center">
             Having trouble signing in?{" "}
             <a
@@ -102,4 +80,4 @@ const OTPForm: React.FC<Prop> = ({ email }) => {
     </div>
   );
 };
-export default OTPForm;
+export default VerifyEmail;

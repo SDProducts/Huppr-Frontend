@@ -24,8 +24,11 @@ export function UpdatePasswordForm({
     password: "",
   };
   const handleForgotPassword = async (values: typeof initialValues) => {
-    changePassword(values);
-    router.push("/auth/login");
+    changePassword(values, {
+      onSuccess() {
+        router.push("/auth/login");
+      },
+    });
   };
 
   return (

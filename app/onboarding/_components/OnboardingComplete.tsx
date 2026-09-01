@@ -35,7 +35,7 @@ const OnboardingComplete = () => {
             className="border border-gray-200 rounded-md p-2 space-y-1"
             key={i}
           >
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-1 items-center">
               <div className="h-7 w-7 flex justify-center rounded-full items-center bg-green-500/20 text-green-500">
                 <Check className="h-3.5 w-3.5" strokeWidth={4} />
               </div>

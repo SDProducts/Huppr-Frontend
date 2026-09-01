@@ -1,3 +1,8 @@
+interface Window {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fbq: (...args: any[]) => void;
+}
+
 interface ModalState {
   isCloseable: boolean;
   isTransModal: boolean;
@@ -160,7 +165,7 @@ interface RegisterPayload {
   role?: string;
 }
 interface LoginResponse {
-  token: string;
+  session: Session;
   user: User;
 }
 
@@ -189,4 +194,79 @@ type RegisterError = {
 
 interface NewPasswordPayload {
   password: string;
+}
+
+interface UserMeta {
+  email: string;
+  email_verified: boolean;
+  phone_verified: boolean;
+  role: string;
+  sub: string;
+}
+interface AppMeta {
+  provider: string;
+  providers: string[];
+}
+interface Identity {
+  identity_id: string;
+  id: string;
+  user_id: string;
+  identity_data: {
+    email: string;
+    email_verified: boolean;
+    phone_verified: boolean;
+    role: string;
+    sub: string;
+  };
+  provider: string;
+  last_sign_in_at: string;
+  created_at: string;
+  updated_at: string;
+  email: string;
+}
+interface User {
+  id: string;
+  aud: string;
+  role: string;
+  email: string;
+  phone: string;
+  confirmation_sent_at: string;
+  app_metadata: AppMeta;
+  user_metadata: UserMeta;
+  identities: Identity[];
+  created_at: string;
+  updated_at: string;
+  is_anonymous: boolean;
+}
+interface Session {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  expires_at: number;
+  refresh_token: string;
+  user: User;
+  weak_password: null;
+}
+interface RegisterResponse {
+  user: User;
+  session: Session;
+}
+
+interface OnboardingStateResponse {
+  status: string;
+  currentStep: number;
+  totalSteps: number;
+  progressPercentage: number;
+  nextAction: string;
+  completedSteps: number[];
+  company: object;
+  departments: string[];
+  workspaceSettings: object;
+  organizationId: string;
+}
+
+interface Option {
+  label: string;
+  description?: string;
+  value: string;
 }

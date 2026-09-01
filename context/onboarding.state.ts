@@ -8,7 +8,7 @@ interface OnboardingState {
   setCompleted: (status: boolean) => void;
 }
 export const useOnboarding = create<OnboardingState>((set) => ({
-  step: 1,
+  step: 0,
   completed: false,
   setStep(step) {
     set({

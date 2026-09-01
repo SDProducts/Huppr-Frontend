@@ -28,9 +28,9 @@ export function ForgotPasswordForm({
     sendOTP(values, {
       onSuccess() {
         setSuccess(true);
+        router.push("/auth/update-password");
       },
     });
-    router.push("/auth/update-password");
   };
 
   return (

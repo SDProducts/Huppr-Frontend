@@ -4,19 +4,25 @@
 import CompanyDetailForm from "@/app/onboarding/_components/CompanyDetailForm";
 import DepartmentsSelect from "@/app/onboarding/_components/DepartmentsSelect";
 import OnboardingComplete from "@/app/onboarding/_components/OnboardingComplete";
+import WorkspaceSettings from "@/app/onboarding/_components/WorkspaceSettings";
 import WelcomeImage from "@/assets/Background+Border+Shadow.png";
 import Button from "@/components/ui/CustomButton";
 import { useOnboarding } from "@/context/onboarding.state";
+import { useGetOnboarding } from "@/hooks/auth/useOnboarding";
 import { ArrowRight, LockKeyhole } from "lucide-react";
 import Image from "next/image";
 
 const PageWrapper = () => {
+  useGetOnboarding();
   const { step, setStep, completed } = useOnboarding();
-  if (step === 2) {
+  if (step === 1) {
     return <CompanyDetailForm />;
   }
-  if (step === 3) {
+  if (step === 2) {
     return <DepartmentsSelect />;
+  }
+  if (step === 3) {
+    return <WorkspaceSettings />;
   }
   if (step === 4) {
     return <OnboardingComplete />;

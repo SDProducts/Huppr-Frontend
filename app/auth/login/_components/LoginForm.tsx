@@ -7,6 +7,7 @@ import { useState } from "react";
 import Input from "@/components/form/Input";
 import { Button } from "@/components/ui/button";
 import { useLogin } from "@/hooks/auth/useAuth";
+import { baseURL } from "@/lib/axios.config";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/lib/validation/auth_validations";
 import { Form, Formik } from "formik";
@@ -28,7 +29,9 @@ export function LoginForm({
     email: "",
     password: "",
   };
-
+  const handleSocialLogin = () => {
+    window.location.href = `${baseURL}/auth/google`;
+  };
   // const handleSocialLogin = async (provider: string) => {
   //   const supabase = createClient();
   //   setIsLoading(true);
@@ -53,8 +56,14 @@ export function LoginForm({
     setError(null);
     try {
       login(values, {
-        onSuccess() {
-          router.push("/dashboard");
+        onSuccess(data) {},
+        onError(data) {
+          if (typeof data.message === "string") {
+            const message = data.message;
+            if (message === "Email address has not been confirmed") {
+              router.push("/auth/verify-email");
+            }
+          }
         },
       });
     } catch (error: unknown) {
@@ -77,7 +86,7 @@ export function LoginForm({
         className="w-full bg-white shadow shadow-primary/5 p-[1.5rem] flex items-center gap-2"
         disabled={isPending}
         variant="secondary"
-        // onClick={() => handleSocialLogin("google")}
+        onClick={handleSocialLogin}
       >
         {isPending ? (
           "Logging in..."

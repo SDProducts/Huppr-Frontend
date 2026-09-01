@@ -10,7 +10,7 @@ export default function Layout({
 }>) {
   return (
     <main className="layout grid sm:grid-cols-2 h-screen max-h-screen overflow-hidden">
-      <aside className="bg-linear-to-b from-primary via-primary-badge to-accent animate-[bg_resize] hidden h-full w-full sm:flex justify-center items-center">
+      <aside className="bg-linear-to-b from-primary via-primary-badge to-gray-700 animate-[bg_resize] hidden h-full w-full sm:flex justify-center items-center">
         <div className="flex flex-col justify-center items-center gap-4">
           <Link href="/">
             <Logo color="white" icon="white" className="logo aspect-auto h-7" />

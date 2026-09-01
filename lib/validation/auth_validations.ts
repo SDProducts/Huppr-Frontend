@@ -31,10 +31,10 @@ export const signUpSchema = yup.object({
   //   "Password must contain at least one uppercase letter, one lowercase letter, and one number"
   // ),
 
-  confirm_password: yup
-    .string()
-    .required("Please confirm your password")
-    .oneOf([yup.ref("password")], "Passwords must match"),
+  // confirm_password: yup
+  //   .string()
+  //   .required("Please confirm your password")
+  //   .oneOf([yup.ref("password")], "Passwords must match"),
 
   role: yup
     .string()
@@ -54,6 +54,12 @@ export const otpSchema = yup.object({
     .required("Verification code is required")
     .length(6, "Verification code must be exactly 6 digits")
     .matches(/^\d+$/, "Verification code must contain only numbers"),
+});
+export const RoleSchema = yup.object({
+  role: yup
+    .string()
+    .oneOf(["employer", "job_seeker"], "Invalid role selected")
+    .required("Role is required"),
 });
 
 // Type inference for use with Formik
