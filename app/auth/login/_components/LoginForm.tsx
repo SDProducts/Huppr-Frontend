@@ -37,6 +37,7 @@ export function LoginForm({
           redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
+      console.log(data);
 
       if (error) {
         console.error("Error signing in:", error.message);
@@ -54,7 +55,7 @@ export function LoginForm({
     setError(null);
     try {
       login(values, {
-        onSuccess(data) {},
+        onSuccess() {},
         onError(data) {
           if (typeof data.message === "string") {
             const message = data.message;
