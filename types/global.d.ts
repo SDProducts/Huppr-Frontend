@@ -251,7 +251,16 @@ interface RegisterResponse {
   user: User;
   session: Session;
 }
-
+interface Company {
+  name: string;
+  industryId: string;
+  industryName: string;
+  website: string;
+  size: string;
+  sizeLabel: string;
+  logoUrl: string;
+  logoUploadedAt: string;
+}
 interface OnboardingStateResponse {
   status: string;
   currentStep: number;
@@ -259,9 +268,12 @@ interface OnboardingStateResponse {
   progressPercentage: number;
   nextAction: string;
   completedSteps: number[];
-  company: object;
+  company: Company;
+  companyRevision: number;
   departments: string[];
+  departmentsRevision: number;
   workspaceSettings: object;
+  settingsRevision: number;
   organizationId: string;
 }
 
@@ -269,4 +281,36 @@ interface Option {
   label: string;
   description?: string;
   value: string;
+}
+
+interface Industry {
+  name: string;
+  id: string;
+  category;
+  active: boolean;
+  popular: boolean;
+}
+interface IndustriesRefResponse {
+  items: Industry[];
+}
+
+interface ProgressResponse {
+  completedStep: number;
+  currentStep: number;
+  totalSteps: number;
+  progressPercentage: number;
+  nextAction: string;
+  completedAt: string;
+}
+
+interface Suggestion {
+  iconId: string;
+  name: string;
+  description: string;
+  popular: boolean;
+}
+
+interface SuggestionsResponse {
+  suggestions: Suggestion[];
+  defaultSuggestion: Suggestion;
 }

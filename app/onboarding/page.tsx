@@ -1,5 +1,5 @@
-import PageWrapper from "@/app/onboarding/_components/PageWrapper";
+import Welcome from "@/app/onboarding/_components/Welcome";
 
 export default function page() {
-  return <PageWrapper />;
+  return <Welcome />;
 }

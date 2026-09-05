@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <Link
         href={href}
-        className={`w-full flex items-center justify-center py-2 rounded-full transition duration-300 hover:underline underline-offset-3 ${className}
+        className={`w-full flex items-center justify-center py-2 rounded-md transition duration-300 hover:underline underline-offset-3 ${className}
               `}
       >
         <div className="flex items-center justify-center w-full">

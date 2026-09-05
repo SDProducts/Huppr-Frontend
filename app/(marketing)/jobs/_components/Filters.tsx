@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import React from "react";
 
 export const TopFilter = () => {
   return (
@@ -45,26 +46,29 @@ function FilterSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mb-9">
+    <div className="mb-9">
       <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.03em] text-slate-500">
         {title}
       </h3>
 
       <div className="space-y-3">{children}</div>
-    </section>
+    </div>
   );
 }
 function CheckboxRow({
   label,
   checked = false,
+  onCheckedChange,
 }: {
   label: string;
   checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }) {
   return (
     <label className="flex cursor-pointer items-center gap-3">
       <Checkbox
         defaultChecked={checked}
+        onCheckedChange={onCheckedChange}
         className="h-[16px] w-[16px] rounded-[3px] border-slate-300 data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600"
       />
 
@@ -72,10 +76,25 @@ function CheckboxRow({
     </label>
   );
 }
-
-export function FilterSidebar() {
+export interface FilterParams {
+  employement_type?: string;
+  experience_level?: string;
+  industry?: string;
+  salary_rage?: {
+    min: number;
+    max: number;
+  };
+}
+interface Prop {
+  filter: FilterParams;
+  onSetFilter: (filter: FilterParams) => void;
+}
+export const FilterSidebar: React.FC<Prop> = ({ filter, onSetFilter }) => {
+  const handleExperienceChange = (value: string, checked: boolean) => {
+    onSetFilter({ ...filter, experience_level: value });
+  };
   return (
-    <aside className="w-[255px] shrink-0 text-[13px] text-slate-500">
+    <div className="ext-[13px] text-slate-500">
       <div className="mb-7 flex items-center justify-between">
         <h2 className="font-semibold text-slate-500">Filters</h2>
 
@@ -93,9 +112,14 @@ export function FilterSidebar() {
 
       {/* Experience */}
       <FilterSection title="Experience Level">
-        <CheckboxRow label="Entry Level" />
-        <CheckboxRow label="Intermediate" />
-        <CheckboxRow label="Senior" checked />
+        {["Entry Level", "Intermediate", "Senior"].map((item) => (
+          <CheckboxRow
+            key={item}
+            label={item}
+            checked={filter.experience_level === item}
+            onCheckedChange={(checked) => handleExperienceChange(item, checked)}
+          />
+        ))}{" "}
       </FilterSection>
 
       {/* Salary */}
@@ -132,6 +156,6 @@ export function FilterSidebar() {
           </SelectContent>
         </Select>
       </FilterSection>
-    </aside>
+    </div>
   );
-}
+};

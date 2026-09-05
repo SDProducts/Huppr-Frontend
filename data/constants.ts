@@ -13,7 +13,7 @@ import {
   UserPlus2,
   Users2,
 } from "lucide-react";
-export const token = Cookies.get("auth_token");
+export const token = Cookies.get("access_token");
 export const jobs: Job[] = [
   {
     id: "job-00001-000000",

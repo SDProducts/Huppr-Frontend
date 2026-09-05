@@ -7,7 +7,7 @@ import { useState } from "react";
 import Input from "@/components/form/Input";
 import { Button } from "@/components/ui/button";
 import { useLogin } from "@/hooks/auth/useAuth";
-import { baseURL } from "@/lib/axios.config";
+import { supabase } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/lib/validation/auth_validations";
 import { Form, Formik } from "formik";
@@ -29,28 +29,26 @@ export function LoginForm({
     email: "",
     password: "",
   };
-  const handleSocialLogin = () => {
-    window.location.href = `${baseURL}/auth/google`;
+  const handleGoogleSignIn = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        console.error("Error signing in:", error.message);
+        throw error;
+      }
+
+      // The user will be redirected to Google's OAuth page
+      // After successful auth, they'll be redirected back to /auth/callback
+    } catch (error) {
+      console.error("Sign in error:", error);
+    }
   };
-  // const handleSocialLogin = async (provider: string) => {
-  //   const supabase = createClient();
-  //   setIsLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const { error } = await supabase.auth.signInWithOAuth({
-  //       provider: provider,
-  //       options: {
-  //         redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
-  //       },
-  //     });
-
-  //     if (error) throw error;
-  //   } catch (error: unknown) {
-  //     setError(error instanceof Error ? error.message : "An error occurred");
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const handleLogin = async (values: typeof initialValues) => {
     setError(null);
@@ -86,7 +84,7 @@ export function LoginForm({
         className="w-full bg-white shadow shadow-primary/5 p-[1.5rem] flex items-center gap-2"
         disabled={isPending}
         variant="secondary"
-        onClick={handleSocialLogin}
+        onClick={handleGoogleSignIn}
       >
         {isPending ? (
           "Logging in..."

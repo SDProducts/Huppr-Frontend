@@ -8,6 +8,7 @@ import Input from "@/components/form/Input";
 import RadioGroup from "@/components/form/RadioGroup";
 import { Button } from "@/components/ui/button";
 import { useRegister } from "@/hooks/auth/useAuth";
+import { supabase } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { signUpSchema } from "@/lib/validation/auth_validations";
 import { Form, Formik } from "formik";
@@ -48,26 +49,26 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
   const togglePassword2 = () => {
     setshowPassword2(!showPassword2);
   };
-  // const handleSocialLogin = async (provider: string) => {
-  //   const supabase = createClient();
-  //   setisPending(true);
-  //   setError(null);
+  const handleGoogleSignIn = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
 
-  //   try {
-  //     const { error } = await supabase.auth.signInWithOAuth({
-  //       provider: provider,
-  //       options: {
-  //         redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
-  //       },
-  //     });
+      if (error) {
+        console.error("Error signing in:", error.message);
+        throw error;
+      }
 
-  //     if (error) throw error;
-  //   } catch (error: unknown) {
-  //     setError(error instanceof Error ? error.message : "An error occurred");
-  //     setisPending(false);
-  //   }
-  // };
-
+      // The user will be redirected to Google's OAuth page
+      // After successful auth, they'll be redirected back to /auth/callback
+    } catch (error) {
+      console.error("Sign in error:", error);
+    }
+  };
   const handleSignUp = async (values: typeof initialValues) => {
     register(values);
   };
@@ -86,7 +87,7 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
         className="w-full bg-white shadow shadow-primary/5 p-[1.5rem]"
         disabled={isPending}
         variant="secondary"
-        // onClick={() => handleSocialLogin("google")}
+        onClick={handleGoogleSignIn}
       >
         {isPending ? (
           "Logging in..."

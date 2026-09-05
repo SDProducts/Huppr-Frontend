@@ -1,5 +1,6 @@
 "use client";
 import {
+  FilterParams,
   FilterSidebar,
   TopFilter,
 } from "@/app/(marketing)/jobs/_components/Filters";
@@ -147,6 +148,15 @@ export const jobs: Job2[] = [
 ];
 
 const PageWrapper = () => {
+  const [filterParams, setfilterParams] = useState<FilterParams>({
+    experience_level: "",
+    employement_type: "",
+    industry: "all",
+    salary_rage: {
+      min: 40,
+      max: 500,
+    },
+  });
   const [selectedJobId, setSelectedJobId] = useState(1);
 
   const selectedJob = jobs.find((job) => job.id === selectedJobId) ?? jobs[0];
@@ -161,9 +171,12 @@ const PageWrapper = () => {
       <div className="space-y-10">
         <JobSearchBar />
         {/* <JobsPage /> */}
-        <div className="grid grid-cols-5 gap-4">
-          <div className="">
-            <FilterSidebar />
+        <div className="grid grid-cols-5 gap-6">
+          <div className="border border-slate-200 rounded-md px-4 h-fit">
+            <FilterSidebar
+              filter={filterParams}
+              onSetFilter={setfilterParams}
+            />
           </div>
           {/* Jobs */}
           <div className="col-span-2">
@@ -181,7 +194,7 @@ const PageWrapper = () => {
           </div>
 
           {/* RIGHT DETAILS */}
-          <div className="hidden col-span-2 rounded-t-none border border-slate-200 lg:block">
+          <div className="hidden col-span-2 rounded-md border border-slate-200 lg:block">
             <JobDetails job={selectedJob} />
           </div>
         </div>
