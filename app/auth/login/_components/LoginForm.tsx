@@ -43,7 +43,7 @@ export function LoginForm({
         throw error;
       }
 
-      // The user will be redirected to Google's OAuth page
+      // The user will be redirected to Google's OAuth pages
       // After successful auth, they'll be redirected back to /auth/callback
     } catch (error) {
       console.error("Sign in error:", error);
