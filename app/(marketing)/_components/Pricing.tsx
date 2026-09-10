@@ -56,7 +56,7 @@ const plans: Subscription[] = [
 export default function Pricing() {
   return (
     <section className="py-20 bg-white">
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-10 lg:px-20">
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">

@@ -1,37 +1,61 @@
 "use client";
 import Input from "@/components/form/Input";
-import Select from "@/components/form/Select";
+import SearchableSelect from "@/components/form/SearchableSelect";
+import {
+  SelectInputSkeleton,
+  WorkspaceSettingsSkeleton,
+} from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
-import { useOnboarding } from "@/context/onboarding.state";
+import {
+  useCompleteWorkspaceSettings,
+  useGetOnboarding,
+  useWorkspaceSettings,
+} from "@/hooks/auth/useOnboarding";
+import {
+  useGetCountries,
+  useGetLocales,
+  useGetTimeZones,
+} from "@/hooks/references/useReferences";
 import { Form, Formik } from "formik";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const WorkspaceSettings = () => {
-  const { setStep, step } = useOnboarding();
+  const { data: onboardingState, isLoading } = useGetOnboarding();
+  const { data: timeZoneData } = useGetTimeZones();
+  const { data: countriesResponse } = useGetCountries();
+  const { data: localesResponse } = useGetLocales();
+  const { mutate: setWorkspace, isPending: isSettingWorkspace } =
+    useWorkspaceSettings();
+  const { mutate: complete, isPending: completing } =
+    useCompleteWorkspaceSettings();
+
+  if (!onboardingState || isLoading) {
+    return <WorkspaceSettingsSkeleton />;
+  }
   const initialValues = {
-    countryCode: "",
-    timeZone: "",
-    locale: "",
-    weekStartsOn: "",
-    dateFormat: "DD/MM/YYYY",
+    expectedRevision: onboardingState.settingsRevision || 0,
+    countryCode: onboardingState.workspaceSettings.countryCode,
+    timezone: onboardingState.workspaceSettings.timezone,
+    locale: onboardingState.workspaceSettings.locale,
+    weekStartsOn: onboardingState.workspaceSettings.weekStartsOn,
+    dateFormat: onboardingState.workspaceSettings.dateFormat || "DD/MM/YYYY",
   };
-  const COUNTRY_CODES = [
-    { label: "US", value: "US" },
-    { label: "GB", value: "GB" },
-    { label: "FR", value: "FR" },
-    { label: "NG", value: "NG" },
-  ];
-  const LOCALES = [
-    { label: "en-US", value: "en-US" },
-    { label: "en-GB", value: "en-GB" },
-    { label: "en-NG", value: "en-NG" },
-    { label: "FR", value: "FR" },
-  ];
-  const TIME_ZONES = [
-    { label: "Africa/Lagos", value: "Africa/Lagos" },
-    { label: "Africa/Accra", value: "Africa/Accra" },
-    { label: "Africa/Ibijan", value: "Africa/Ibijan" },
-  ];
+  const COUNTRY_CODES =
+    countriesResponse?.items.map((item) => ({
+      label: `${item.name} (${item.code})`,
+      value: item.code,
+    })) || [];
+  const LOCALES =
+    localesResponse?.items.map((item) => ({
+      label: item.code,
+      value: item.code,
+    })) || [];
+
+  const TIME_ZONES =
+    timeZoneData?.items.map((item) => ({
+      label: item.name,
+      value: item.name,
+    })) || [];
   const DAYS = [
     { label: "Monday", value: "monday" },
     { label: "Tuesday", value: "tuesday" },
@@ -42,7 +66,11 @@ const WorkspaceSettings = () => {
     { label: "Sunday", value: "sunday" },
   ];
   const submit = (values: typeof initialValues) => {
-    setStep(step + 1);
+    setWorkspace(values, {
+      onSuccess() {
+        complete();
+      },
+    });
   };
   return (
     <div className="space-y-8">
@@ -59,30 +87,43 @@ const WorkspaceSettings = () => {
           return (
             <Form className="space-y-10">
               <div className="grid sm:grid-cols-2 gap-4">
-                <Select
-                  label="Country Code"
-                  name="countryCode"
-                  options={COUNTRY_CODES}
-                  placeholder="Select country code"
-                  labelClassName="text-sm"
-                />
-                <Select
-                  label="Locale"
-                  name="locale"
-                  options={LOCALES}
-                  placeholder="Select locale"
-                  labelClassName="text-sm"
-                />
+                {!countriesResponse && !localesResponse ? (
+                  <>
+                    <SelectInputSkeleton />
+                    <SelectInputSkeleton />
+                  </>
+                ) : (
+                  <>
+                    <SearchableSelect
+                      label="Country Code"
+                      name="countryCode"
+                      options={COUNTRY_CODES}
+                      placeholder="Select country code"
+                      labelClassName="text-sm"
+                    />
+                    <SearchableSelect
+                      label="Locale"
+                      name="locale"
+                      options={LOCALES}
+                      placeholder="Select locale"
+                      labelClassName="text-sm"
+                    />
+                  </>
+                )}
                 <div className="sm:col-span-2">
-                  <Select
-                    label="Time Zone"
-                    name="timeZone"
-                    options={TIME_ZONES}
-                    placeholder="Select time zone"
-                    labelClassName="text-sm"
-                  />
+                  {!timeZoneData ? (
+                    <SelectInputSkeleton />
+                  ) : (
+                    <SearchableSelect
+                      label="Time Zone"
+                      name="timezone"
+                      options={TIME_ZONES}
+                      placeholder="Select time zone"
+                      labelClassName="text-sm"
+                    />
+                  )}
                 </div>
-                <Select
+                <SearchableSelect
                   label="Week Starts on:"
                   name="weekStartsOn"
                   options={DAYS}
@@ -100,7 +141,7 @@ const WorkspaceSettings = () => {
 
               <div className="flex justify-between items-center text-sm py-4 border-t border-gray-300">
                 <Button
-                  onClick={() => setStep(step - 1)}
+                  // onClick={() => setStep(step - 1)}
                   label="Back"
                   icon={<ArrowLeft />}
                   className="w-fit! px-5 rounded-full! bg-transparent text-black!"
@@ -108,6 +149,8 @@ const WorkspaceSettings = () => {
                 <Button
                   label="Continue"
                   type="submit"
+                  isLoading={isSettingWorkspace || completing}
+                  disabled={isSettingWorkspace || completing}
                   rightIcon={<ArrowRight />}
                   className="w-fit! px-5 rounded-full!"
                 />

@@ -14,10 +14,10 @@ const PageWrapper = () => {
   if (step === "departments") {
     return <DepartmentsSelect />;
   }
-  if (step === "workspace") {
+  if (step === "workspace_settings") {
     return <WorkspaceSettings />;
   }
-  if (step === "completed") {
+  if (step === "review") {
     return <OnboardingComplete />;
   }
   return redirect("/onboarding");

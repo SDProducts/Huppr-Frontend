@@ -130,7 +130,7 @@ export const useCompleteCompanyStep = () => {
 };
 interface DepartmentsSelectPayload {
   expectedRevision: number;
-  departments: Suggestion[];
+  departments: SelectedDepartment[];
 }
 export const useSaveSelectedDepartments = () => {
   const qc = useQueryClient();
@@ -147,6 +147,167 @@ export const useSaveSelectedDepartments = () => {
         queryKey: ["onboarding"],
       });
       toast.success("Draft Saved");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+export const useCompleteDepartmentStep = () => {
+  const qc = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async (): Promise<ProgressResponse> => {
+      const response = await api.post(
+        "/employer/onboarding/departments/complete"
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({
+        queryKey: ["onboarding"],
+      });
+      router.push(`/onboarding/${data.nextAction}`);
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+
+interface WorkspaceSettingsPayload {
+  expectedRevision: number;
+  countryCode: string;
+  timezone: string;
+  locale: string;
+  weekStartsOn: string;
+  dateFormat: string;
+}
+export const useWorkspaceSettings = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: WorkspaceSettingsPayload) => {
+      const response = await api.patch(
+        "/employer/onboarding/workspace-settings",
+        payload
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ["onboarding"],
+      });
+      toast.success("Draft Saved");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+
+export const useCompleteWorkspaceSettings = () => {
+  const qc = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async (): Promise<ProgressResponse> => {
+      const response = await api.post(
+        "/employer/onboarding/workspace-settings/complete"
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({
+        queryKey: ["onboarding"],
+      });
+      router.push(`/onboarding/${data.nextAction}`);
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+
+export const useCompleteOnboarding = () => {
+  const qc = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async (): Promise<ProgressResponse> => {
+      const response = await api.post("/employer/onboarding/complete");
+      return response.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ["onboarding"],
+      });
+      router.push(`/dashboard}`);
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data

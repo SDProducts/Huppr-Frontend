@@ -203,6 +203,46 @@ export const useResendOTP = () => {
     },
   });
 };
+interface OTPPayload {
+  otp: string;
+  email: string;
+}
+export const useConfirmOTP = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: OTPPayload) => {
+      const res = await api.post(`/auth/confrim-otp/`, payload);
+      return res.data;
+    },
+    onSuccess: () => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+      toast.success("OTP sent successfully");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("OTP Failed");
+      }
+    },
+  });
+};
 export const useUpdatePassword = () => {
   const queryClient = useQueryClient();
   return useMutation({

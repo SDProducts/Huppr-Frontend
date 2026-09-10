@@ -1,8 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
+"use client";
 import Button from "@/components/ui/CustomButton";
+import { useCompleteOnboarding } from "@/hooks/auth/useOnboarding";
 import { ArrowRight, Check } from "lucide-react";
 
 const OnboardingComplete = () => {
+  const { mutate: complete, isPending } = useCompleteOnboarding();
   const completedSteps = [
     {
       name: "Company Created",
@@ -29,7 +32,7 @@ const OnboardingComplete = () => {
           ready to start managing your team with calm intelligence.
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid sm:grid-cols-3 gap-1">
         {completedSteps.map((item, i) => (
           <div
             className="border border-gray-200 rounded-md p-2 space-y-1"
@@ -47,11 +50,15 @@ const OnboardingComplete = () => {
       </div>
       <div className="flex justify-center">
         <Button
-          type="link"
-          href="/dashboard"
+          // type="link"
+          // href="/dashboard"
+          onClick={complete}
           label="Go to Dashboard"
+          isLoading={isPending}
+          disabled={isPending}
+          loadingLabel="Completing company profile"
           rightIcon={<ArrowRight />}
-          className="w-fit! px-6 bg-primary text-white rounded-lg"
+          className="w-fit! px-6"
         />
       </div>
     </div>

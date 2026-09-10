@@ -4,6 +4,8 @@ import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import PasswordStrength from "@/app/auth/sign-up/_components/PasswordStrength";
+import Checkbox from "@/components/form/Checkbox";
 import Input from "@/components/form/Input";
 import RadioGroup from "@/components/form/RadioGroup";
 import { Button } from "@/components/ui/button";
@@ -14,11 +16,11 @@ import { signUpSchema } from "@/lib/validation/auth_validations";
 import { Form, Formik } from "formik";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-interface Prop {
-  setstep: (step: AuthStep) => void;
-  setEmail: (email: string) => void;
-}
-const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
+// interface Prop {
+//   setstep: (step: AuthStep) => void;
+//   setEmail: (email: string) => void;
+// }
+const SignUpForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword1, setshowPassword1] = useState(false);
   const [showPassword2, setshowPassword2] = useState(false);
@@ -42,6 +44,7 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
     password: "",
     // confirm_password: "",
     role: "employer",
+    agree: false,
   };
   const togglePassword1 = () => {
     setshowPassword1(!showPassword1);
@@ -132,6 +135,7 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
                   )
                 }
               />
+              <PasswordStrength name="password" />
               <RadioGroup
                 label="Continue as:"
                 options={ROLES}
@@ -157,6 +161,30 @@ const SignUpForm: React.FC<Prop> = ({ setstep, setEmail }) => {
                 }
               /> */}
               {error && <p className="text-sm text-red-500">{error}</p>}
+              <Checkbox
+                name="agree"
+                className="mt-4"
+                label={
+                  <div>
+                    I agree to the{" "}
+                    <Link
+                      href={"/policy"}
+                      className="text-primary hover:underline"
+                    >
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      href={"/policy"}
+                      className="text-primary hover:underline"
+                    >
+                      {" "}
+                      Privacy Policy
+                    </Link>
+                    .
+                  </div>
+                }
+              />
               <Button
                 type="submit"
                 className="w-full p-[1.5rem]"

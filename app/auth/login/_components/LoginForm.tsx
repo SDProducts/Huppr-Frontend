@@ -73,7 +73,7 @@ export function LoginForm({
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <div>
+      <div className="text-center">
         <h2 className="text-[clamp(1.5rem,2cqi+0.025rem,2rem)] font-semibold tracking-normal ">
           Log In to Your Account
         </h2>

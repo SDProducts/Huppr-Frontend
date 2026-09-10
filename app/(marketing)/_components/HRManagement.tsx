@@ -1,15 +1,8 @@
-import { Badge } from "@/components/ui/badge";
-import {
-  TrendingUp,
-  UsersRound,
-  Award,
-  Clock,
-  Info,
-  CalendarCheck,
-} from "lucide-react";
-import Image from "next/image";
 import DashboardMockup from "@/assets/Background+Border+Shadow-2.png";
 import FeatureCard from "@/components/FeatureCard";
+import { Badge } from "@/components/ui/badge";
+import { CalendarCheck, Info, UsersRound } from "lucide-react";
+import Image from "next/image";
 
 export default function HRManagement() {
   const features = [
@@ -28,7 +21,7 @@ export default function HRManagement() {
   ];
   return (
     <section className="py-16">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-10 lg:px-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left: Applicants Overview */}
           <div className="space-y-6">

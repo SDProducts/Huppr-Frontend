@@ -1,5 +1,7 @@
 // app/fonts.ts
 import {
+  Comfortaa,
+  Fredoka,
   Geist,
   Geist_Mono,
   Inter,
@@ -46,4 +48,13 @@ export const geistSans = Geist({
 export const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+export const fredoka = Fredoka({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+export const comfortaa = Comfortaa({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });

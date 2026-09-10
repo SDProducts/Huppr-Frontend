@@ -2,25 +2,15 @@
 import { DepartmentsSelectSkeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import {
+  useCompleteDepartmentStep,
   useGetOnboarding,
   useSaveSelectedDepartments,
 } from "@/hooks/auth/useOnboarding";
-import { useGetDepartments } from "@/hooks/references/useReferences";
 import {
-  ArrowLeft,
-  ArrowRight,
-  Banknote,
-  ChartNoAxesCombined,
-  Code,
-  HelpCircle,
-  LucideGavel,
-  Megaphone,
-  Package,
-  Palette,
-  PlusCircle,
-  Settings,
-  Users2,
-} from "lucide-react";
+  useGetDepartmentIcons,
+  useGetDepartments,
+} from "@/hooks/references/useReferences";
+import { ArrowLeft, ArrowRight, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -28,67 +18,27 @@ const DepartmentsSelect = () => {
   const { data: onboardingState } = useGetOnboarding();
   const router = useRouter();
   const { data } = useGetDepartments();
+  const { data: iconsData } = useGetDepartmentIcons();
   const { mutate: saveDepartments, isPending } = useSaveSelectedDepartments();
-  const [selectedDepartments, setselectedDepartments] = useState<Suggestion[]>(
-    []
-  );
-  if (!data) {
+  const { mutate: completeStep, isPending: isCompleting } =
+    useCompleteDepartmentStep();
+  const savedDepartments = onboardingState?.departments || [];
+  const [selectedDepartments, setselectedDepartments] =
+    useState<SelectedDepartment[]>(savedDepartments);
+  if (!data || !iconsData || !onboardingState) {
     return <DepartmentsSelectSkeleton />;
   }
-  const departmnts = [
-    {
-      name: "Human Resources",
-      icon: Users2,
-    },
-    {
-      name: "Finance",
-      icon: Banknote,
-    },
-    {
-      name: "Sales",
-      icon: ChartNoAxesCombined,
-    },
-    {
-      name: "Marketing",
-      icon: Megaphone,
-    },
-    {
-      name: "Operations",
-      icon: Settings,
-    },
-    {
-      name: "Customer Support",
-      icon: HelpCircle,
-    },
-    {
-      name: "Engineering",
-      icon: Code,
-    },
-    {
-      name: "Product",
-      icon: Package,
-    },
-    {
-      name: "General",
-      icon: Palette,
-    },
-    {
-      name: "Legal",
-      icon: LucideGavel,
-    },
-    {
-      name: "Administration",
-      icon: Code,
-    },
-  ];
+  const icons = iconsData?.items || [];
   const handleToggleDepartment = (dept: Suggestion) => {
+    const { popular, ...selected } = dept;
+    console.log(popular);
     const exists = selectedDepartments.some((item) => item.name === dept.name);
     if (exists) {
       setselectedDepartments(
-        selectedDepartments.filter((item) => item.name !== dept.name)
+        selectedDepartments.filter((item) => item.name !== selected.name)
       );
     } else {
-      setselectedDepartments([...selectedDepartments, dept]);
+      setselectedDepartments([...selectedDepartments, selected]);
     }
   };
   const proceed = () => {
@@ -96,7 +46,11 @@ const DepartmentsSelect = () => {
       expectedRevision: onboardingState?.departmentsRevision || 0,
       departments: selectedDepartments,
     };
-    saveDepartments(payload);
+    saveDepartments(payload, {
+      onSuccess() {
+        completeStep();
+      },
+    });
   };
   return (
     <div className="space-y-8">
@@ -108,9 +62,9 @@ const DepartmentsSelect = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {data?.suggestions.map((dept, i) => {
-          const department = departmnts.find((item) => item.name === dept.name);
+          const icon = icons.find((item) => item.id === dept.iconId);
           const isSelected = selectedDepartments.some(
             (item) => item.name === dept.name
           );
@@ -124,13 +78,19 @@ const DepartmentsSelect = () => {
                 handleToggleDepartment(dept);
               }}
             >
-              <div className="h-28 w-full flex justify-center items-center">
-                {department && <department.icon size={50} />}
+              <div className="h-14 sm:h-28 w-full flex justify-center items-center">
+                {icon && (
+                  <img
+                    src={icon.url}
+                    alt={icon.name}
+                    className="w-8 sm:w-16 h-8 sm:h-16"
+                  />
+                )}
               </div>
               <div
                 className={`${
                   isSelected ? "bg-transparent text-white" : "bg-white"
-                } text-xs p-2 text-center group-hover:bg-transparent group-hover:text-white`}
+                } text-xs p-2 text-center group-hover:bg-transparent group-hover:text-white truncate line-clamp-1`}
               >
                 {dept.name}
               </div>
@@ -138,10 +98,10 @@ const DepartmentsSelect = () => {
           );
         })}
         <div className="border rounded-md bg-gray-200 group hover:bg-primary/70 hover:text-white overflow-hidden border-gray-300 flex flex-col cursor-pointer">
-          <div className="h-28 w-full flex justify-center items-center">
-            <PlusCircle size={50} />
+          <div className="h-14 sm:h-28 w-full flex justify-center items-center">
+            <PlusCircle className="h-8 w-8 sm:h-16 sm:w-16" />
           </div>
-          <div className="bg-white text-xs p-2 text-center group-hover:bg-transparent group-hover:text-white">
+          <div className="bg-white truncate line-clamp-1 text-xs p-2 text-center group-hover:bg-transparent group-hover:text-white">
             {"Custom Dept"}
           </div>
         </div>
@@ -156,8 +116,9 @@ const DepartmentsSelect = () => {
         <Button
           label="Continue"
           onClick={proceed}
-          isLoading={isPending}
-          disabled={isPending}
+          loadingLabel="Saving..."
+          isLoading={isPending || isCompleting}
+          disabled={isPending || isCompleting}
           rightIcon={<ArrowRight />}
           className="w-fit! px-5 rounded-full!"
         />

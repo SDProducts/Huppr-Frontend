@@ -162,7 +162,7 @@ const PageWrapper = () => {
   const selectedJob = jobs.find((job) => job.id === selectedJobId) ?? jobs[0];
 
   return (
-    <div>
+    <div className="px-4 sm:px-10">
       <div className="py-12 sm:py-18 text-center">
         <h1 className="font-black text-gray-600 text-2xl sm:text-4xl">
           Find your dream jobs

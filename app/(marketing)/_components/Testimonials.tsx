@@ -65,8 +65,8 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="py-20 bg-indigo-900/5">
-      <div className="px-4 sm:px-6 lg:px-8 full">
+    <section className="py-5 sm:py-10 lg:py-10 bg-indigo-900/5">
+      <div className="px-4 sm:px-10 lg:px-20 full">
         <div className="text-center max-w-2xl mx-auto *:mx-auto mb-12 grid place-content-center gap-2">
           <Badge className="tracking-wide bg-primary-100/50 text-primary-badge text-xs font-semibold px-3 py-1">
             WHAT OUR CUSTOMERS SAY

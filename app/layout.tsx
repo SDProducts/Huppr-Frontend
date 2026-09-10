@@ -1,4 +1,4 @@
-import { poppins } from "@/app/fonts";
+import { space } from "@/app/fonts";
 import Modal from "@/components/global/Modal";
 import { QCProvider } from "@/components/global/QueryClientProvider";
 import { cn } from "@/lib/utils";
@@ -38,7 +38,7 @@ export default function RootLayout({
         // geistMono.variable,
         // // "font-sans",
         // inter.variable,
-        poppins.className
+        space.className
       )}
     >
       <QCProvider>
@@ -47,8 +47,8 @@ export default function RootLayout({
             position="top-center"
             toastOptions={{
               style: {
-                borderRadius: "10px",
-                fontSize: 14,
+                borderRadius: "4px",
+                fontSize: 12,
               },
             }}
           />

@@ -25,8 +25,11 @@ api.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     const message = error.response?.data.message;
+    const isExpired =
+      message === "A valid bearer token is required" ||
+      "Invalid or expired session";
     // Example: Auto logout on 401
-    if (status === 401 && message === "Invalid or expired session") {
+    if (status === 401 && isExpired) {
       console.log("Status:", status);
       toast.error("User session timed out");
       Cookies.remove("access_token");

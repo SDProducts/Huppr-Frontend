@@ -1,5 +1,6 @@
-import VerifyEmail from "@/app/auth/confirm-email/_components/VerifyEmail";
+import OTPForm from "@/app/auth/confirm-email/_components/OTPForm";
 
 export default function page() {
-  return <VerifyEmail />;
+  return <OTPForm />;
+  // return <VerifyEmail />;
 }

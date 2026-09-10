@@ -73,7 +73,7 @@ export default function Stats() {
 
   return (
     <section ref={ref} className="py-16 bg-[#0F172A] border-y border-gray-100">
-      <div className="grid gap-[1.5rem] px-4 sm:px-6 lg:px-8  text-white">
+      <div className="grid gap-[1.5rem] px-4 sm:px-10 lg:px-20 text-white">
         <h3 className="text-center font-bold text-white ">
           TRUSTED BY FAST-GROWING COMPANIES
         </h3>

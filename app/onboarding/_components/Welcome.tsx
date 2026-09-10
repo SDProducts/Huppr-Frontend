@@ -27,7 +27,11 @@ const Welcome = () => {
     } else {
       startOnboarding(undefined, {
         onSuccess(data) {
-          router.push(`/onboarding/${data.nextAction}`);
+          if (data.status === "completed") {
+            router.push(`/${data.nextAction}`);
+          } else {
+            router.push(`/onboarding/${data.nextAction}`);
+          }
         },
       });
     }
@@ -51,12 +55,18 @@ const Welcome = () => {
       </div>
       <div className="space-y-4 ">
         <Button
-          label={data.status === "in_progress" ? "Continue" : "Get Started"}
+          label={
+            data.status === "in_progress"
+              ? "Continue"
+              : data.status === "completed"
+              ? "Go to Dashboard"
+              : "Get Started"
+          }
           onClick={handleStart}
           isLoading={isPending}
           disabled={isLoading}
           loadingLabel="Starting..."
-          className="text-xl w-fit! px-20 bg-primary text-white! mx-auto"
+          className="text-xl sm:w-fit! sm:px-20 bg-primary text-white! mx-auto"
           rightIcon={<ArrowRight size={20} />}
         />
         <div className="flex items-center justify-center gap-1 text-gray-500">

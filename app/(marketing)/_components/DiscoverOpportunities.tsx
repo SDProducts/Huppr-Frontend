@@ -15,7 +15,7 @@ import Link from "next/link";
 export default function DiscoverOpportunities() {
   return (
     <section className="py-20 bg-gray-50/50">
-      <div className="px-4 sm:px-6 lg:px-8 space-y-4">
+      <div className="px-4 sm:px-0 lg:px-20 space-y-4">
         {/* Section Header */}
         <div className="flex flex-wrap justify-between gap-2 items-end">
           <div className="grid">

@@ -261,6 +261,20 @@ interface Company {
   logoUrl: string;
   logoUploadedAt: string;
 }
+interface SavedDepartment {
+  name: string;
+  iconId: string;
+  clientId: string;
+  description: string;
+}
+interface WorkspaceSettings {
+  countryCode: string;
+  countryName: string;
+  timezone: string;
+  locale: string;
+  weekStartsOn: string;
+  dateFormat: string;
+}
 interface OnboardingStateResponse {
   status: string;
   currentStep: number;
@@ -270,9 +284,9 @@ interface OnboardingStateResponse {
   completedSteps: number[];
   company: Company;
   companyRevision: number;
-  departments: string[];
+  departments: SavedDepartment[];
   departmentsRevision: number;
-  workspaceSettings: object;
+  workspaceSettings: WorkspaceSettings;
   settingsRevision: number;
   organizationId: string;
 }
@@ -302,6 +316,11 @@ interface ProgressResponse {
   nextAction: string;
   completedAt: string;
 }
+interface SelectedDepartment {
+  iconId: string;
+  name: string;
+  description: string;
+}
 
 interface Suggestion {
   iconId: string;
@@ -313,4 +332,55 @@ interface Suggestion {
 interface SuggestionsResponse {
   suggestions: Suggestion[];
   defaultSuggestion: Suggestion;
+}
+interface TimeZone {
+  name: string;
+  offset: string;
+  abbr: string;
+  countryCode: string;
+}
+
+interface TimeZonesResponse {
+  items: TimeZone[];
+  total: number;
+}
+interface Country {
+  code: string;
+  name: string;
+  phoneCode: string;
+  currency: string;
+  flag: string;
+}
+
+interface CountryResponse {
+  items: Country[];
+  page: number;
+  limit: number;
+  total: number;
+  hasMore: boolean;
+}
+
+interface Locale {
+  code: string;
+  name: string;
+  language: string;
+  countryCode: string;
+  countryName: string;
+  defaultWeekStart: string;
+  defaultDateFormat: string;
+}
+interface LocaleResponse {
+  items: Locale[];
+  total: number;
+}
+
+interface DepartmentIcons {
+  id: string;
+  name: string;
+  active: boolean;
+  builtinKey: null;
+  url: string;
+}
+interface DepartmentIconResponse {
+  items: DepartmentIcons[];
 }
