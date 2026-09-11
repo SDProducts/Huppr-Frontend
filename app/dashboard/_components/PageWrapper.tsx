@@ -10,7 +10,9 @@ import { CompanyCalendar } from "@/app/dashboard/_components/MiniCalendar";
 import UpcomingInterviews from "@/app/dashboard/_components/UpcomingInterviews";
 import UpcomingBirthdays from "@/app/dashboard/_components/UpcommingBirthdays";
 import WorkAnniversaries from "@/app/dashboard/_components/WorkAnniversary";
+import { PageLoader } from "@/components/global/PageLoader";
 import { useGetMyDetails } from "@/hooks/auth/useAuth";
+import { useGetDashboard } from "@/hooks/employer/useEmployer";
 import {
   BadgeDollarSign,
   CalendarDays,
@@ -25,7 +27,12 @@ import {
 } from "lucide-react";
 
 const PageWrapper = () => {
-  useGetMyDetails();
+  const { data: userData } = useGetMyDetails();
+  const { data: dashboardData } = useGetDashboard(userData?.id);
+  if (!dashboardData) {
+    return <PageLoader text="Loading your dashboard..." />;
+  }
+  const activities = dashboardData.todaysActivity.items;
   const metrics = [
     {
       icon: Users,
@@ -71,7 +78,7 @@ const PageWrapper = () => {
       variant: "yellow" as const,
     },
   ];
-  const activities = [
+  const activities2 = [
     {
       id: 1,
       icon: ClipboardList,

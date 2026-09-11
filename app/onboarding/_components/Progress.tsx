@@ -17,17 +17,37 @@ const Progress = () => {
   }
   return (
     <div className="mb-5 space-y-1">
-      <div className="flex justify-between text-sm">
+      <div className="flex justify-between items-end text-sm">
         <div className="">
-          Step {currentStep} of {totalSteps}
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white">
+              H
+            </div>
+
+            <div>
+              <p className="text-sm font-bold text-slate-900">Huppr</p>
+              <p className="text-[11px] text-slate-500">Employer onboarding</p>
+            </div>
+          </div>
         </div>
-        <div className="text-primary">{progress}%</div>
+        <div className="text-right text-xs">
+          <div className="text-slate-500">
+            Step{" "}
+            <span className="font-semibold text-slate-900">{currentStep}</span>{" "}
+            of {totalSteps}
+          </div>
+
+          {/* <div className="text-primary">{progress}%</div> */}
+        </div>
       </div>
-      <div className="w-full bg-gray-200 rounded-full overflow-hidden">
-        <div
-          className="h-1.5 bg-linear-to-r from-primary to-orange-500"
-          style={{ width: `${progress}%` }}
-        ></div>
+      <div className="flex items-center gap-2">
+        <div className="w-full bg-gray-200 rounded-full overflow-hidden flex-1">
+          <div
+            className="h-1.5 bg-linear-to-r from-primary to-orange-500"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <div className="text-primary text-xs">{progress}%</div>
       </div>
     </div>
   );

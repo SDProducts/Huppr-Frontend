@@ -91,12 +91,13 @@ const OTPForm: React.FC = () => {
             >
               <InputOTPGroup
                 className="
-                  *:data-[slot=input-otp-slot]:h-10
+                  *:data-[slot=input-otp-slot]:shadow-none
+                  *:data-[slot=input-otp-slot]:h-12
                   sm:*:data-[slot=input-otp-slot]:h-16
-                  *:data-[slot=input-otp-slot]:w-10
+                  *:data-[slot=input-otp-slot]:w-12
                   sm:*:data-[slot=input-otp-slot]:w-16
                   *:data-[slot=input-otp-slot]:text-xl
-                  space-x-2
+                  space-x-1 sm:space-x-2
                 "
               >
                 <InputOTPSlot index={0} className="border rounded-md!" />
@@ -122,11 +123,9 @@ const OTPForm: React.FC = () => {
                 Resend in {timer}s
               </span>
             ) : (
-              <button
-                type="button"
+              <span
                 className="flex items-center gap-1 text-primary cursor-pointer"
                 onClick={handleResend}
-                disabled={isResending}
               >
                 {isResending ? (
                   "Resending..."
@@ -136,7 +135,7 @@ const OTPForm: React.FC = () => {
                     <RefreshCcw size={12} />
                   </>
                 )}
-              </button>
+              </span>
             )}
           </FieldDescription>
         </Field>

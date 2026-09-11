@@ -99,7 +99,7 @@ class Navigation {
     {
       label: " report",
       icon: BarChartBig,
-      path: "/dashboard/report",
+      path: "/dashboard/reports",
     },
 
     {

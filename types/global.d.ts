@@ -384,3 +384,110 @@ interface DepartmentIcons {
 interface DepartmentIconResponse {
   items: DepartmentIcons[];
 }
+
+interface EmployerDashboardResponse {
+  organization: Organization;
+  timezone: string;
+  asOf: string;
+  summary: NetworkSummary;
+  todaysActivity: TodaysActivity;
+  upcomingEvents: UpcomingEvents;
+  departmentOverview: DepartmentOverview;
+  unavailableMetrics: string[];
+}
+
+interface Organization {
+  id: string;
+  name: string;
+}
+
+interface NetworkSummary {
+  departments: number;
+  headcount: number | null;
+  openRoles: number | null;
+  onLeaveToday: number | null;
+}
+
+interface TodaysActivity {
+  items: ActivityItem[];
+  nextCursor: string;
+}
+
+interface ActivityItem {
+  id: string;
+  category: string;
+  kind: string;
+  title: string;
+  summary: string;
+  occurredAt: string;
+  actorId: string;
+  subject: ActivitySubject;
+  urgency: "low" | "normal" | "high" | string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  availableActions: any[]; // Replace any[] if you have specific action shapes
+}
+
+interface ActivitySubject {
+  type: string;
+  id: string;
+}
+
+interface UpcomingEvents {
+  items: EventItem[];
+}
+
+interface EventItem {
+  id: string;
+  organizationId: string;
+  kind: string;
+  source: "manual" | string;
+  sourceId: string | null;
+  title: string;
+  description: string;
+  startsAt: string;
+  endsAt: string;
+  timezone: string;
+  allDay: boolean;
+  location: string;
+  meetingUrl: string;
+  organizerId: string;
+  attendees: Attendee[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Attendee {
+  userId: string;
+  response: "accepted" | "declined" | "tentative" | "needs_action" | string;
+}
+
+interface DepartmentOverview {
+  summary: DepartmentSummary;
+  items: DepartmentItem[];
+  unavailableMetrics: string[];
+}
+
+interface DepartmentSummary {
+  totalDepartments: number;
+  totalHeadcount: number | null;
+  totalSubteams: number | null;
+}
+
+interface DepartmentItem {
+  id: string;
+  organizationId: string;
+  name: string;
+  description: string;
+  displayOrder: number;
+  archived: boolean;
+  icon: DepartmentIcon;
+  createdAt: string;
+}
+
+interface DepartmentIcon {
+  id: string;
+  name: string;
+  builtin_key: string;
+  storage_path: string | null;
+}

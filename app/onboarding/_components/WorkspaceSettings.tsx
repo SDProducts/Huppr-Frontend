@@ -73,7 +73,7 @@ const WorkspaceSettings = () => {
     });
   };
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 h-full">
       <div className="space-y-1">
         <h2 className="text-3xl font-bold">Workspace Settings</h2>
         <p className="text-sm">
@@ -86,7 +86,7 @@ const WorkspaceSettings = () => {
         {() => {
           return (
             <Form className="space-y-10">
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-4 flex-1">
                 {!countriesResponse && !localesResponse ? (
                   <>
                     <SelectInputSkeleton />
@@ -139,8 +139,10 @@ const WorkspaceSettings = () => {
                 />
               </div>
 
-              <div className="flex justify-between items-center text-sm py-4 border-t border-gray-300">
+              <div className="flex justify-between items-center text-sm py-4 mt-14 border-t border-gray-300">
                 <Button
+                  type="link"
+                  href="/onboarding/company_setup"
                   // onClick={() => setStep(step - 1)}
                   label="Back"
                   icon={<ArrowLeft />}

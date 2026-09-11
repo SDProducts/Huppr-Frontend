@@ -21,7 +21,7 @@ export default function HRManagement() {
   ];
   return (
     <section className="py-16">
-      <div className="mx-auto px-4 sm:px-10 lg:px-20">
+      <div className="mx-auto px-2 sm:px-10 lg:px-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left: Applicants Overview */}
           <div className="space-y-6">

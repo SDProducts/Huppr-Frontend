@@ -55,7 +55,7 @@ export default function PrivacyPolicyPage() {
 
   return (
     <main className="bg-white text-slate-950">
-      <section className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-8">
         {/* HEADER */}
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">

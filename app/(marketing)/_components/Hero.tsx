@@ -12,7 +12,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="py-4 px-4 sm:px-10 lg:px-20 sm:py-12 bg-linear-to-b from-white via-indigo-50/50  to-white full overflow-clip">
+    <section className="py-4 px-2 sm:px-10 lg:px-20 sm:py-12 bg-linear-to-b from-white via-indigo-50/50  to-white full overflow-clip">
       <div className="relative isolate">
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Content */}

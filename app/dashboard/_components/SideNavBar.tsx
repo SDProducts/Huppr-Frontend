@@ -1,5 +1,5 @@
 "use client";
-import Logo from "@/assets/huppr_without_bg.png";
+import Logo from "@/assets/huppr_logo2.png";
 import { navigation } from "@/data/constants";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
@@ -17,7 +17,7 @@ function SideNavBar() {
           alt="HeyHR"
           loading="eager"
           quality={100}
-          className="w-auto h-18"
+          className="w-auto h-10"
         />
         <div className="text-sm text-gray-500 flex-1">workspace</div>
       </div>

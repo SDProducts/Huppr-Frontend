@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function RecruitSmarter() {
   return (
     <section className="py-16 bg-light">
-      <div className="px-4 sm:px-10 lg:px-20">
+      <div className="px-2 sm:px-10 lg:px-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left: Recruit Smarter */}
           <div className="space-y-6">

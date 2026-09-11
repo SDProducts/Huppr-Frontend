@@ -162,7 +162,7 @@ const PageWrapper = () => {
   const selectedJob = jobs.find((job) => job.id === selectedJobId) ?? jobs[0];
 
   return (
-    <div className="px-4 sm:px-10">
+    <div className="px-2 sm:px-10">
       <div className="py-12 sm:py-18 text-center">
         <h1 className="font-black text-gray-600 text-2xl sm:text-4xl">
           Find your dream jobs
@@ -171,15 +171,15 @@ const PageWrapper = () => {
       <div className="space-y-10">
         <JobSearchBar />
         {/* <JobsPage /> */}
-        <div className="grid grid-cols-5 gap-6">
-          <div className="border border-slate-200 rounded-md px-4 h-fit">
+        <div className="grid sm:grid-cols-5 gap-6">
+          <div className="border border-slate-200 rounded-md px-4 h-fit hidden sm:block">
             <FilterSidebar
               filter={filterParams}
               onSetFilter={setfilterParams}
             />
           </div>
           {/* Jobs */}
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <TopFilter />
             <div className="space-y-4">
               {jobs.map((job) => (

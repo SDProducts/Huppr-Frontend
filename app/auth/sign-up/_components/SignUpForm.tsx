@@ -52,7 +52,7 @@ const SignUpForm: React.FC = () => {
   const togglePassword2 = () => {
     setshowPassword2(!showPassword2);
   };
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignUp = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -73,7 +73,8 @@ const SignUpForm: React.FC = () => {
     }
   };
   const handleSignUp = async (values: typeof initialValues) => {
-    register(values);
+    const { agree, ...payload } = values;
+    register(payload);
   };
 
   return (
@@ -90,7 +91,7 @@ const SignUpForm: React.FC = () => {
         className="w-full bg-white shadow shadow-primary/5 p-[1.5rem]"
         disabled={isPending}
         variant="secondary"
-        onClick={handleGoogleSignIn}
+        onClick={handleGoogleSignUp}
       >
         {isPending ? (
           "Logging in..."
@@ -168,7 +169,7 @@ const SignUpForm: React.FC = () => {
                   <div>
                     I agree to the{" "}
                     <Link
-                      href={"/policy"}
+                      href={"/terms"}
                       className="text-primary hover:underline"
                     >
                       Terms of Service

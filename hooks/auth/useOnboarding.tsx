@@ -2,6 +2,7 @@ import { token } from "@/data/constants";
 import api from "@/lib/axios.config";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 export const useGetOnboarding = () => {
@@ -67,7 +68,7 @@ export const useSaveCompanyData = () => {
       qc.invalidateQueries({
         queryKey: ["onboarding"],
       });
-      toast.success("Company data saved");
+      toast.success("Draft saved");
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data
@@ -307,7 +308,8 @@ export const useCompleteOnboarding = () => {
       qc.invalidateQueries({
         queryKey: ["onboarding"],
       });
-      router.push(`/dashboard}`);
+      Cookies.set("onboarding_complete", "true");
+      router.push(`/onboading/complete}`);
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data

@@ -1,8 +1,10 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Subscription } from "@/types";
 import { CheckCircle2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const plans: Subscription[] = [
   {
@@ -54,18 +56,21 @@ const plans: Subscription[] = [
 ];
 
 export default function Pricing() {
+  const pathname = usePathname();
   return (
     <section className="py-20 bg-white">
-      <div className="px-4 sm:px-10 lg:px-20">
+      <div className="px-2 sm:px-10 lg:px-20">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Simple Pricing That Grows With Your Business
-          </h2>
-          <p className="mt-3 leading-relaxed">
-            Start with what you need today, upgrade as your team expands.
-          </p>
-        </div>
+        {pathname !== "/pricing" && (
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Simple Pricing That Grows With Your Business
+            </h2>
+            <p className="mt-3 leading-relaxed">
+              Start with what you need today, upgrade as your team expands.
+            </p>
+          </div>
+        )}
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">

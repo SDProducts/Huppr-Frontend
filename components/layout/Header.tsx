@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 // import Logo from "@/components/ui/logo";
-import Logo from "@/assets/huppr_without_bg.png";
+import Logo from "@/assets/huppr_logo2.png";
 import Image from "next/image";
 
 export default function Header() {
@@ -20,7 +20,7 @@ export default function Header() {
               src={Logo}
               alt="Huppr Logo"
               loading="eager"
-              className="h-16 w-auto"
+              className="h-10 w-auto"
             />
           </Link>
 

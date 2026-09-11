@@ -3,6 +3,7 @@
 import CompanyDetailForm from "@/app/onboarding/_components/CompanyDetailForm";
 import DepartmentsSelect from "@/app/onboarding/_components/DepartmentsSelect";
 import OnboardingComplete from "@/app/onboarding/_components/OnboardingComplete";
+import EmployerOnboardingPreview from "@/app/onboarding/_components/Preview";
 import WorkspaceSettings from "@/app/onboarding/_components/WorkspaceSettings";
 import { redirect, useParams } from "next/navigation";
 
@@ -18,6 +19,9 @@ const PageWrapper = () => {
     return <WorkspaceSettings />;
   }
   if (step === "review") {
+    return <EmployerOnboardingPreview />;
+  }
+  if (step === "complete") {
     return <OnboardingComplete />;
   }
   return redirect("/onboarding");

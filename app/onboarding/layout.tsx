@@ -20,7 +20,9 @@ export default function Layout({
       </aside>
       <section className="px-4 sm:px-10 pt-4 h-screen max-h-screen overflow-y-auto flex flex-col">
         <Progress />
-        <div className="w-full flex-1 sm:min-w-md mt-8">{children}</div>
+        <div className="w-full flex-1 sm:min-w-xs lg:min-w-md mt-8">
+          {children}
+        </div>
 
         <small className="text-center py-5">
           © 2026 Hoopr Technologies Inc. All rights reserved.

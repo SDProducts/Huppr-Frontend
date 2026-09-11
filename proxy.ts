@@ -44,7 +44,7 @@ export function proxy(request: NextRequest) {
 
   if (token && isProtectedRoute) {
     if (!onboarding_complete) {
-      return NextResponse.redirect(onboardingURL);
+      // return NextResponse.redirect(onboardingURL);
     }
   }
   if (!token && isOnboardingRoute) {

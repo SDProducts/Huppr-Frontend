@@ -1,11 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
+import { CompanyFormSkeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
-import { useCompleteOnboarding } from "@/hooks/auth/useOnboarding";
+import { useGetOnboarding } from "@/hooks/auth/useOnboarding";
 import { ArrowRight, Check } from "lucide-react";
+import { redirect } from "next/navigation";
 
 const OnboardingComplete = () => {
-  const { mutate: complete, isPending } = useCompleteOnboarding();
+  const { data } = useGetOnboarding();
   const completedSteps = [
     {
       name: "Company Created",
@@ -20,6 +22,12 @@ const OnboardingComplete = () => {
       desc: "All modules, permissions and tools are live.",
     },
   ];
+  if (!data) {
+    return <CompanyFormSkeleton />;
+  }
+  if (data.status === "completed") {
+    return redirect("/onboarding");
+  }
   return (
     <div className="space-y-8">
       <div className="flex flex-col items-center text-center">
@@ -50,15 +58,12 @@ const OnboardingComplete = () => {
       </div>
       <div className="flex justify-center">
         <Button
-          // type="link"
-          // href="/dashboard"
-          onClick={complete}
+          type="link"
+          href="/dashboard"
           label="Go to Dashboard"
-          isLoading={isPending}
-          disabled={isPending}
           loadingLabel="Completing company profile"
           rightIcon={<ArrowRight />}
-          className="w-fit! px-6"
+          className="w-fit! px-6 bg-primary! text-white!"
         />
       </div>
     </div>

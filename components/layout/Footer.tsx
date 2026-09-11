@@ -1,6 +1,6 @@
 "use client";
 
-import Logo from "@/assets/huppr_without_bg.png";
+import Logo from "@/assets/huppr_logo2.png";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,10 +13,10 @@ const productLinks = [
 ];
 const companyLinks = ["About Us", "Careers", "Press Kit", "Contact"];
 const legalLinks = [
-  "Privacy Policy",
-  "Terms of Service",
-  "Cookie Policy",
-  "Security",
+  { label: "Privacy Policy", link: "/policy" },
+  { label: "Terms of Service", link: "/terms" },
+  { label: "Cookie Policy", link: "/cookies" },
+  { label: "Security", link: "/security" },
 ];
 
 export default function Footer() {
@@ -25,15 +25,15 @@ export default function Footer() {
   return (
     <footer className="layout-footer mt-10">
       <div className="px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-        <div className="grid md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 sm:gap-8">
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <Image
                 src={Logo}
                 alt="Huppr Logo"
                 loading="eager"
-                className="h-16 w-auto"
+                className="h-10 w-auto"
               />
             </div>
             <p className="text-sm max-w-xs leading-relaxed">
@@ -65,7 +65,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {productLinks.map((link, idx) => (
                 <li key={idx}>
-                  <Link href="#" className="hover:text-gray-200 transition">
+                  <Link href="#" className="hover:text-primary transition">
                     {link}
                   </Link>
                 </li>
@@ -79,7 +79,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {companyLinks.map((link, idx) => (
                 <li key={idx}>
-                  <Link href="#" className="hover:text-gray-200 transition">
+                  <Link href="#" className="hover:text-primary transition">
                     {link}
                   </Link>
                 </li>
@@ -91,10 +91,13 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Legal</h4>
             <ul className="space-y-2.5 text-sm">
-              {legalLinks.map((link, idx) => (
+              {legalLinks.map((item, idx) => (
                 <li key={idx}>
-                  <Link href="#" className="hover:text-gray-200 transition">
-                    {link}
+                  <Link
+                    href={item.link}
+                    className="hover:text-primary transition"
+                  >
+                    {item.label}
                   </Link>
                 </li>
               ))}

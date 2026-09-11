@@ -108,7 +108,7 @@ export default function Features() {
   ];
   return (
     <section className="py-20 bg-linear-to-b from-dark via-blue-950 to-primary">
-      <div className="*:mx-auto px-4 sm:px-10 lg:px-20 space-y-4">
+      <div className="*:mx-auto px-2 sm:px-10 lg:px-20 space-y-4">
         <h2 className="text-4xl font-bold tracking-tight text-white  text-center">
           AI That Works Alongside Your Team
         </h2>

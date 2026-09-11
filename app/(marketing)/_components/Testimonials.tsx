@@ -66,7 +66,7 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <section className="py-5 sm:py-10 lg:py-10 bg-indigo-900/5">
-      <div className="px-4 sm:px-10 lg:px-20 full">
+      <div className="px-2 sm:px-10 lg:px-20 full">
         <div className="text-center max-w-2xl mx-auto *:mx-auto mb-12 grid place-content-center gap-2">
           <Badge className="tracking-wide bg-primary-100/50 text-primary-badge text-xs font-semibold px-3 py-1">
             WHAT OUR CUSTOMERS SAY
@@ -145,7 +145,7 @@ export const TestimonialCard = ({
   photo,
   role,
 }: TestimonialProps) => (
-  <Card className=" hover:bg-primary hover:**:text-white self-center m-1 w-full max-w-[28rem] h-full">
+  <Card className=" hover:bg-primary hover:**:text-white self-center sm:m-1 w-full max-w-xs sm:max-w-[28rem] h-full">
     <CardContent className="grid gap-4 p-6 relative h-full">
       <QuoteIcon className="absolute top-0 right-8 aspect-auto w-8 text-primary/50" />
       <p className="text-gray-700 text-sm leading-relaxed italic">"{quote}"</p>

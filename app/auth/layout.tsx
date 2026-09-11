@@ -18,8 +18,8 @@ export default function AuthLayout({
           <Info />
         </div>
       </aside>
-      <section className="px-4 sm:px-30 pt-20 pb-16 h-screen max-h-screen overflow-y-auto flex flex-col">
-        <div className="sm:min-w-md">{children}</div>
+      <section className="px-4 sm:px-10 lg:px-30 pt-20 pb-16 h-screen max-h-screen overflow-x-hidden overflow-y-auto flex flex-col">
+        <div className="sm:min-w-xs lg:min-w-md">{children}</div>
 
         <small className="text-center py-5">
           © 2026 Hoopr Technologies Inc. All rights reserved.

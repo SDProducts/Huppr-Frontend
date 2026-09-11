@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 
 export default function CTA() {
   return (
-    <section className="my-[2rem]">
-      <div className="w-full max-w-[75%] mx-auto px-8 sm:px-10 lg:px-20 text-center py-12  bg-[#111827] rounded-[2.5rem]">
+    <section className="my-[2rem] px-2 sm:px-0">
+      <div className="w-full sm:max-w-[75%] mx-auto px-8 sm:px-10 lg:px-20 text-center py-12  bg-[#111827] rounded-[2.5rem]">
         <h2 className="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
           Start Hiring Today.
         </h2>

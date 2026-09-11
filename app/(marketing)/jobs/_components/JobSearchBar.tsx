@@ -32,7 +32,7 @@ export function JobSearchBar({
   };
 
   return (
-    <div className="sticky top-0 z-40 w-full bg-white shadow rounded-2xl px-4 py-4">
+    <div className="sticky top-2 z-40 w-full bg-white shadow rounded-2xl px-4 py-4">
       <form
         onSubmit={handleSubmit}
         className="mx-auto flex w-full max-w-7xl flex-col gap-3 lg:flex-row lg:items-center lg:gap-4"
