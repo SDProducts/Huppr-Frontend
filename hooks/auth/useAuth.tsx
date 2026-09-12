@@ -59,12 +59,13 @@ export const useLogin = () => {
       });
       if (data.user.user_metadata.email_verified) {
         if (data.user.user_metadata.role === "employer") {
-          if (onboarding_complete) {
+          if (data.onboardingComplete) {
             toast.success("Login successfully");
             router.push("/dashboard");
+          } else {
+            toast.success("Login successfully, let's setup your workspace");
+            router.push("/onboarding");
           }
-          toast.success("Login successfully, let's setup your workspace");
-          router.push("/onboarding");
         }
         if (data.user.user_metadata.role === "job_seeker") {
           toast.success("Login successfully");

@@ -28,7 +28,7 @@ import {
 
 const PageWrapper = () => {
   const { data: userData } = useGetMyDetails();
-  const { data: dashboardData } = useGetDashboard(userData?.id);
+  const { data: dashboardData } = useGetDashboard(userData?.organizationId);
   if (!dashboardData) {
     return <PageLoader text="Loading your dashboard..." />;
   }

@@ -167,6 +167,8 @@ interface RegisterPayload {
 interface LoginResponse {
   session: Session;
   user: User;
+  onboardingComplete: boolean;
+  onboardingStatus: string;
 }
 
 interface ErrorMsg {
@@ -226,6 +228,7 @@ interface Identity {
 }
 interface User {
   id: string;
+  organizationId: string;
   aud: string;
   role: string;
   email: string;
