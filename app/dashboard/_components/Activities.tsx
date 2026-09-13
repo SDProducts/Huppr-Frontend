@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, getTimeAgo } from "@/lib/utils";
 import { CalendarDays, User2 } from "lucide-react";
 import Link from "next/link";
 
@@ -64,14 +64,18 @@ export function TodayActivities({
               </div>
 
               {/* Message */}
-              <p className="min-w-0 flex-1 text-[14px] text-slate-700">
-                {activity.summary}
-              </p>
-
-              {/* Time */}
-              <span className="shrink-0 text-[11px] text-slate-500">
-                {activity.title}
-              </span>
+              <div className="flex items-start justify-between flex-1">
+                <div className="">
+                  <div className="text-sm font-semibold">{activity.title}</div>
+                  <p className="min-w-0 flex-1 text-sm text-slate-700">
+                    {activity.summary}
+                  </p>
+                </div>
+                {/* Time */}
+                <div className="shrink-0 text-[11px] text-slate-500">
+                  {getTimeAgo(activity.occurredAt)}
+                </div>
+              </div>
             </div>
           );
         })}

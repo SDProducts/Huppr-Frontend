@@ -16,13 +16,9 @@ import { useGetDashboard } from "@/hooks/employer/useEmployer";
 import {
   BadgeDollarSign,
   CalendarDays,
-  CircleAlert,
   ClipboardCheck,
-  ClipboardList,
-  FileText,
   Megaphone,
   MessageSquare,
-  UserRound,
   Users,
 } from "lucide-react";
 
@@ -33,6 +29,7 @@ const PageWrapper = () => {
     return <PageLoader text="Loading your dashboard..." />;
   }
   const activities = dashboardData.todaysActivity.items;
+  const departments = dashboardData.departmentOverview.items;
   const metrics = [
     {
       icon: Users,
@@ -76,43 +73,6 @@ const PageWrapper = () => {
       label: "Reviews Due",
       meta: "This week",
       variant: "yellow" as const,
-    },
-  ];
-  const activities2 = [
-    {
-      id: 1,
-      icon: ClipboardList,
-      message: "3 leave requests are awaiting your approval",
-      time: "2m ago",
-      color: "orange" as const,
-    },
-    {
-      id: 2,
-      icon: UserRound,
-      message: "Sarah Johnson starts today in Marketing",
-      time: "1h ago",
-      color: "green" as const,
-    },
-    {
-      id: 3,
-      icon: CalendarDays,
-      message: "2 interviews scheduled for today",
-      time: "2h ago",
-      color: "blue" as const,
-    },
-    {
-      id: 4,
-      icon: CircleAlert,
-      message: "Payroll closes this Friday",
-      time: "3h ago",
-      color: "red" as const,
-    },
-    {
-      id: 5,
-      icon: FileText,
-      message: "5 documents are expiring this week",
-      time: "4h ago",
-      color: "yellow" as const,
     },
   ];
 
@@ -184,25 +144,7 @@ const PageWrapper = () => {
             // onNextMonth={() => console.log("next")}
             // onViewCalendar={() => console.log("view calendar")}
           />
-          <DepartmentOverview
-            departments={[
-              {
-                name: "Engineering",
-                employees: 42,
-                attendance: 96,
-              },
-              {
-                name: "Marketing",
-                employees: 18,
-                attendance: 88,
-              },
-              {
-                name: "Finance",
-                employees: 12,
-                attendance: 100,
-              },
-            ]}
-          />
+          <DepartmentOverview departments={departments} />
           <WorkAnniversaries />
           <UpcomingBirthdays />
           <LeaveOverview />

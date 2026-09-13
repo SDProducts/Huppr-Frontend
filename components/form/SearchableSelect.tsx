@@ -112,7 +112,7 @@ const SearchableSelect: React.FC<SelectProps> = ({
           {icon && <div className="flex items-center px-3">{icon}</div>}
 
           <div
-            className={`flex-1 text-sm text-left px-0 ${
+            className={`flex-1 text-sm text-nowrap truncate text-left px-0 ${
               selectedOption
                 ? theme === "dark"
                   ? "text-gray-300"
@@ -174,9 +174,9 @@ const SearchableSelect: React.FC<SelectProps> = ({
                     String(field.value) === String(option.value);
 
                   return (
-                    <button
+                    <div
                       key={option.value}
-                      type="button"
+                      // type="button"
                       onClick={() => handleSelect(option.value)}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm text-left transition-colors ${
                         theme === "dark"
@@ -193,7 +193,7 @@ const SearchableSelect: React.FC<SelectProps> = ({
                       <span>{option.label}</span>
 
                       {isSelected && <Check className="w-4 h-4 shrink-0" />}
-                    </button>
+                    </div>
                   );
                 })
               ) : (

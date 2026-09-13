@@ -1,4 +1,5 @@
-import Logo from "@/components/ui/logo";
+import Logo from "@/assets/huppr-white.png";
+import Image from "next/image";
 import Link from "next/link";
 import Info from "./_components/Info";
 import "./styles.css";
@@ -13,7 +14,9 @@ export default function AuthLayout({
       <aside className="bg-linear-to-b from-[#2563EB] via-[#7C6CF8] to-[#F59E0B] animate-[bg_resize] hidden h-full w-full sm:flex justify-center items-center">
         <div className="flex flex-col justify-center items-center gap-4">
           <Link href="/">
-            <Logo color="white" icon="white" className="logo aspect-auto h-7" />
+            <Image src={Logo} alt="huppr" className="h-7 w-auto" />
+
+            {/* <Logo color="white" icon="white" className="logo aspect-auto h-7" /> */}
           </Link>
           <Info />
         </div>

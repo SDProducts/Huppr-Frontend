@@ -90,7 +90,7 @@ const CompanyDetailForm = () => {
                 <Input
                   label="Company Website (Optional)"
                   name="website"
-                  LabelClassName="text-sm"
+                  LabelClassName="text-sm line-clamp-1"
                   placeholder="e.g.www.sterlingtech.com"
                 />
               </div>
@@ -103,7 +103,7 @@ const CompanyDetailForm = () => {
                 size="xs"
                 optionClassName="text-center font-medium min-w-[calc(24%)] justify-center!"
               />
-              <div className="w-1/2">
+              <div className="w-full lg:w-1/2">
                 <ImageUploadField
                   label="Company Logo"
                   labelClassName="text-sm"

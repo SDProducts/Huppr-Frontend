@@ -5,7 +5,6 @@ import {
   ArrowRight,
   Building2,
   CalendarDays,
-  Check,
   Edit3,
   Flag,
   Globe2,
@@ -43,10 +42,6 @@ export default function EmployerOnboardingPreview() {
       <div className="mx-auto">
         {/* Intro */}
         <div className="mx-auto max-w-2xl text-center">
-          <div className="h-25 w-25 mx-auto rounded-full flex justify-center items-center bg-primary text-white">
-            <Check className="h-15 w-15" strokeWidth={5} />
-          </div>
-
           <h1 className="text-3xl font-bold tracking-tight text-slate-950">
             Review your company profile
           </h1>
@@ -226,20 +221,20 @@ export default function EmployerOnboardingPreview() {
         </div>
 
         {/* Actions */}
-        <div className="mx-auto mt-8 flex max-w-3xl flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+        <div className="mx-auto mt-8 flex max-w-3xl flex-col-reverse gap-3 lg:flex-row lg:justify-between">
           <Button
             type="link"
             href="/onboarding/workspace_settings"
             icon={<ArrowLeft className="mr-2 h-4 w-4" />}
             label="Back to details"
-            className="h-11 w-fit! px-5 bg-transparent! text-primary! border border-gray-300"
+            className="h-11 lg:w-fit! px-5 bg-transparent! text-primary! border border-gray-300"
           />
 
           <Button
             label="Complete Company Profile"
             loadingLabel="Completing company profile"
             rightIcon={<ArrowRight className="ml-2 h-4 w-4" />}
-            className="h-11 w-fit!"
+            className="h-11 lg:w-fit!"
             onClick={complete}
             isLoading={isPending}
             disabled={isPending}

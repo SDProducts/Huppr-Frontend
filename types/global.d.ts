@@ -418,21 +418,16 @@ interface TodaysActivity {
 
 interface ActivityItem {
   id: string;
-  category: string;
+  category: ActivityCategory;
   kind: string;
   title: string;
   summary: string;
   occurredAt: string;
   actorId: string;
   subject: ActivitySubject;
-  urgency: "low" | "normal" | "high" | string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  availableActions: any[]; // Replace any[] if you have specific action shapes
-}
+  urgency: ActivityUrgency;
 
-interface ActivitySubject {
-  type: string;
-  id: string;
+  availableActions: ActivityAction; // Replace any[] if you have specific action shapes
 }
 
 interface UpcomingEvents {
@@ -493,4 +488,39 @@ interface DepartmentIcon {
   name: string;
   builtin_key: string;
   storage_path: string | null;
+}
+type ActivityFilters = {
+  organisationId?: string;
+  search?: string;
+  category?: string;
+  from?: string;
+  to?: string;
+};
+
+type ActivityCategory =
+  | "employee"
+  | "recruitment"
+  | "payroll"
+  | "compliance"
+  | "events"
+  | string; // extend as more categories appear
+type ActivityUrgency = "low" | "normal" | "high" | string; // extend as needed
+
+type ActivitySubjectType = "department" | string; // extend as needed
+
+interface ActivitySubject {
+  type: ActivitySubjectType;
+  id: string;
+}
+
+interface ActivityAction {
+  // Define this once you know the shape of availableActions items
+  label?: string;
+  action?: string;
+  // ...other fields
+}
+
+interface ActivityTimelineResponse {
+  items: ActivityItem[];
+  nextCursor: string | null;
 }

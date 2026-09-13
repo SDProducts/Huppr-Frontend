@@ -4,39 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
-interface Department {
-  name: string;
-  employees: number;
-  attendance: number;
-}
-
 interface DepartmentOverviewProps {
-  departments?: Department[];
-  onViewAll?: () => void;
+  departments: DepartmentItem[];
   className?: string;
 }
 
-const defaultDepartments: Department[] = [
-  {
-    name: "Engineering",
-    employees: 42,
-    attendance: 96,
-  },
-  {
-    name: "Marketing",
-    employees: 18,
-    attendance: 88,
-  },
-  {
-    name: "Finance",
-    employees: 12,
-    attendance: 100,
-  },
-];
-
 export default function DepartmentOverview({
-  departments = defaultDepartments,
-  onViewAll,
+  departments,
   className,
 }: DepartmentOverviewProps) {
   return (
@@ -54,7 +28,6 @@ export default function DepartmentOverview({
 
         <Button
           variant="ghost"
-          onClick={onViewAll}
           className="h-auto p-0 text-[15px] font-bold text-[#2864e8] hover:bg-transparent hover:text-[#1749b5]"
         >
           View all
@@ -63,7 +36,7 @@ export default function DepartmentOverview({
 
       {/* Departments */}
       <div className="space-y-7">
-        {departments.map((department) => (
+        {departments.slice(0, 5).map((department) => (
           <div key={department.name}>
             {/* Department information */}
             <div className="mb-2 flex items-start justify-between gap-4">
@@ -73,13 +46,15 @@ export default function DepartmentOverview({
                 </h3>
 
                 <p className="mt-1 text-[12px] font-medium text-[#697586]">
-                  {department.employees} Employees
+                  {/* {department.employees} */}
+                  12 Employees
                 </p>
               </div>
 
               <div className="text-right">
                 <p className="text-[16px] font-extrabold leading-tight text-[#171a1f]">
-                  {department.attendance}%
+                  {/* {department.attendance} */}
+                  87%
                 </p>
 
                 <p className="mt-1 text-[12px] font-medium text-[#697586]">
@@ -90,9 +65,9 @@ export default function DepartmentOverview({
 
             {/* Progress */}
             <Progress
-              value={department.attendance}
-              className="h-[8px] rounded-full bg-[#edf0f4]"
-              indicatorClassName="rounded-full bg-[linear-gradient(90deg,#2864e8_0%,#466ff0_35%,#142d8e_70%,#f59e0b_100%)]"
+              value={87}
+              className="h-[8px] rounded-full bg-white!"
+              indicatorClassName="rounded-full bg-primary"
             />
           </div>
         ))}

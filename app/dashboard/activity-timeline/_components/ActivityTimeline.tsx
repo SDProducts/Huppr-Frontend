@@ -10,8 +10,9 @@ import {
   Video,
 } from "lucide-react";
 
+import ActivityEmptyState from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, getTimeAgo } from "@/lib/utils";
 
 type ActivityType =
   | "leave"
@@ -32,7 +33,7 @@ interface Activity {
 }
 
 interface ActivityTimelineProps {
-  activities?: Activity[];
+  activities: ActivityItem[];
   liveUpdates?: boolean;
   onAction?: (activity: Activity) => void;
   className?: string;
@@ -96,11 +97,14 @@ const defaultActivities: Activity[] = [
 ];
 
 export default function ActivityTimeline({
-  activities = defaultActivities,
+  activities,
   liveUpdates = true,
   onAction,
   className,
 }: ActivityTimelineProps) {
+  if (activities.length < 1) {
+    return <ActivityEmptyState />;
+  }
   return (
     <section className={cn("w-full", className)}>
       {/* Header */}
@@ -132,12 +136,12 @@ export default function ActivityTimeline({
 }
 
 interface ActivityCardProps {
-  activity: Activity;
+  activity: ActivityItem;
   onAction?: (activity: Activity) => void;
 }
 
 function ActivityCard({ activity, onAction }: ActivityCardProps) {
-  const isUrgent = activity.type === "urgent";
+  const isUrgent = activity.urgency === "urgent";
   const handleAction = () => {};
 
   return (
@@ -149,7 +153,7 @@ function ActivityCard({ activity, onAction }: ActivityCardProps) {
     >
       <div className="flex gap-8">
         {/* Icon */}
-        <ActivityIcon type={activity.type} />
+        <ActivityIcon type={activity.category} />
 
         {/* Content */}
         <div className="min-w-0 flex-1">
@@ -170,7 +174,7 @@ function ActivityCard({ activity, onAction }: ActivityCardProps) {
                 isUrgent ? "text-[#596474]" : "text-[#596474]"
               )}
             >
-              {activity.time}
+              {getTimeAgo(activity.occurredAt)}
             </span>
           </div>
 
@@ -181,11 +185,11 @@ function ActivityCard({ activity, onAction }: ActivityCardProps) {
               isUrgent ? "text-[#596474]" : "text-[#596474]"
             )}
           >
-            {activity.description}
+            {activity.summary}
           </p>
 
           {/* Actions */}
-          {(activity.action || activity.secondaryAction) && (
+          {/* {(activity.action || activity.secondaryAction) && (
             <div className="mt-5 flex items-center gap-7">
               {activity.action && (
                 <ActivityAction activity={activity} onAction={handleAction} />
@@ -201,20 +205,20 @@ function ActivityCard({ activity, onAction }: ActivityCardProps) {
                 </button>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </article>
   );
 }
 
-function ActivityIcon({ type }: { type: ActivityType }) {
+function ActivityIcon({ type }: { type: ActivityType | string }) {
   const config = {
     leave: {
       className: "bg-[#dce8fa] text-[#2864e8]",
       icon: CalendarDays,
     },
-    onboarding: {
+    employee: {
       className: "bg-[#dce4ff] text-[#344b91]",
       icon: UserPlus,
     },
@@ -236,16 +240,20 @@ function ActivityIcon({ type }: { type: ActivityType }) {
     },
   }[type];
 
-  const Icon = config.icon;
+  const Icon = config?.icon;
 
   return (
     <div
       className={cn(
         "flex h-16 w-16 shrink-0 items-center justify-center rounded-full",
-        config.className
+        config?.className
       )}
     >
-      <Icon size={23} strokeWidth={2.2} />
+      {Icon ? (
+        <Icon size={23} strokeWidth={2.2} />
+      ) : (
+        <CalendarDays size={23} strokeWidth={2.2} />
+      )}
     </div>
   );
 }

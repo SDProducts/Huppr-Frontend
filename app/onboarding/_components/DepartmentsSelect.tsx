@@ -80,6 +80,14 @@ const DepartmentsSelect = () => {
             >
               <div className="h-14 sm:h-28 w-full flex justify-center items-center">
                 {icon && (
+                  // <div className="w-8 sm:w-16 h-8 sm:h-16 relative">
+                  //   <Image
+                  //     src={icon.url}
+                  //     alt={icon.name}
+                  //     fill
+                  //     className="absolute"
+                  //   />
+                  // </div>
                   <img
                     src={icon.url}
                     alt={icon.name}

@@ -1,3 +1,7 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+
 export const SelectInputSkeleton = () => {
   return (
     <div className="space-y-1.5">
@@ -120,3 +124,70 @@ export const WorkspaceSettingsSkeleton = () => {
     </div>
   );
 };
+
+interface ActivityTimelineSkeletonProps {
+  count?: number;
+  liveUpdates?: boolean;
+  className?: string;
+}
+
+export function ActivityTimelineSkeleton({
+  count = 5,
+  liveUpdates = true,
+  className,
+}: ActivityTimelineSkeletonProps) {
+  return (
+    <section className={cn("w-full", className)}>
+      {/* Header */}
+      <div className="mb-8 flex items-center justify-between">
+        <div className="h-8 w-56 animate-pulse rounded-md bg-[#e8ebef]" />
+
+        {liveUpdates && (
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#e8ebef]" />
+            <div className="h-4 w-36 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+        )}
+      </div>
+
+      {/* Activities */}
+      <div className="space-y-4">
+        {Array.from({ length: count }).map((_, i) => (
+          <ActivityCardSkeleton key={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ActivityCardSkeleton() {
+  return (
+    <article className="rounded-[18px] border border-[#dfe3e8] bg-white px-8 py-8">
+      <div className="flex gap-8">
+        {/* Icon */}
+        <div className="h-16 w-16 shrink-0 animate-pulse rounded-full bg-[#e8ebef]" />
+
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          {/* Title row */}
+          <div className="flex items-start justify-between gap-6">
+            <div className="h-5 w-2/3 animate-pulse rounded bg-[#e8ebef]" />
+            <div className="h-4 w-16 shrink-0 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+
+          {/* Description — two lines */}
+          <div className="mt-3 space-y-2">
+            <div className="h-4 w-full animate-pulse rounded bg-[#e8ebef]" />
+            <div className="h-4 w-5/6 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+
+          {/* Actions (optional, matches the commented block) */}
+          {/* <div className="mt-5 flex items-center gap-7">
+            <div className="h-[48px] w-32 animate-pulse rounded-[10px] bg-[#e8ebef]" />
+            <div className="h-5 w-20 animate-pulse rounded bg-[#e8ebef]" />
+          </div> */}
+        </div>
+      </div>
+    </article>
+  );
+}

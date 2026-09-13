@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 // import { useUserState } from "../../zustand/user.state";
 import api from "@/lib/axios.config";
+import { useEffect } from "react";
 // const { setUser, setIsLoggedIn, setToken, reset } = useUserState.getState();
-const onboarding_complete = Cookies.get("onboarding_complete");
 const login = async (payload: LoginPayload): Promise<LoginResponse> => {
   const res = await api.post(`auth/sign-in`, payload);
   return res.data;
@@ -327,11 +327,11 @@ export const useGetMyDetails = () => {
     },
     enabled: !!token,
   });
-  // useEffect(() => {
-  //   if (response.data) {
-  //     setUser(response.data);
-  //   }
-  // }, [response.data]);
+  useEffect(() => {
+    if (response.data) {
+      Cookies.set("organisationId", response.data.organizationId);
+    }
+  }, [response.data]);
 
   return response;
 };

@@ -1,5 +1,4 @@
 "use client";
-import { ActivityFilters } from "@/app/dashboard/activity-timeline/_components/ActivityFilter";
 import { ActivityStatCard } from "@/app/dashboard/activity-timeline/_components/ActivityStatsCard";
 import LeaveRequestsModal from "@/app/dashboard/activity-timeline/_components/LeaveRequestModal";
 import PayrollModal from "@/app/dashboard/activity-timeline/_components/PayrollModal";
@@ -33,7 +32,6 @@ const ActivityAsideContainer = () => {
 
   return (
     <div className="space-y-4">
-      <ActivityFilters />
       {/* Pending approvals */}
       <ActivityStatCard
         value={3}
