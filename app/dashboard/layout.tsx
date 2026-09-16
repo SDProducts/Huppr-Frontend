@@ -13,10 +13,10 @@ const dashboardlayout: React.FC<Prop> = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="pt-17.5 md:pt-0 flex-1 overflow-y-auto md:mb-0 py-5 px-2 md:px-0 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto md:mb-0 py-0 sm:py-5 px-2 md:px-0 scrollbar-hide">
         <HeaderMenu />
-        <div className="py-2 px-6">{children}</div>
-      </main>
+        <div className="py-2 px-2 sm:px-6">{children}</div>
+      </div>
     </div>
   );
 };

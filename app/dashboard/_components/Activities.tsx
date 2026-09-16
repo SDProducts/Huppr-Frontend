@@ -16,7 +16,7 @@ export function TodayActivities({
   className,
 }: TodayActivitiesProps) {
   return (
-    <section
+    <div
       className={cn(
         "w-full rounded-[28px] border border-slate-200 bg-white p-7 shadow-none",
         className
@@ -80,6 +80,6 @@ export function TodayActivities({
           );
         })}
       </div>
-    </section>
+    </div>
   );
 }

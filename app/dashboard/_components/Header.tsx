@@ -23,11 +23,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
+import { navigation } from "@/data/constants";
+import { cn } from "@/lib/utils";
 
 export function HeaderMenu() {
   return (
     <header className="w-full border-b border-gray-200">
-      <div className="flex h-[72px] w-full items-center px-5">
+      <div className="hidden sm:flex h-[72px] w-full items-center px-5">
         {/* ------------------------------------------------ */}
         {/* Company / Logo */}
         {/* ------------------------------------------------ */}
@@ -269,6 +271,45 @@ export function HeaderMenu() {
           </button>
         </div>
       </div>
+      <NavigationMenu className={cn("h-16 flex sm:hidden")}>
+        <NavigationMenuList className="flex-none">
+          <NavigationMenuItem>
+            <NavigationMenuTrigger
+              className="
+                  h-9
+                  bg-transparent
+                  px-3
+                  font-medium
+                  border border-gray-300
+                "
+            >
+              <div className="flex items-center gap-2">
+                <Building2
+                  size={15}
+                  strokeWidth={2.2}
+                  className="text-primary"
+                />
+                <span>RichTec Professional</span>
+              </div>
+            </NavigationMenuTrigger>
+
+            <NavigationMenuContent>
+              <ul className="w-60 p-2 text-sm text-gray-700 divide-y divide-gray-200">
+                {navigation.workspace.map((item, i) => (
+                  <Link
+                    key={i}
+                    href={item.path}
+                    className="flex items-center gap-1.5 py-3"
+                  >
+                    <item.icon size={18} />
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </header>
   );
 }

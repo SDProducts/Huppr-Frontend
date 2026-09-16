@@ -108,7 +108,7 @@ const PageWrapper = () => {
             Here's what's happening across Sterling Tech today.
           </div>
         </div>
-        <div className="bg-white px-4 py-1 rounded-full flex items-center gap-2">
+        <div className="bg-white px-4 py-1 rounded-full hidden sm:flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-green-500" />
           <div className="">
             Workspace Pulse: Everything is running smoothly today.{" "}
@@ -120,8 +120,8 @@ const PageWrapper = () => {
           <MetricCard key={metric.label} {...metric} />
         ))}
       </div>
-      <div className="grid grid-cols-3 mt-4 gap-6">
-        <div className="col-span-2 space-y-2">
+      <div className="grid sm:grid-cols-3 mt-4 gap-6">
+        <div className="sm:col-span-2 space-y-2">
           <TodayActivities activities={activities} />
           <CompanyCalendar
             month="October 2023"

@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 export interface CalendarDay {
   date: number;
@@ -152,9 +153,8 @@ export function CompanyCalendar({
 
       {/* Footer */}
       <div className="mt-7 flex justify-center">
-        <button
-          type="button"
-          onClick={onViewCalendar}
+        <Link
+          href={"/dashboard/calendar"}
           className="group flex items-center gap-1.5 text-[14px] font-bold text-blue-600 transition-colors hover:text-blue-700"
         >
           View full calendar
@@ -162,7 +162,7 @@ export function CompanyCalendar({
             className="size-4 transition-transform group-hover:translate-x-0.5"
             strokeWidth={2}
           />
-        </button>
+        </Link>
       </div>
     </section>
   );
