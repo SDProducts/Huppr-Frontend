@@ -1,19 +1,28 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 import WelcomeImage from "@/assets/Background+Border+Shadow.png";
+import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
+import { useGetMyDetails } from "@/hooks/auth/useAuth";
 import {
   useGetOnboarding,
   useStartOnboarding,
 } from "@/hooks/auth/useOnboarding";
 import { ArrowRight, LockKeyhole } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const Welcome = () => {
   const router = useRouter();
   const { data, isLoading } = useGetOnboarding();
+  const { data: userData, isLoading: gettingUser } = useGetMyDetails();
   const { mutate: startOnboarding, isPending } = useStartOnboarding();
+  if (gettingUser) {
+    return <PageLoader text="Getting User Status" />;
+  }
+  if (userData?.onboardingComplete) {
+    return redirect("/dashboard");
+  }
   if (isLoading || !data) {
     return (
       <div className="animate-pulse text-xl h-full flex justify-center items-center">

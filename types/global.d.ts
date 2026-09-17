@@ -524,3 +524,13 @@ interface ActivityTimelineResponse {
   items: ActivityItem[];
   nextCursor: string | null;
 }
+
+interface MyDetailsResponse {
+  id: string;
+  email: string;
+  roles: string[];
+  onboardingComplete: boolean;
+  onboardingStatus: string;
+  organizationId: string;
+  onboardingCompletedAt: string;
+}

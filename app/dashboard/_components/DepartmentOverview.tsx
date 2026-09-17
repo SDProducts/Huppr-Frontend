@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface DepartmentOverviewProps {
   departments: DepartmentItem[];
@@ -26,12 +26,12 @@ export default function DepartmentOverview({
           Department Overview
         </h2>
 
-        <Button
-          variant="ghost"
+        <Link
+          href={"/dashboard/departments"}
           className="h-auto p-0 text-[15px] font-bold text-[#2864e8] hover:bg-transparent hover:text-[#1749b5]"
         >
           View all
-        </Button>
+        </Link>
       </div>
 
       {/* Departments */}

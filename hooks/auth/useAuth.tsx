@@ -319,7 +319,7 @@ export const useCompleteSignUp = () => {
 };
 export const useGetMyDetails = () => {
   const token = Cookies.get("access_token");
-  const response = useQuery<User>({
+  const response = useQuery<MyDetailsResponse>({
     queryKey: ["user"],
     queryFn: async () => {
       const res = await api.get("/auth/me/");
@@ -330,6 +330,10 @@ export const useGetMyDetails = () => {
   useEffect(() => {
     if (response.data) {
       Cookies.set("organisationId", response.data.organizationId);
+      Cookies.set(
+        "onboarding_complete",
+        String(response.data.onboardingComplete)
+      );
     }
   }, [response.data]);
 
