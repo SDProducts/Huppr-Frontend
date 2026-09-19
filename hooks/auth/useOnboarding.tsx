@@ -309,7 +309,7 @@ export const useCompleteOnboarding = () => {
         queryKey: ["onboarding"],
       });
       Cookies.set("onboarding_complete", "true");
-      router.push(`/onboading/complete}`);
+      router.push(`/dashboard}`);
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data

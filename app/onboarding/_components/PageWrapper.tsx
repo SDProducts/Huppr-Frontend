@@ -21,7 +21,7 @@ const PageWrapper = () => {
   if (step === "review") {
     return <EmployerOnboardingPreview />;
   }
-  if (step === "complete") {
+  if (step === "completed") {
     return <OnboardingComplete />;
   }
   return redirect("/onboarding");
