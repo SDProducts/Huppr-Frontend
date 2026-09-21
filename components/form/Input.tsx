@@ -25,6 +25,7 @@ interface InputProps {
     | "checkbox"
     | "textarea";
   placeholder?: string;
+  helpText?: string;
   name: string;
   label?: string;
   icon?: React.ReactNode;
@@ -40,6 +41,7 @@ interface InputProps {
 const Input: React.FC<InputProps> = ({
   type = "text",
   placeholder,
+  helpText,
   name,
   label,
   icon,
@@ -81,8 +83,11 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="w-full text-left">
       {label && (
-        <div className={`text-gray-800 capitalize mb-0.5 ${LabelClassName}`}>
-          {label}
+        <div className="mb-0.5">
+          <div className={`text-gray-800 capitalize ${LabelClassName}`}>
+            {label}
+          </div>
+          <div className="text-xs">{helpText}</div>
         </div>
       )}
       <div

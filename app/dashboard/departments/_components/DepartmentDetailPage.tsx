@@ -1,15 +1,21 @@
 "use client";
 
+import CreateRoleStep1 from "@/app/dashboard/departments/_components/CreateRoleStep1";
+import CreateSubTeam from "@/app/dashboard/departments/_components/CreateSubTeam";
 import RoleDirectoryList, {
   SubteamsList,
 } from "@/app/dashboard/departments/_components/RoleDirectoryList";
+import { PageLoader } from "@/components/global/PageLoader";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
 import { Separator } from "@/components/ui/separator";
+import { useModal } from "@/context/modal.state";
+import { useGetDepartmentByID } from "@/hooks/employer/useDepartment";
 import { cn, getInitials } from "@/lib/utils";
 import {
   BriefcaseBusiness,
   CalendarDays,
+  Network,
   Plus,
   UserPlus,
   Users,
@@ -44,24 +50,37 @@ const departmentItem = {
 };
 
 const DepartmentDetailPage = () => {
+  const modal = useModal();
   const { department } = useParams();
+  const { data, isLoading } = useGetDepartmentByID(String(department));
+
   const tabs = [
     { label: "Role Directory", id: "role" },
     { label: "Sub-teams", id: "sub" },
   ];
   const [activeTab, setactiveTab] = useState("sub");
+  if (isLoading || !data) {
+    return <PageLoader />;
+  }
+  const { headcount, subteams, openRoles } = data.metrics;
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-start py-5">
         <div className="w-1/2 space-y-2">
-          <h2 className="text-3xl font-extrabold capitalize">{department}</h2>
+          <h2 className="text-3xl font-extrabold capitalize">{data.name}</h2>
           <p>
             Monitor organizational health across key sectors with real-time
             metrics and operational pulse.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col lg:flex-row items-end lg:items-center gap-2">
           <Button
+            onClick={() => {
+              modal.open({
+                content: <CreateSubTeam />,
+                size: "sm:w-xl",
+              });
+            }}
             icon={<UserPlus size={16} />}
             label="Create Role"
             className="w-fit! px-5 bg-white text-primary! border border-gray-200"
@@ -70,19 +89,38 @@ const DepartmentDetailPage = () => {
             icon={<Plus size={16} />}
             label="New Sub-team"
             className="w-fit! px-5"
+            onClick={() => {
+              modal.open({
+                content: <CreateRoleStep1 />,
+                size: "sm:w-3xl",
+                bgColor: "bg-primary-100",
+              });
+            }}
           />
         </div>
       </div>
       <div className="grid grid-cols-4 divide-x divide-gray-200 bg-white border border-gray-200 rounded-lg p-2">
-        {departmentItem.metrics.map((item, i) => (
-          <div className="p-4" key={i}>
-            <div className="flex items-center gap-1">
-              <item.icon className="w-3 h-3" />
-              <div className="">{item.label}</div>
-            </div>
-            <div className="text-xl font-extrabold">{item.value}</div>
+        <div className="p-4">
+          <div className="flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            <div className="">Headcount</div>
           </div>
-        ))}
+          <div className="text-xl font-extrabold">{headcount || 0}</div>
+        </div>
+        <div className="p-4">
+          <div className="flex items-center gap-1">
+            <Network className="w-3 h-3" />
+            <div className="">Subteams</div>
+          </div>
+          <div className="text-xl font-extrabold">{subteams || 0}</div>
+        </div>
+        <div className="p-4">
+          <div className="flex items-center gap-1">
+            <BriefcaseBusiness className="w-3 h-3" />
+            <div className="">Open roles</div>
+          </div>
+          <div className="text-xl font-extrabold">{openRoles || 0}</div>
+        </div>
         <div className="flex items-center gap-1 p-4">
           <Avatar>
             <AvatarFallback>

@@ -1,4 +1,4 @@
-import { space } from "@/app/fonts";
+import { Wix } from "@/app/fonts";
 import Modal from "@/components/global/Modal";
 import { QCProvider } from "@/components/global/QueryClientProvider";
 import { cn } from "@/lib/utils";
@@ -38,7 +38,7 @@ export default function RootLayout({
         // geistMono.variable,
         // // "font-sans",
         // inter.variable,
-        space.className
+        Wix.className
       )}
     >
       <QCProvider>

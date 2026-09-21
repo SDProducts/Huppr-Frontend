@@ -1,12 +1,13 @@
 "use client";
 import { useField } from "formik";
 import { Check, Info } from "lucide-react";
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface Option {
   label: string;
   description?: string;
   value: string;
+  icon?: ReactNode;
 }
 
 interface RadioGroupProps {
@@ -75,31 +76,37 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               <div className="space-y-0.5">
                 {/* Custom Radio Circle */}
                 <div className="flex items-center gap-1.5">
-                  {!hideIcon && (
-                    <div
-                      className={`
-                    ${size === "sm" && "w-4 h-4"} ${
-                        size === "xs" && "w-3 h-3"
-                      } rounded-full border flex items-center justify-center
-                    ${
-                      isSelected
-                        ? !hasError
-                          ? "border-primary/70 bg-primary/70"
-                          : "border-red-500 bg-red-500"
-                        : "border-gray-400"
-                    }
-                  `}
-                    >
-                      {isSelected && (
-                        <Check
-                          strokeWidth={4}
-                          className={`text-white ${
-                            size === "xs" && "w-2 h-2"
-                          } ${size === "sm" && "w-2.5 h-2.5"}`}
-                        />
-                        // <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
+                  {option.icon ? (
+                    <div>{option.icon}</div>
+                  ) : (
+                    <>
+                      {!hideIcon && (
+                        <div
+                          className={`
+  ${size === "sm" && "w-4 h-4"} ${
+                            size === "xs" && "w-3 h-3"
+                          } rounded-full border flex items-center justify-center
+  ${
+    isSelected
+      ? !hasError
+        ? "border-primary/70 bg-primary/70"
+        : "border-red-500 bg-red-500"
+      : "border-gray-400"
+  }
+`}
+                        >
+                          {isSelected && (
+                            <Check
+                              strokeWidth={4}
+                              className={`text-white ${
+                                size === "xs" && "w-2 h-2"
+                              } ${size === "sm" && "w-2.5 h-2.5"}`}
+                            />
+                            // <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
+                          )}
+                        </div>
                       )}
-                    </div>
+                    </>
                   )}
 
                   <div

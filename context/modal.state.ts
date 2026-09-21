@@ -8,6 +8,7 @@ export const useModal = create<ModalState>((set) => ({
   content: null,
   title: "",
   size: "w-full sm:w-sm",
+  bgColor: "bg-white",
   goBack() {},
   open: (content) =>
     set({
@@ -18,6 +19,7 @@ export const useModal = create<ModalState>((set) => ({
       title: content.title,
       goBack: content.goBack,
       size: content.size || "w-full sm:w-sm",
+      bgColor: content.bgColor || "bg-white",
     }),
   openStrong: (content) => set({ isOpen: true, isCloseable: false, content }),
   openTransModal: (content) =>

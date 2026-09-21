@@ -1,5 +1,6 @@
 "use client";
 import { useModal } from "@/context/modal.state";
+import { cn } from "@/lib/utils";
 import { ChevronLeft, X } from "lucide-react";
 import { useEffect } from "react";
 const Modal = () => {
@@ -12,6 +13,7 @@ const Modal = () => {
     title,
     isCloseable,
     isTransModal,
+    bgColor,
   } = useModal();
 
   useEffect(() => {
@@ -49,12 +51,15 @@ const Modal = () => {
       // onClick={close}
     >
       <div
-        className={`relative space-y-1 p-2 w-full ${size} ${
-          isTransModal ? "bg-transparent" : "bg-white shadow-lg"
-        } rounded-2xl`}
+        className={cn(
+          "relative space-y-1 p-2 w-full",
+          size,
+          isTransModal ? "bg-transparent" : `${bgColor} shadow-lg`,
+          "rounded-2xl"
+        )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-white flex items-start">
+        <div className="flex items-start">
           <div
             className="h-7 w-7 sm:h-10 sm:w-10 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center"
             onClick={goBack}
@@ -67,7 +72,7 @@ const Modal = () => {
 
           {isCloseable && (
             <div
-              className="bg-white rounded-full border border-gray-200 text-gray-600 hover:text-gray-900 cursor-pointer h-7 w-7 sm:h-10 sm:w-10 flex justify-center items-center"
+              className="rounded-full border border-gray-200 text-gray-600 hover:text-gray-900 cursor-pointer h-7 w-7 sm:h-10 sm:w-10 flex justify-center items-center"
               onClick={close}
               aria-label="Close Modal"
             >

@@ -1,7 +1,9 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { useGetRoles, useGetTeams } from "@/hooks/employer/useDepartment";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
@@ -14,8 +16,12 @@ import {
   Server,
   ShieldCheck,
 } from "lucide-react";
+import { useParams } from "next/navigation";
 
 const RoleDirectoryList = () => {
+  const { department } = useParams();
+  const { data } = useGetRoles({ departmentId: String(department) });
+
   const roleDir = [
     {
       name: "Senior Backend Engineer",
@@ -88,6 +94,9 @@ const RoleDirectoryList = () => {
 export default RoleDirectoryList;
 
 export const SubteamsList = () => {
+  const { department } = useParams();
+  const { data, isLoading } = useGetTeams({ departmentId: String(department) });
+  const teams = data?.items || [];
   const SUBTEAMS = [
     {
       icon: Server,
@@ -134,27 +143,27 @@ export const SubteamsList = () => {
   ];
   return (
     <div className="">
-      <div className="grid grid-cols-3 gap-2">
-        {SUBTEAMS.map((team, i) => (
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+        {teams.map((team, i) => (
           <div
             className="border border-gray-200 rounded-md bg-white p-4 space-y-4"
             key={i}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-2">
               <div className="h-10 w-10 bg-gray-200 rounded-md flex justify-center items-center">
-                <team.icon className="h-5 w-5" />
+                <Server className="h-5 w-5" />
               </div>
               <div className="">
                 <div className="font-semibold">{team.name}</div>
-                <div className="text-sm">{team.desc}</div>
+                <div className="text-sm">{team.description}</div>
               </div>
             </div>
             <div className="space-y-1">
               <div className="flex justify-between items-center text-sm">
-                <div className="">Capacity({team.capacity})</div>
-                <div className="text-right">{team.percentage}%</div>
+                <div className="">Capacity({"58/65"})</div>
+                <div className="text-right">{86}%</div>
               </div>
-              <Progress value={team.percentage} indicatorClassName="" />
+              <Progress value={86} indicatorClassName="" />
             </div>
             <Separator />
             <div className="flex justify-between items-center">

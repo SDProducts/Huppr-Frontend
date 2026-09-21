@@ -7,9 +7,10 @@ interface ModalState {
   isCloseable: boolean;
   isTransModal: boolean;
   isOpen: boolean;
-  content: ReactNode | null;
+  content: ReactNode;
   title: string;
   size: string;
+  bgColor: string;
   // setTitle: (title: string) => void;
   goBack: () => void;
   open: (content: StateModalContent) => void;
@@ -21,6 +22,7 @@ interface StateModalContent {
   content: ReactNode;
   title?: string;
   size?: string;
+  bgColor?: string;
   goBack?: () => void;
 }
 
@@ -406,9 +408,9 @@ interface Organization {
 
 interface NetworkSummary {
   departments: number;
-  headcount: number | null;
-  openRoles: number | null;
-  onLeaveToday: number | null;
+  headcount: number;
+  openRoles: number;
+  onLeaveToday: number;
 }
 
 interface TodaysActivity {
@@ -439,7 +441,7 @@ interface EventItem {
   organizationId: string;
   kind: string;
   source: "manual" | string;
-  sourceId: string | null;
+  sourceId: string;
   title: string;
   description: string;
   startsAt: string;
@@ -468,8 +470,8 @@ interface DepartmentOverview {
 
 interface DepartmentSummary {
   totalDepartments: number;
-  totalHeadcount: number | null;
-  totalSubteams: number | null;
+  totalHeadcount: number;
+  totalSubteams: number;
 }
 
 interface DepartmentItem {
@@ -487,7 +489,7 @@ interface DepartmentIcon {
   id: string;
   name: string;
   builtin_key: string;
-  storage_path: string | null;
+  storage_path: string;
 }
 type ActivityFilters = {
   organisationId?: string;
@@ -495,6 +497,15 @@ type ActivityFilters = {
   category?: string;
   from?: string;
   to?: string;
+};
+type TeamsFilters = {
+  organisationId?: string;
+  departmentId?: string;
+  projectId?: string;
+  teamId?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
 };
 
 type ActivityCategory =
@@ -522,7 +533,7 @@ interface ActivityAction {
 
 interface ActivityTimelineResponse {
   items: ActivityItem[];
-  nextCursor: string | null;
+  nextCursor: string;
 }
 
 interface MyDetailsResponse {
@@ -533,4 +544,57 @@ interface MyDetailsResponse {
   onboardingStatus: string;
   organizationId: string;
   onboardingCompletedAt: string;
+}
+
+interface DR_DepartmentIcon {
+  id: string;
+  name: string;
+  builtinKey: string;
+  url: string;
+  imageStatus: string;
+  retryable: boolean;
+}
+
+interface DR_DepartmentItem {
+  id: string;
+  organizationId: string;
+  name: string;
+  description: string;
+  membershipRevision: number;
+  displayOrder: number;
+  archived: boolean;
+  icon: DR_DepartmentIcon;
+  createdAt: string;
+}
+
+interface DR_DepartmentSummary {
+  totalDepartments: number;
+  totalHeadcount: number;
+  totalSubteams: number;
+}
+
+interface DepartmentsResponse {
+  summary: DR_DepartmentSummary;
+  items: DR_DepartmentItem[];
+  unavailableMetrics: string[];
+}
+
+interface DepartmentByIDMetrics {
+  headcount: number;
+  openRoles: number;
+  subteams: number;
+}
+
+interface DepartmentDetailResponse {
+  id: string;
+  organizationId: string;
+  name: string;
+  description: string;
+  membershipRevision: number;
+  displayOrder: number;
+  archived: boolean;
+  icon: DepartmentIcon;
+  createdAt: string;
+  metrics: DepartmentByIDMetrics;
+  unavailableMetrics: string[];
 }

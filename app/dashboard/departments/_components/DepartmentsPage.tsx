@@ -1,8 +1,11 @@
 "use client";
 import { MetricCard } from "@/app/dashboard/_components/MetricCard";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { PageLoader } from "@/components/global/PageLoader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
+import { useGetDepartments } from "@/hooks/employer/useDepartment";
 import { cn, getInitials } from "@/lib/utils";
+import Cookies from "js-cookie";
 import {
   ChevronRight,
   Code2,
@@ -127,11 +130,20 @@ const DEPARTMENTS = [
 ];
 
 const DepartmentsPage = () => {
+  const organisationId = Cookies.get("organisationId");
+  const { data: departmentResponse, isLoading } = useGetDepartments({
+    organisationId: organisationId,
+  });
   const layouts = [
     { icon: LayoutGrid, type: "grid" },
     { icon: List, type: "list" },
   ];
   const [layout, setlayout] = useState("grid");
+  if (isLoading || !departmentResponse) {
+    return <PageLoader />;
+  }
+  const departments = departmentResponse.items || [];
+  const summary = departmentResponse.summary;
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-start py-5">
@@ -150,9 +162,24 @@ const DepartmentsPage = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        {metrics.map((item, i) => (
+        <MetricCard
+          icon={Users}
+          label="Total Headcount"
+          value={summary.totalHeadcount || 0}
+        />
+        <MetricCard
+          icon={Network}
+          label="Total Subteams"
+          value={summary.totalSubteams || 0}
+        />
+        <MetricCard
+          icon={Group}
+          label="Total Departments"
+          value={summary.totalDepartments || 0}
+        />
+        {/* {metrics.map((item, i) => (
           <MetricCard key={i} {...item} />
-        ))}
+        ))} */}
       </div>
 
       <div className="space-y-4">
@@ -176,28 +203,35 @@ const DepartmentsPage = () => {
         <div
           className={cn("grid gap-2", layout === "grid" ? "grid-cols-3" : "")}
         >
-          {DEPARTMENTS.map((dept, i) => (
+          {departments.map((dept, i) => (
             <Link
-              href={`/dashboard/departments/${dept.name}`}
+              href={`/dashboard/departments/${dept.id}`}
               key={i}
               className={cn(
                 "rounded-md border bg-white max-w-md border-gray-200 p-3 space-y-2"
               )}
             >
               <div className="flex justify-between items-center">
-                <div className="h-10 w-10 bg-primary/10 flex justify-center items-center rounded-sm">
-                  <dept.icon className="h-7 w-7" />
-                </div>
+                <Avatar className="h-10 w-10 bg-primary/10 flex justify-center items-center rounded-sm">
+                  <AvatarImage
+                    src={dept.icon.url || ""}
+                    alt={dept.name}
+                    className="h-6 w-6"
+                  />
+                  <AvatarFallback>
+                    <Network className="h-6 w-6" />
+                  </AvatarFallback>
+                </Avatar>
                 <div className="text-green-500 bg-green-100 px-2 py-0.5 rounded-full text-xs">
                   stable
                 </div>
               </div>
               <div className="">
                 <div className="font-semibold text-lg">{dept.name}</div>
-                <div className="text-sm">{dept.desc}</div>
+                <div className="text-sm">{dept.description}</div>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {dept.metrics.map((item, i) => (
+                {DEPARTMENTS[0].metrics.map((item, i) => (
                   <div className="bg-primary-100 rounded-md p-2" key={i}>
                     <div className="">{item.label}</div>
                     <div className="font-extrabold">{item.value}</div>
@@ -209,14 +243,16 @@ const DepartmentsPage = () => {
                   <div className="flex-1 flex items-center gap-1">
                     <Avatar>
                       <AvatarFallback>
-                        {getInitials(dept.head_staff.name)}
+                        {getInitials(DEPARTMENTS[0].head_staff.name)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="">
                       <div className="font-semibold">
-                        {dept.head_staff.name}
+                        {DEPARTMENTS[0].head_staff.name}
                       </div>
-                      <div className="text-xs">{dept.head_staff.role}</div>
+                      <div className="text-xs">
+                        {DEPARTMENTS[0].head_staff.role}
+                      </div>
                     </div>
                   </div>
                   <div className="">

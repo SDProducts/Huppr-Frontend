@@ -7,9 +7,11 @@ import {
   Inter,
   Lato,
   Montserrat,
+  Noto_Sans,
   Plus_Jakarta_Sans,
   Poppins,
   Space_Grotesk,
+  Wix_Madefor_Display,
 } from "next/font/google";
 
 export const montserrat = Montserrat({
@@ -35,6 +37,14 @@ export const jakata = Plus_Jakarta_Sans({
 export const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+export const NotoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+export const Wix = Wix_Madefor_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 export const lato = Lato({
   //   subsets: ["latin"],
