@@ -53,6 +53,14 @@ export interface JobItem {
   revision: number;
   key: string;
   isSystem: boolean;
+  metrics: {
+    members: [];
+    openPositions: number;
+    totalPositions: number;
+    filledPositions: number;
+    plannedPositions: number;
+    averageSalaryByCurrency: [];
+  };
 }
 
 export interface JobListResponse {

@@ -1,14 +1,15 @@
 "use client";
 import Logo from "@/assets/huppr_logo2.png";
 import { navigation } from "@/data/constants";
+import { useLogout } from "@/hooks/auth/useAuth";
 import { LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 function SideNavBar() {
   const pathname = usePathname();
-  const router = useRouter();
+  const { mutate: logout } = useLogout();
   return (
     <div className="flex flex-col p-5 gap-0 h-screen justify-between overflow-y-auto scrollbar-hide">
       <div className="flex items-center gap-2 px-5">
@@ -68,10 +69,7 @@ function SideNavBar() {
           ))}
 
           <button
-            onClick={() => {
-              //   logout();
-              router.refresh();
-            }}
+            onClick={() => logout()}
             className="flex items-center w-full px-7 py-1.75 text-[12px] text-red-500 rounded-xl hover:bg-[#FFE6E6]"
           >
             <LogOut className="mr-2 w-4 h-4" />

@@ -1,5 +1,5 @@
 import api from "@/lib/axios.config";
-import { JobListResponse } from "@/types/department_roles";
+import { JobItem, JobListResponse } from "@/types/department_roles";
 import { SubTeamListResponse } from "@/types/subteams";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -37,6 +37,49 @@ export const useGetDepartmentByID = (id?: string) => {
     enabled: !!id,
   });
 };
+
+interface CreateNewDepartmentPayload {
+  name: string;
+  description?: string;
+  iconId?: string;
+}
+export const useCreateNewDepartment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: CreateNewDepartmentPayload) => {
+      const response = await api.post(`/organization/departments`, payload);
+      return response.data;
+    },
+    onSuccess: () => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["departments"],
+      });
+      toast.success("New department created");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed to create new department");
+      }
+    },
+  });
+};
+
 export const useGetTeams = (filters: TeamsFilters = {}) => {
   const { organisationId, teamId, departmentId, search, page, limit } = filters;
 
@@ -83,6 +126,21 @@ export const useGetRoles = (filters: TeamsFilters = {}) => {
     // enabled: !!organisationId,
   });
 };
+export const useGetRolesById = (roleID?: string) => {
+  return useQuery<JobItem>({
+    queryKey: ["role", roleID],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+
+      if (roleID) params.append("roleId", roleID);
+      const response = await api.get(
+        `/organization/roles?${params.toString()}`
+      );
+      return response.data;
+    },
+    enabled: !!roleID,
+  });
+};
 
 interface CreateSubTeamPayload {
   expectedRevision: number;
@@ -104,6 +162,42 @@ export const useCreateSubteam = () => {
         queryKey: ["teams"],
       });
       toast.success("Created new subteam");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+
+export const useCreateNewRole = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: CreateRolePayload) => {
+      const response = await api.post("/organization/roles", payload);
+      return response.data;
+    },
+    onSuccess: (data: JobItem) => {
+      qc.invalidateQueries({
+        queryKey: ["roles"],
+      });
+      toast.success("Created new role");
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data

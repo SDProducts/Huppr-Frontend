@@ -2,10 +2,6 @@
 import { ErrorMessage, useField } from "formik";
 import { Check, Info } from "lucide-react";
 import React, { useEffect } from "react";
-interface Option {
-  label: string;
-  value: string;
-}
 
 interface CheckboxProps {
   name: string;
@@ -18,7 +14,7 @@ interface CheckboxProps {
   maxSelections?: number;
   minSelections?: number;
   defaultSelectAll?: boolean; // New prop for default select all
-  orientation?: "horizontal" | "vertical";
+  orientationStyle?: string;
   optionClassName?: string;
   size?: "xs" | "sm" | "md" | "lg";
 }
@@ -34,7 +30,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   maxSelections,
   minSelections,
   defaultSelectAll = false, // Default to false
-  orientation = "vertical",
+  orientationStyle,
   optionClassName,
   size = "sm",
 }) => {
@@ -175,13 +171,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           </p>
         )}
 
-        <div
-          className={`flex gap-0 ${
-            orientation === "horizontal"
-              ? "flex-row flex-wrap"
-              : "flex-col border border-gray-200 rounded-lg overflow-hidden"
-          }`}
-        >
+        <div className={`flex gap-0 ${orientationStyle}`}>
           {options.map((option) => {
             const isSelected = selectedValues.includes(option.value);
             const isDisabled =
@@ -193,15 +183,11 @@ const Checkbox: React.FC<CheckboxProps> = ({
             return (
               <label
                 key={option.value}
-                className={`flex items-center justify-between ${
+                className={`flex items-center justify-between rounded-md border border-primary/5 ${
                   size === "xs" && "p.1.5"
-                } ${size === "sm" && "p-2"} cursor-pointer transition-all 
+                } ${size === "sm" && "p-3"} cursor-pointer transition-all 
                 ${
-                  isSelected
-                    ? !hasError
-                      ? "bg-primary/5"
-                      : "border bg-red-100"
-                    : "border-gray-300"
+                  isSelected ? (!hasError ? "bg-primary/5" : " bg-red-100") : ""
                 }
                 ${hasError ? "border-red-500" : ""}
                 ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}
@@ -239,14 +225,20 @@ const Checkbox: React.FC<CheckboxProps> = ({
                       </svg>
                     )}
                   </div>
-
-                  <span
-                    className={`text-gray-800 text-xs capitalize ${
-                      isDisabled ? "opacity-50" : ""
-                    }`}
-                  >
-                    {option.label}
-                  </span>
+                  <div className="flex-1">
+                    <div
+                      className={`text-gray-800 text-sm font-semibold capitalize ${
+                        isDisabled ? "opacity-50" : ""
+                      }`}
+                    >
+                      {option.label}
+                    </div>
+                    {option.description && (
+                      <div className="text-xs line-clamp-1">
+                        {option.description}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Hidden native checkbox input */}

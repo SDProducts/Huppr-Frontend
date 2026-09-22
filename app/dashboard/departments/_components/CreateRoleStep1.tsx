@@ -1,11 +1,16 @@
 import CreateRoleStep2 from "@/app/dashboard/departments/_components/CreateRoleStep2";
+import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import Input from "@/components/form/Input";
 import RadioGroup from "@/components/form/RadioGroup";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import { SelectInputSkeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import { useModal } from "@/context/modal.state";
-import { useGetDepartments } from "@/hooks/employer/useDepartment";
+import {
+  useCreateNewRole,
+  useGetDepartments,
+  useGetRolesById,
+} from "@/hooks/employer/useDepartment";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import {
@@ -16,18 +21,30 @@ import {
   Home,
 } from "lucide-react";
 import { useParams } from "next/navigation";
+import React from "react";
+interface Prop {
+  roleID?: string;
+}
 
-const CreateRoleStep1 = () => {
+const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
   const organisationId = Cookies.get("organisationId");
   const modal = useModal();
   const { department } = useParams();
   const { data, isLoading } = useGetDepartments({
     organisationId: organisationId,
   });
+  const { mutate: createRole, isPending } = useCreateNewRole();
+  const { data: roleData } = useGetRolesById(roleID);
+  if (isLoading) {
+    return <div className="">Loading...</div>;
+  }
   const departments = data?.items.map((item) => ({
     label: item.name,
     value: item.id,
   }));
+  const departmentData = data?.items.find(
+    (item) => item.id === String(department)
+  );
   const levels = [
     { label: "Entry Level", value: "entry" },
     { label: "Junior", value: "junior" },
@@ -35,32 +52,50 @@ const CreateRoleStep1 = () => {
     { label: "Senior ", value: "senior" },
   ];
   const types = [
-    { label: "Fulltime ", value: "Fulltime" },
-    { label: "Parttime", value: "Parttime" },
-    { label: "Contract", value: "Contract" },
+    { label: "Fulltime ", value: "full_time" },
+    { label: "Parttime", value: "part_time" },
+    { label: "Contract", value: "contract" },
   ];
   const workArrangements = [
-    { label: "On-site ", value: "On-site", icon: <Building2 size={18} /> },
-    { label: "Remote", value: "Remote", icon: <Home size={18} /> },
-    { label: "Hybrid", value: "Hybrid", icon: <ArrowRightLeft size={18} /> },
+    { label: "On-site ", value: "on_site", icon: <Building2 size={18} /> },
+    { label: "Remote", value: "remote", icon: <Home size={18} /> },
+    { label: "Hybrid", value: "hybrid", icon: <ArrowRightLeft size={18} /> },
   ];
-  const initialValues = {
+
+  const initialValues: CreateRolePayload = {
     departmentId: String(department),
-    name: "",
-    role_level: "",
-    employement_type: "",
-    location: "",
-    work_arrangemet: "",
+    iconId: String(departmentData?.icon.id),
+    name: roleData?.name || "",
+    level: roleData?.level || "",
+    employmentType: roleData?.employmentType || "",
+    location: roleData?.location || "",
+    workArrangement: roleData?.workArrangement || "",
   };
-  const submit = () => {
-    modal.open({
-      content: <CreateRoleStep2 />,
-      size: "sm:w-[80%]",
-      bgColor: "bg-primary-100",
+  const submit = (values: typeof initialValues) => {
+    createRole(values, {
+      onSuccess(data) {
+        modal.open({
+          content: <CreateRoleStep2 roleID={data.id} />,
+          size: "sm:w-[80%] md:w-4xl",
+          bgColor: "bg-[#F7F9FC]",
+          goBack: () => {
+            modal.open({
+              content: <CreateRoleStep1 />,
+              size: "sm:w-3xl",
+              bgColor: "bg-[#F7F9FC]",
+            });
+          },
+        });
+      },
     });
   };
   return (
-    <div className="min-h-[400px] px-4">
+    <div className="min-h-[400px] px-4 space-y-10">
+      <div className="">
+        <h2 className="text-2xl font-bold">Create Role</h2>
+        <p className="text-sm">Define the foundation for this new position.</p>
+      </div>
+      <Stepper currentStep={1} />
       <Formik initialValues={initialValues} onSubmit={submit}>
         {() => {
           return (
@@ -90,14 +125,14 @@ const CreateRoleStep1 = () => {
                 <div className="grid grid-cols-3 gap-2">
                   <SearchableSelect
                     label="Role level"
-                    name="role_level"
+                    name="level"
                     options={levels!}
                     placeholder="Select Level"
                     labelClassName="text-sm"
                   />
                   <SearchableSelect
                     label="Employement type"
-                    name="employement_type"
+                    name="employmentType"
                     options={types!}
                     placeholder="Select Type"
                     labelClassName="text-sm"
@@ -112,7 +147,7 @@ const CreateRoleStep1 = () => {
                 <div className="w-full md:w-2/3">
                   <RadioGroup
                     label="Work Arrangement"
-                    name="wprk_arrangement"
+                    name="workArrangement"
                     options={workArrangements}
                     orientation="horizontal"
                     optionClassName="rounded-md!"
@@ -137,10 +172,14 @@ const CreateRoleStep1 = () => {
                   <Button
                     label="Save as draft"
                     className="bg-transparent! text-primary! border"
+                    isLoading={isPending}
+                    disabled={isPending}
                   />
                   <Button
                     label="Continue"
                     type="submit"
+                    isLoading={isPending}
+                    disabled={isPending}
                     rightIcon={<ArrowRight />}
                   />
                 </div>

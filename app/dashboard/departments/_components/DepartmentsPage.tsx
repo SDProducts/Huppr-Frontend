@@ -1,8 +1,10 @@
 "use client";
 import { MetricCard } from "@/app/dashboard/_components/MetricCard";
+import CreateNewDepartment from "@/app/dashboard/departments/_components/CreateNewDepartment";
 import { PageLoader } from "@/components/global/PageLoader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
+import { useModal } from "@/context/modal.state";
 import { useGetDepartments } from "@/hooks/employer/useDepartment";
 import { cn, getInitials } from "@/lib/utils";
 import Cookies from "js-cookie";
@@ -20,30 +22,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-const metrics = [
-  {
-    icon: Users,
-    value: 153,
-    label: "Total Headcount",
-    meta: "↑ 11 this month",
-    subMeta: "+4 vs last month",
-    variant: "blue" as const,
-  },
-  {
-    icon: Network,
-    value: 3,
-    label: "Number of Dept",
-    meta: "Awaiting approval",
-    variant: "purple" as const,
-  },
-  {
-    icon: Group,
-    value: 2,
-    label: "Total sub-team",
-    meta: "Today",
-    variant: "green" as const,
-  },
-];
 
 const DEPARTMENTS = [
   {
@@ -131,6 +109,7 @@ const DEPARTMENTS = [
 
 const DepartmentsPage = () => {
   const organisationId = Cookies.get("organisationId");
+  const modal = useModal();
   const { data: departmentResponse, isLoading } = useGetDepartments({
     organisationId: organisationId,
   });
@@ -144,6 +123,7 @@ const DepartmentsPage = () => {
   }
   const departments = departmentResponse.items || [];
   const summary = departmentResponse.summary;
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-start py-5">
@@ -158,6 +138,13 @@ const DepartmentsPage = () => {
           icon={<Plus />}
           label="New Department"
           className="w-fit! px-5"
+          onClick={() => {
+            modal.open({
+              content: <CreateNewDepartment />,
+              size: "sm:w-2xl",
+              bgColor: "bg-primary-100",
+            });
+          }}
         />
       </div>
 
@@ -231,12 +218,24 @@ const DepartmentsPage = () => {
                 <div className="text-sm">{dept.description}</div>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {DEPARTMENTS[0].metrics.map((item, i) => (
-                  <div className="bg-primary-100 rounded-md p-2" key={i}>
-                    <div className="">{item.label}</div>
-                    <div className="font-extrabold">{item.value}</div>
+                <div className="bg-primary-100 min-h-24 flex flex-col justify-center items-center rounded-md p-2">
+                  <div className="truncate min-w-0">Headcount</div>
+                  <div className="font-extrabold">{dept.metrics.headcount}</div>
+                </div>
+                <div className="bg-primary-100 min-h-24 flex flex-col justify-center items-center rounded-md p-2">
+                  <div className="truncate min-w-0">Attendance</div>
+                  <div className="font-extrabold">
+                    {dept.metrics.attendancePercent || 0}%
                   </div>
-                ))}
+                </div>
+                <div className="bg-primary-100 min-h-24 flex flex-col justify-center items-center rounded-md p-2">
+                  <div className="truncate min-w-0">Subteams</div>
+                  <div className="font-extrabold">{dept.metrics.subteams}</div>
+                </div>
+                <div className="bg-primary-100 min-h-24 flex flex-col justify-center items-center rounded-md p-2">
+                  <div className="truncate min-w-0">Open roles</div>
+                  <div className="font-extrabold">{dept.metrics.openRoles}</div>
+                </div>
               </div>
               <div className="border-t border-gray-200 py-2 mt-4">
                 <div className="flex justify-between items-center">

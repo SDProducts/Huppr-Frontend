@@ -191,3 +191,126 @@ function ActivityCardSkeleton() {
     </article>
   );
 }
+
+interface RolesListSkeletonProps {
+  count?: number;
+  className?: string;
+}
+
+export function RolesListSkeleton({
+  count = 4,
+  className,
+}: RolesListSkeletonProps) {
+  return (
+    <div className={cn("space-y-2", className)}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-2 rounded-lg bg-white p-4"
+        >
+          <div className="grid flex-1 grid-cols-[3fr_1fr_1fr_2fr] items-center">
+            {/* Name + meta */}
+            <div className="flex items-center gap-2">
+              <div className="h-10 w-10 shrink-0 animate-pulse rounded-md bg-[#e8ebef]" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-40 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+            </div>
+
+            {/* Positions */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="h-4 w-16 animate-pulse rounded bg-[#e8ebef]" />
+              <div className="h-4 w-8 animate-pulse rounded bg-[#e8ebef]" />
+            </div>
+
+            {/* Status badge */}
+            <div className="flex justify-center">
+              <div className="h-6 w-20 animate-pulse rounded-2xl bg-[#e8ebef]" />
+            </div>
+
+            {/* Avatar group */}
+            <div className="flex items-center">
+              <div className="flex -space-x-2">
+                {Array.from({ length: 3 }).map((_, j) => (
+                  <div
+                    key={j}
+                    className="h-9 w-9 animate-pulse rounded-full border-2 border-white bg-[#e8ebef]"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Dropdown trigger placeholder */}
+          <div className="h-[18px] w-[18px] shrink-0 animate-pulse rounded bg-[#e8ebef]" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+interface TeamsGridSkeletonProps {
+  count?: number;
+  className?: string;
+}
+
+export function TeamsGridSkeleton({
+  count = 6,
+  className,
+}: TeamsGridSkeletonProps) {
+  return (
+    <div className={className}>
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: count }).map((_, i) => (
+          <div
+            key={i}
+            className="space-y-4 rounded-md border border-gray-200 bg-white p-4"
+          >
+            {/* Header: icon + name + description */}
+            <div className="flex items-start gap-2">
+              <div className="h-10 w-10 shrink-0 animate-pulse rounded-md bg-[#e8ebef]" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-28 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-full animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-3/4 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+            </div>
+
+            {/* Capacity block */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <div className="h-3 w-24 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-10 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+              {/* Progress bar */}
+              <div className="h-2 w-full animate-pulse rounded-full bg-[#e8ebef]" />
+            </div>
+
+            {/* Separator */}
+            <div className="h-px w-full bg-gray-200" />
+
+            {/* Footer: avatar group + button */}
+            <div className="flex items-center justify-between">
+              {/* Avatar group */}
+              <div className="flex -space-x-4">
+                {Array.from({ length: 4 }).map((_, j) => (
+                  <div
+                    key={j}
+                    className="h-9 w-9 animate-pulse rounded-full border-2 border-white bg-[#e8ebef]"
+                  />
+                ))}
+              </div>
+
+              {/* Button placeholder */}
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-10 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-4 w-4 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

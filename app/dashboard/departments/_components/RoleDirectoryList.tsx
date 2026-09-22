@@ -1,56 +1,38 @@
 "use client";
+import CreateRoleStep1 from "@/app/dashboard/departments/_components/CreateRoleStep1";
+import ActivityEmptyState from "@/components/EmptyState";
+import { RolesListSkeleton, TeamsGridSkeleton } from "@/components/skeletons";
 import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { useModal } from "@/context/modal.state";
 import { useGetRoles, useGetTeams } from "@/hooks/employer/useDepartment";
 import { cn } from "@/lib/utils";
-import {
-  ArrowRight,
-  Box,
-  Bug,
-  ChartLine,
-  Code2,
-  MoreVertical,
-  Palette,
-  Server,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight, Code2, MoreVertical, Server } from "lucide-react";
 import { useParams } from "next/navigation";
 
 const RoleDirectoryList = () => {
+  const modal = useModal();
   const { department } = useParams();
-  const { data } = useGetRoles({ departmentId: String(department) });
+  const { data, isLoading } = useGetRoles({ departmentId: String(department) });
+  if (isLoading && !data) {
+    return <RolesListSkeleton />;
+  }
+  const roles = data?.items || [];
+  if (roles.length < 1) {
+    return <ActivityEmptyState title="No Roles Found" />;
+  }
 
-  const roleDir = [
-    {
-      name: "Senior Backend Engineer",
-      tier: 4,
-      positions: 5,
-      role_type: "Remote/US",
-      status: "filled",
-      staffs: ["SM", "PG", "OT", "LK", "NJ"],
-    },
-    {
-      name: "Frontend Engineer",
-      tier: 5,
-      positions: 2,
-      role_type: "Remote/US",
-      status: "open",
-      staffs: ["SM", "PG"],
-    },
-    {
-      name: "DevOps Lead",
-      tier: 4,
-      positions: 5,
-      role_type: "NYC/Hybrid",
-      status: "open",
-      staffs: ["SM", "PG", "OT", "LK", "NJ"],
-    },
-  ];
   return (
     <div className="space-y-2">
-      {roleDir.map((item, i) => (
+      {roles.map((item, i) => (
         <div
           className="flex items-center gap-2 bg-white p-4 rounded-lg"
           key={i}
@@ -62,21 +44,21 @@ const RoleDirectoryList = () => {
               </div>
               <div className="flex-1">
                 <div className="font-semibold">{item.name}</div>
-                <div className="text-sm">
-                  {item.role_type} ◾ tier {item.tier}
+                <div className="text-sm capitalize">
+                  {item.workArrangement} / {item.location}
                 </div>
               </div>
             </div>
             <div className="text-center">
               <div className="font-semibold">Positions</div>
-              <div className="">{item.positions}</div>
+              <div className="text-sm">{item.metrics.openPositions || 0}</div>
             </div>
             <div className="bg-green-100 text-green-500 h-fit w-fit text-sm px-3 py-0.5 rounded-2xl">
               {item.status}
             </div>
             <div className="">
               <AvatarGroup>
-                {item.staffs.map((staff) => (
+                {item.metrics.members.map((staff) => (
                   <Avatar key={staff} className={cn("bg-white")}>
                     <AvatarFallback>{staff}</AvatarFallback>
                   </Avatar>
@@ -84,7 +66,48 @@ const RoleDirectoryList = () => {
               </AvatarGroup>
             </div>
           </div>
-          <MoreVertical />
+          <DropdownMenu>
+            <DropdownMenuTrigger className={"p-0!"}>
+              <div>
+                <MoreVertical size={18} />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                className={cn("hover:bg-primary-100! hover:text-primary!")}
+              >
+                View
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  modal.open({
+                    content: <CreateRoleStep1 roleID={item.id} />,
+                    size: "sm:w-3xl",
+                    bgColor: "bg-[#F7F9FC]",
+                  });
+                }}
+                className={cn("hover:bg-primary-100! hover:text-primary!")}
+              >
+                Edit
+              </DropdownMenuItem>
+
+              {/* <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Edit</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>Rename</DropdownMenuItem>
+                  <DropdownMenuItem>Change owner</DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub> */}
+
+              <DropdownMenuItem
+                className={cn(
+                  "hover:bg-red-100! text-red-500 hover:text-red-500!"
+                )}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>{" "}
         </div>
       ))}
     </div>
@@ -96,51 +119,13 @@ export default RoleDirectoryList;
 export const SubteamsList = () => {
   const { department } = useParams();
   const { data, isLoading } = useGetTeams({ departmentId: String(department) });
+  if (isLoading || !data) {
+    return <TeamsGridSkeleton />;
+  }
   const teams = data?.items || [];
-  const SUBTEAMS = [
-    {
-      icon: Server,
-      name: "Core Infrastructure",
-      desc: "Server health, db optimization",
-      capacity: "68/80",
-      percentage: 84,
-    },
-    {
-      icon: Palette,
-      name: "Design",
-      desc: "Server health, db optimization",
-      capacity: "68/80",
-      percentage: 84,
-    },
-    {
-      icon: Box,
-      name: "Product Engineering",
-      desc: "Server health, db optimization",
-      capacity: "68/80",
-      percentage: 84,
-    },
-    {
-      icon: ChartLine,
-      name: "Data Science",
-      desc: "Server health, db optimization",
-      capacity: "68/80",
-      percentage: 84,
-    },
-    {
-      icon: Bug,
-      name: "QA & Testing",
-      desc: "Server health, db optimization",
-      capacity: "68/80",
-      percentage: 84,
-    },
-    {
-      icon: ShieldCheck,
-      name: "Security",
-      desc: "Server health, db optimization",
-      capacity: "68/80",
-      percentage: 84,
-    },
-  ];
+  if (teams.length < 1) {
+    return <ActivityEmptyState title="No subteams yet" />;
+  }
   return (
     <div className="">
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -160,10 +145,16 @@ export const SubteamsList = () => {
             </div>
             <div className="space-y-1">
               <div className="flex justify-between items-center text-sm">
-                <div className="">Capacity({"58/65"})</div>
-                <div className="text-right">{86}%</div>
+                <div className="">
+                  Capacity(
+                  {`${team.memberCount || 0}/${team.plannedCapacity || 0}`})
+                </div>
+                <div className="text-right">{team.capacityPercent || 0}%</div>
               </div>
-              <Progress value={86} indicatorClassName="" />
+              <Progress
+                value={team.capacityPercent || 0}
+                indicatorClassName=""
+              />
             </div>
             <Separator />
             <div className="flex justify-between items-center">

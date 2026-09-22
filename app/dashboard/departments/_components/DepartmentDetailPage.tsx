@@ -77,8 +77,9 @@ const DepartmentDetailPage = () => {
           <Button
             onClick={() => {
               modal.open({
-                content: <CreateSubTeam />,
-                size: "sm:w-xl",
+                content: <CreateRoleStep1 />,
+                size: "sm:w-3xl",
+                bgColor: "bg-[#F7F9FC]",
               });
             }}
             icon={<UserPlus size={16} />}
@@ -91,9 +92,8 @@ const DepartmentDetailPage = () => {
             className="w-fit! px-5"
             onClick={() => {
               modal.open({
-                content: <CreateRoleStep1 />,
-                size: "sm:w-3xl",
-                bgColor: "bg-primary-100",
+                content: <CreateSubTeam />,
+                size: "sm:w-xl",
               });
             }}
           />

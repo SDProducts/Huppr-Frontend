@@ -25,12 +25,14 @@ const forgotPassword = async (payload: {
 };
 export const logout = async () => {
   //   reset(); // Reset user store
-  Cookies.set("access_token", "");
-  Cookies.set("refresh_token", "");
-  Cookies.set("user_role", "");
+  Cookies.remove("access_token");
+  Cookies.remove("refresh_token");
+  Cookies.remove("user_role");
+  Cookies.remove("onboarding_complete");
+  Cookies.remove("onboarding_complete");
   localStorage.removeItem("user-state"); // Clear persisted user state
   // window.location.reload(); // Optional: Refresh page to clear UI state
-  toast.success("Logged out successfully!"); // Show logout success message
+  // toast.success("Logged out successfully!"); // Show logout success message
 };
 
 export const useLogin = () => {
@@ -338,4 +340,28 @@ export const useGetMyDetails = () => {
   }, [response.data]);
 
   return response;
+};
+
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+      toast.success("User logged out");
+      router.refresh();
+    },
+    onError: (error) => {
+      // Check if this is an Axios error with response data
+      if (error.message) {
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to log out");
+      }
+    },
+  });
 };

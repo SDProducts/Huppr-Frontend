@@ -7,6 +7,10 @@ export interface SubTeamItem {
   createdAt: string;
   updatedAt: string;
   membershipRevision: number;
+  understaffed: null;
+  capacityPercent: number;
+  plannedCapacity: number;
+  memberCount: number;
 }
 
 export interface SubTeamListResponse {

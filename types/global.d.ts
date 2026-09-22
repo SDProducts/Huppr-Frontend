@@ -565,6 +565,7 @@ interface DR_DepartmentItem {
   archived: boolean;
   icon: DR_DepartmentIcon;
   createdAt: string;
+  metrics: DR_DepartmentMetrics;
 }
 
 interface DR_DepartmentSummary {
@@ -597,4 +598,81 @@ interface DepartmentDetailResponse {
   createdAt: string;
   metrics: DepartmentByIDMetrics;
   unavailableMetrics: string[];
+}
+interface DR_DepartmentMetrics {
+  id: string;
+  headcount: number;
+  previousHeadcount: number;
+  growthPercent: number;
+  subteams: number;
+  openRoles: number;
+  attendancePercent: number;
+  leadUserId: string;
+  lead: DR_DepartmentLead;
+  operationalStatus: string;
+  annualBudget: number;
+  currency: string;
+  annualSalaryTotal: number;
+  salaryRecordsMissingOrOtherCurrency: number;
+  budgetUtilizationPercent: number;
+}
+interface DR_DepartmentLead {
+  userId: string;
+  displayName: string;
+  avatarUrl: string;
+}
+
+interface Option {
+  label: string;
+  value: string;
+  description?: string;
+}
+interface CreateRolePayload {
+  expectedRevision?: number;
+  name?: string;
+  departmentId?: string;
+  iconId?: string;
+  status?: "draft" | "active";
+  description?: string;
+  level?: string;
+  employmentType?: string;
+  location?: string;
+  workArrangement?: string;
+  requirements?: {
+    responsibilities?: string[];
+    skills?: string[];
+    minimumDegree?: string;
+    fieldOfStudy?: string;
+    minYears?: number;
+    maxYears?: number;
+    certifications?: string[];
+    languages?: string[];
+    otherRequirements?: string;
+  };
+  benefits?: {
+    leaveDays?: {
+      annual?: number;
+      sick?: number;
+      study?: number;
+    };
+    details?: [
+      {
+        name?: string;
+        description?: string;
+        allowance?: number;
+      }
+    ];
+    currency?: string;
+    minimumSalary?: number;
+    maximumSalary?: number;
+    leaveTypes?: string[];
+    salaryReviewFrequency?: string;
+    probationMonths?: number;
+    growthReviewFrequency?: string;
+    successionPath?: string;
+    reportingLine?: string;
+    benefits?: string[];
+  };
+  reportsToUserId?: string;
+  permissionIds?: string[];
 }
