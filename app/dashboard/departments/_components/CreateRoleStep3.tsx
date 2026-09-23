@@ -4,8 +4,13 @@ import Checkbox from "@/components/form/Checkbox";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import Button from "@/components/ui/CustomButton";
 import { useModal } from "@/context/modal.state";
+import {
+  useGetRolesById,
+  usePatchNewRole,
+} from "@/hooks/employer/useDepartment";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
+import Cookies from "js-cookie";
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,20 +18,19 @@ import {
   ClipboardList,
   Users,
 } from "lucide-react";
-
-const CreateRoleStep3 = () => {
+import React from "react";
+interface Prop {
+  roleId: string;
+}
+const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
+  const myId = Cookies.get("user_id");
   const modal = useModal();
-  const initialValues = {
-    responsibilities: [""],
-    permissions: [],
-    report_to: "",
-    maxXP: "",
-    language: "",
-    certification: "",
-    skils: [],
-    degree: "",
-    field: "",
-    other: "",
+  const { data: roleData } = useGetRolesById(roleId);
+
+  const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
+  const initialValues: CreateRolePayload = {
+    reportsToUserId: roleData?.reportsToUserId,
+    permissionIds: [],
   };
   const RESPONSIBILITIES: Option[] = [
     {
@@ -70,12 +74,38 @@ const CreateRoleStep3 = () => {
       actions: ["view", "manage"],
     },
   ];
-  const submit = () => {
-    modal.open({
-      content: <CreateRoleStep4 />,
-      size: "sm:w-3xl",
-      bgColor: "bg-gray-100",
+  const submit = (values: typeof initialValues) => {
+    patchRole(values, {
+      onSuccess(data) {
+        modal.open({
+          content: <CreateRoleStep4 roleId={data.id} />,
+          size: "sm:w-3xl",
+          bgColor: "bg-gray-100",
+          goBack() {
+            modal.open({
+              content: <CreateRoleStep3 roleId={data.id} />,
+              size: "sm:w-2xl",
+              bgColor: "bg-gray-100",
+            });
+          },
+        });
+      },
     });
+  };
+  // helper — the shape your backend wants
+  const permissionKey = (permId: string, action: string) =>
+    `${permId}.${action}`;
+
+  const togglePermission = (
+    current: string[],
+    key: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setFieldValue: (field: string, value: any) => void
+  ) => {
+    const next = current.includes(key)
+      ? current.filter((p) => p !== key)
+      : [...current, key];
+    setFieldValue("permissionIds", next);
   };
 
   return (
@@ -96,8 +126,8 @@ const CreateRoleStep3 = () => {
                   <div className="text-xl font-bold">Hierarchy</div>
                   <SearchableSelect
                     label="Reports to"
-                    name="report_to"
-                    options={[]}
+                    name="reportsToUserId"
+                    options={[{ label: "Report to me", value: myId || "" }]}
                     labelClassName="text-sm"
                   />
                   <div className="text-xs">
@@ -133,11 +163,40 @@ const CreateRoleStep3 = () => {
                           <div className="">{perm.name}</div>
                         </div>
                         <div className="flex items-center gap-2">
+                          {perm.actions.map((action) => {
+                            const key = permissionKey(perm.id, action);
+                            const active = values.permissionIds?.includes(key);
+
+                            return (
+                              <button
+                                type="button"
+                                key={action}
+                                onClick={() =>
+                                  togglePermission(
+                                    values.permissionIds || [],
+                                    key,
+                                    setFieldValue
+                                  )
+                                }
+                                className={cn(
+                                  "cursor-pointer rounded-full px-4 py-1 text-sm transition",
+                                  active
+                                    ? "bg-primary text-white"
+                                    : "bg-gray-200 hover:bg-gray-300"
+                                )}
+                              >
+                                {action} {perm.id}s
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* <div className="flex items-center gap-2">
                           {perm.actions.map((action, i) => (
                             <div
                               onClick={() =>
-                                setFieldValue("permissions", [
-                                  ...values.permissions,
+                                setFieldValue("permissionIds", [
+                                  ...values.permissionIds,
                                   `${action}.${perm.id}`,
                                 ])
                               }
@@ -149,7 +208,7 @@ const CreateRoleStep3 = () => {
                               {action} {perm.id}s
                             </div>
                           ))}
-                        </div>
+                        </div> */}
                       </div>
                     ))}
                   </div>
@@ -159,6 +218,7 @@ const CreateRoleStep3 = () => {
                 <div className="">
                   <Button
                     label="Back"
+                    onClick={modal.goBack}
                     icon={<ArrowLeft />}
                     className="w-fit! bg-transparent text-gray-500!"
                   />
@@ -166,11 +226,15 @@ const CreateRoleStep3 = () => {
                 <div className="flex items-center gap-2">
                   <Button
                     label="Save as draft"
+                    isLoading={isPending}
+                    disabled={isPending}
                     className="bg-transparent! text-primary! border"
                   />
                   <Button
                     label="Continue"
                     type="submit"
+                    isLoading={isPending}
+                    disabled={isPending}
                     rightIcon={<ArrowRight />}
                   />
                 </div>

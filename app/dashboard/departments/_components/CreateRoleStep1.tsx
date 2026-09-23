@@ -10,6 +10,7 @@ import {
   useCreateNewRole,
   useGetDepartments,
   useGetRolesById,
+  usePatchNewRole,
 } from "@/hooks/employer/useDepartment";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -34,6 +35,9 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
     organisationId: organisationId,
   });
   const { mutate: createRole, isPending } = useCreateNewRole();
+  const { mutate: patchRole, isPending: isPatching } = usePatchNewRole(
+    roleID || ""
+  );
   const { data: roleData } = useGetRolesById(roleID);
   if (isLoading) {
     return <div className="">Loading...</div>;
@@ -70,24 +74,44 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
     employmentType: roleData?.employmentType || "",
     location: roleData?.location || "",
     workArrangement: roleData?.workArrangement || "",
+    status: "draft",
   };
   const submit = (values: typeof initialValues) => {
-    createRole(values, {
-      onSuccess(data) {
-        modal.open({
-          content: <CreateRoleStep2 roleID={data.id} />,
-          size: "sm:w-[80%] md:w-4xl",
-          bgColor: "bg-[#F7F9FC]",
-          goBack: () => {
-            modal.open({
-              content: <CreateRoleStep1 />,
-              size: "sm:w-3xl",
-              bgColor: "bg-[#F7F9FC]",
-            });
-          },
-        });
-      },
-    });
+    if (roleID) {
+      patchRole(values, {
+        onSuccess(data) {
+          modal.open({
+            content: <CreateRoleStep2 roleID={data.id} />,
+            size: "sm:w-[80%] md:w-4xl",
+            bgColor: "bg-[#F7F9FC]",
+            goBack: () => {
+              modal.open({
+                content: <CreateRoleStep1 />,
+                size: "sm:w-3xl",
+                bgColor: "bg-[#F7F9FC]",
+              });
+            },
+          });
+        },
+      });
+    } else {
+      createRole(values, {
+        onSuccess(data) {
+          modal.open({
+            content: <CreateRoleStep2 roleID={data.id} />,
+            size: "sm:w-[80%] md:w-4xl",
+            bgColor: "bg-[#F7F9FC]",
+            goBack: () => {
+              modal.open({
+                content: <CreateRoleStep1 />,
+                size: "sm:w-3xl",
+                bgColor: "bg-[#F7F9FC]",
+              });
+            },
+          });
+        },
+      });
+    }
   };
   return (
     <div className="min-h-[400px] px-4 space-y-10">
@@ -172,14 +196,14 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
                   <Button
                     label="Save as draft"
                     className="bg-transparent! text-primary! border"
-                    isLoading={isPending}
-                    disabled={isPending}
+                    isLoading={isPending || isPatching}
+                    disabled={isPending || isPatching}
                   />
                   <Button
                     label="Continue"
                     type="submit"
-                    isLoading={isPending}
-                    disabled={isPending}
+                    isLoading={isPending || isPatching}
+                    disabled={isPending || isPatching}
                     rightIcon={<ArrowRight />}
                   />
                 </div>

@@ -8,7 +8,10 @@ import TagsInput from "@/components/form/TagsInput";
 import Button from "@/components/ui/CustomButton";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/context/modal.state";
-import { useGetRolesById } from "@/hooks/employer/useDepartment";
+import {
+  useGetRolesById,
+  usePatchNewRole,
+} from "@/hooks/employer/useDepartment";
 import { Form, Formik } from "formik";
 import {
   ArrowLeft,
@@ -25,10 +28,11 @@ interface Prop {
 const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
   const modal = useModal();
   const { data: roleData } = useGetRolesById(roleID);
+  const { mutate: patchRole, isPending } = usePatchNewRole(roleID || "");
 
   const initialValues: CreateRolePayload = {
     requirements: {
-      responsibilities: roleData?.requirements.responsibilities || [],
+      responsibilities: roleData?.requirements.responsibilities || [""],
       minYears: roleData?.requirements.minYears || 1,
       maxYears: roleData?.requirements.maxYears || 10,
       languages: roleData?.requirements.languages || [],
@@ -39,11 +43,22 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
       otherRequirements: roleData?.requirements.otherRequirements || "",
     },
   };
-  const submit = () => {
-    modal.open({
-      content: <CreateRoleStep3 />,
-      size: "sm:w-2xl",
-      bgColor: "bg-gray-100",
+  const submit = (values: typeof initialValues) => {
+    patchRole(values, {
+      onSuccess(data) {
+        modal.open({
+          content: <CreateRoleStep3 roleId={data.id} />,
+          size: "sm:w-2xl",
+          bgColor: "bg-gray-100",
+          goBack: () => {
+            modal.open({
+              content: <CreateRoleStep2 roleID={data.id} />,
+              size: "sm:w-[80%] md:w-4xl",
+              bgColor: "bg-[#F7F9FC]",
+            });
+          },
+        });
+      },
     });
   };
 
@@ -67,7 +82,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                   <div className="space-y-4">
                     <ListInputField
                       className="bg-white p-4"
-                      name="responsibilities"
+                      name="requirements.responsibilities"
                       label="Job Responsobilities"
                       helpText="What will this person do on a daily basis?"
                       placeholder="Type responsibility here."
@@ -82,7 +97,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                             Hard and soft skills needed.
                           </p>
                         </div>
-                        <TagsInput name="skills" />
+                        <TagsInput name="requirements.skills" />
                       </div>
                       <div className="p-4 bg-white rounded-md space-y-4">
                         <div className="">
@@ -93,13 +108,13 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                         </div>
                         <Select
                           label="Minimum Degree"
-                          name="minimumDegree"
+                          name="requirements.minimumDegree"
                           options={[]}
                           labelClassName="text-sm"
                         />
                         <Input
                           label="Field of Study"
-                          name="fieldOfStudy"
+                          name="requirements.fieldOfStudy"
                           placeholder="Computer Science"
                           LabelClassName="text-sm"
                         />
@@ -108,7 +123,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                     <div className="p-4 bg-white rounded-md">
                       <Input
                         type="textarea"
-                        name="otherRequirements"
+                        name="requirements.otherRequirements"
                         label="Other Requirements"
                         helpText="Any additional context or specific physical/travel needs."
                         rows={2}
@@ -123,15 +138,17 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                       </div>
                       <div className="flex items-end gap-2">
                         <Input
+                          type="number"
                           label="Min Years"
-                          name="minYears"
+                          name="requirements.minYears"
                           className="p-2.5!"
                           LabelClassName="text-xs"
                         />
                         <div className="h-0.5 w-10 mb-5 bg-gray-300" />
                         <Input
+                          type="number"
                           label="Max Years"
-                          name="maxYears"
+                          name="requirements.maxYears"
                           LabelClassName="text-xs"
                           className="p-2.5!"
                         />
@@ -144,17 +161,20 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                           <div className="">Certificationss</div>
                         </div>
                         <Input
-                          name="certificate"
+                          name="requirements.certificate"
                           placeholder="e.g., AWS Certified Solutions Architect"
                         />
                       </div>
                       <Separator className={"my-6"} />
-                      <div className=" space-y-4">
+                      <div className="space-y-4">
                         <div className="flex items-center gap-1 font-semibold text-lg">
                           <Globe className="text-primary" />{" "}
                           <div className="">Language</div>
                         </div>
-                        <Input name="language" placeholder="e.g., English" />
+                        <TagsInput
+                          name="requirements.languages"
+                          placeholder="e.g., English"
+                        />
                       </div>
                     </div>
                     <div className="p-4 bg-primary-100 rounded-md mt-7">
@@ -190,11 +210,15 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                 <div className="flex items-center gap-2">
                   <Button
                     label="Save as draft"
+                    isLoading={isPending}
+                    disabled={isPending}
                     className="bg-transparent! text-primary! border"
                   />
                   <Button
                     label="Continue"
                     type="submit"
+                    isLoading={isPending}
+                    disabled={isPending}
                     rightIcon={<ArrowRight />}
                   />
                 </div>

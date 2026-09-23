@@ -4,10 +4,21 @@ import Checkbox from "@/components/form/Checkbox";
 import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import Button from "@/components/ui/CustomButton";
+import {
+  useGetRolesById,
+  usePatchNewRole,
+} from "@/hooks/employer/useDepartment";
 import { Form, Formik } from "formik";
 import { ArrowLeft, ArrowRight, Lightbulb } from "lucide-react";
+import React from "react";
+interface Prop {
+  roleId: string;
+}
+const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
+  const { data: roleData } = useGetRolesById(roleId);
 
-const CreateRoleStep4 = () => {
+  const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
+
   const LEAVE_POLICIES: Option[] = [
     { label: "Annual Leave", value: "Annual Leave" },
     { label: "Sick Leave", value: "Sick Leave" },
@@ -19,10 +30,11 @@ const CreateRoleStep4 = () => {
     { label: "Commissions", value: "Commissions" },
     { label: "Profit Sharing", value: "Profit Sharing" },
   ];
-  const initialValues = {
-    minSalary: "",
-    mmaxSalary: "",
-    leave: "",
+  const initialValues: CreateRolePayload = {
+    benefits: {
+      maximumSalary: roleData?.benefits.maximumSalary,
+      minimumSalary: roleData?.benefits.minimumSalary,
+    },
   };
   const submit = () => {};
 

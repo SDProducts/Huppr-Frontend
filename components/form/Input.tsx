@@ -57,6 +57,7 @@ const Input: React.FC<InputProps> = ({
   const { setValue } = helpers;
 
   const isTextarea = type === "textarea";
+  const isNumeric = type === "number";
   const hasError = meta.touched && meta.error;
   const [displayValue, setDisplayValue] = useState<string>("");
 
@@ -122,6 +123,7 @@ const Input: React.FC<InputProps> = ({
           <Field
             as={isTextarea ? "textarea" : "input"}
             {...field}
+            inputMode={isNumeric ? "numeric" : undefined}
             type={isTextarea ? undefined : type}
             placeholder={placeholder}
             rows={isTextarea ? rows : undefined}

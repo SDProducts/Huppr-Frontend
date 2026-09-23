@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowRight,
   Bell,
   Building2,
   CalendarDays,
@@ -24,9 +25,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
 import { navigation } from "@/data/constants";
+import { useGetDepartments } from "@/hooks/employer/useDepartment";
 import { cn } from "@/lib/utils";
+import Cookies from "js-cookie";
 
 export function HeaderMenu() {
+  const organisationId = Cookies.get("organisationId");
+  const { data } = useGetDepartments({ organisationId: organisationId });
+  const departments = data?.items || [];
   return (
     <header className="w-full border-b border-gray-200">
       <div className="hidden sm:flex h-[72px] w-full items-center px-5">
@@ -54,7 +60,7 @@ export function HeaderMenu() {
         <NavigationMenu className="ml-8 max-w-none">
           <NavigationMenuList className="gap-1">
             {/* Teams */}
-            <NavigationMenuItem>
+            <NavigationMenuItem className={cn("cursor-pointer")}>
               <NavigationMenuTrigger
                 className="
                   h-9
@@ -85,7 +91,7 @@ export function HeaderMenu() {
             </NavigationMenuItem>
 
             {/* Departments */}
-            <NavigationMenuItem>
+            <NavigationMenuItem className={cn("cursor-pointer")}>
               <NavigationMenuTrigger
                 className="
                   h-9
@@ -100,21 +106,22 @@ export function HeaderMenu() {
 
               <NavigationMenuContent>
                 <ul className="w-[250px] p-2">
-                  <ListItem href="/departments/admin" title="Admin">
-                    10 Employees
-                  </ListItem>
-
-                  <ListItem href="/departments/developers" title="Developers">
-                    10 Employees
-                  </ListItem>
-
-                  <ListItem href="/departments/sales" title="Sales">
-                    10 Employees
-                  </ListItem>
-
-                  <ListItem href="/departments/marketing" title="Marketing">
-                    10 Employees
-                  </ListItem>
+                  {departments.slice(0, 5).map((department, i) => (
+                    <ListItem
+                      href={`/dashboard/departments/${department.id}`}
+                      title={department.name}
+                      key={i}
+                    >
+                      {department.metrics.headcount || 0} Employees
+                    </ListItem>
+                  ))}
+                  <Link
+                    href={"/dashboard/departments"}
+                    className="p-3 rounded-md flex items-center justify-between text-sm text-primary hover:bg-primary/5"
+                  >
+                    <div className="">View more</div>
+                    <ArrowRight size={16} />
+                  </Link>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>

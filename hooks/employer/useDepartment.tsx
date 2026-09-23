@@ -130,12 +130,7 @@ export const useGetRolesById = (roleID?: string) => {
   return useQuery<JobItem>({
     queryKey: ["role", roleID],
     queryFn: async () => {
-      const params = new URLSearchParams();
-
-      if (roleID) params.append("roleId", roleID);
-      const response = await api.get(
-        `/organization/roles?${params.toString()}`
-      );
+      const response = await api.get(`/organization/roles/${roleID}}`);
       return response.data;
     },
     enabled: !!roleID,
@@ -191,6 +186,44 @@ export const useCreateNewRole = () => {
   return useMutation({
     mutationFn: async (payload: CreateRolePayload) => {
       const response = await api.post("/organization/roles", payload);
+      return response.data;
+    },
+    onSuccess: (data: JobItem) => {
+      qc.invalidateQueries({
+        queryKey: ["roles"],
+      });
+      toast.success("Created new role");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+export const usePatchNewRole = (roleId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: CreateRolePayload) => {
+      const response = await api.patch(
+        `/organization/roles/${roleId}`,
+        payload
+      );
       return response.data;
     },
     onSuccess: (data: JobItem) => {

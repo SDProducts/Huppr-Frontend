@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/CustomButton";
-import { FieldArray, useField } from "formik";
+import { FieldArray, getIn, useField } from "formik";
 import { Info, PlusCircle, Trash2 } from "lucide-react";
 import React from "react";
 
@@ -34,15 +34,22 @@ const ListInputField: React.FC<ListInputFieldProps> = ({
   return (
     <FieldArray name={name}>
       {({ push, remove, form }) => {
-        const values: string[] = form.values[name] || [];
+        // ✅ Use getIn so dot-paths like "requirements.responsibilities" work
+        const values: string[] = getIn(form.values, name) || [];
+
+        const clearAll = () => {
+          for (let i = values.length - 1; i >= 0; i--) {
+            remove(i);
+          }
+        };
 
         return (
           <div
-            className={`w-full space-y-5 border border-gray-200 p-2 rounded-lg ${className}`}
+            className={`w-full space-y-5 rounded-lg border border-gray-200 p-2 ${className}`}
           >
             <div className="flex items-start justify-between">
-              <div className="">
-                <div className="text-xs capitalize sm:text-lg font-bold">
+              <div>
+                <div className="text-xs font-bold capitalize sm:text-lg">
                   {label}
                 </div>
                 <p className="text-xs">{helpText}</p>
@@ -50,25 +57,33 @@ const ListInputField: React.FC<ListInputFieldProps> = ({
               <div className="flex flex-col items-end gap-1 text-xs">
                 <Button
                   label="Clear all"
-                  onClick={() => {
-                    for (let index = 0; index < values.length; index++) {
-                      remove(0);
-                    }
-                  }}
-                  className="w-fit! rounded-lg py-1! px-4 bg-transparent border border-red-100 hover:bg-red-100 text-red-500!"
+                  onClick={clearAll}
+                  className="hidden w-fit! rounded-lg border border-red-100 bg-transparent px-4 py-1! text-red-500! hover:bg-red-100 md:flex"
                   icon={<Trash2 size={12} />}
                 />
-                {/* Add Button */}
+                <div className="flex gap-2 md:hidden">
+                  <Trash2
+                    size={16}
+                    className="text-red-500"
+                    onClick={clearAll}
+                  />
+                  <PlusCircle
+                    size={16}
+                    className="cursor-pointer text-primary"
+                    onClick={() => push("")}
+                  />
+                </div>
                 {values.length < maxItems && (
                   <Button
                     label={addButtonText}
                     onClick={() => push("")}
                     icon={<PlusCircle size={12} />}
-                    className="w-fit! rounded-lg py-1! px-4 border bg-transparent border-blue-100 hover:bg-blue-100 text-blue-500!"
+                    className="hidden w-fit! rounded-lg border border-blue-100 bg-transparent px-4 py-1! text-blue-500! hover:bg-blue-100 md:flex"
                   />
                 )}
               </div>
             </div>
+
             <div className="space-y-2">
               {values.map((value, index) => {
                 const itemError = Array.isArray(meta.error)
@@ -81,12 +96,12 @@ const ListInputField: React.FC<ListInputFieldProps> = ({
 
                 return (
                   <div key={index} className="flex items-stretch gap-1">
-                    <div className="h-8 w-8 flex items-center justify-center text-gray-700 text-sm bg-gray-100 rounded-sm">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-gray-100 text-sm text-gray-700">
                       {index + 1}
                     </div>
                     <div className="flex-1">
                       <div
-                        className={`w-full relative flex flex-row border bg-transparent rounded-sm py-1.5 ${
+                        className={`relative flex w-full flex-row rounded-sm border bg-transparent py-1.5 ${
                           hasItemError ? "border-red-500" : "border-zinc-200"
                         }`}
                       >
@@ -103,31 +118,28 @@ const ListInputField: React.FC<ListInputFieldProps> = ({
                           onBlur={() =>
                             form.setFieldTouched(`${name}[${index}]`, true)
                           }
-                          className="text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-5 outline-none"
+                          className="block w-full rounded-lg px-5 text-sm text-gray-900 outline-none focus:ring-0"
                         />
 
-                        {/* Error Icon */}
                         {hasItemError && (
                           <div className="flex items-center px-3">
-                            <Info className="w-5 h-5 text-red-500" />
+                            <Info className="h-5 w-5 text-red-500" />
                           </div>
                         )}
                       </div>
 
-                      {/* Item Error Message */}
                       {hasItemError && (
-                        <p className="text-red-500 text-xs mt-1 text-left">
+                        <p className="mt-1 text-left text-xs text-red-500">
                           {itemError}
                         </p>
                       )}
                     </div>
 
-                    {/* Delete Button */}
                     {showDeleteButton && values.length > minItems && (
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        className="p-2 rounded-sm border border-red-100 hover:bg-red-100 text-red-500 transition-colors"
+                        className="rounded-sm border border-red-100 p-2 text-red-500 transition-colors hover:bg-red-100"
                         aria-label="Remove item"
                       >
                         <Trash2 size={14} />
@@ -138,9 +150,8 @@ const ListInputField: React.FC<ListInputFieldProps> = ({
               })}
             </div>
 
-            {/* Array Error Message */}
             {hasError && typeof meta.error === "string" && (
-              <p className="text-red-500 text-xs mt-1 text-left">
+              <p className="mt-1 text-left text-xs text-red-500">
                 {meta.error}
               </p>
             )}

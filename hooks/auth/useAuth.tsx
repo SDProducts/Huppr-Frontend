@@ -331,6 +331,7 @@ export const useGetMyDetails = () => {
   });
   useEffect(() => {
     if (response.data) {
+      Cookies.set("user_id", response.data.id);
       Cookies.set("organisationId", response.data.organizationId);
       Cookies.set(
         "onboarding_complete",
