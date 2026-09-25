@@ -31,7 +31,9 @@ import Cookies from "js-cookie";
 
 export function HeaderMenu() {
   const organisationId = Cookies.get("organisationId");
-  const { data } = useGetDepartments({ organisationId: organisationId });
+  const { data } = useGetDepartments(
+    organisationId ? { organisationId: organisationId } : {}
+  );
   const departments = data?.items || [];
   return (
     <header className="w-full border-b border-gray-200">

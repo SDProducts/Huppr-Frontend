@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/context/modal.state";
 import { useGetRoles, useGetTeams } from "@/hooks/employer/useDepartment";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Code2, MoreVertical, Server } from "lucide-react";
+import { ArrowRight, MoreVertical, Server, UserSquare } from "lucide-react";
 import { useParams } from "next/navigation";
 
 const RoleDirectoryList = () => {
@@ -40,7 +40,7 @@ const RoleDirectoryList = () => {
           <div className="grid grid-cols-[3fr_1fr_1fr_2fr] flex-1">
             <div className="flex items-center gap-2">
               <div className="h-10 w-10 flex items-center justify-center bg-primary-100 rounded-md">
-                <Code2 />
+                <UserSquare />
               </div>
               <div className="flex-1">
                 <div className="font-semibold">{item.name}</div>

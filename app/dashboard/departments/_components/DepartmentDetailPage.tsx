@@ -58,7 +58,7 @@ const DepartmentDetailPage = () => {
     { label: "Role Directory", id: "role" },
     { label: "Sub-teams", id: "sub" },
   ];
-  const [activeTab, setactiveTab] = useState("sub");
+  const [activeTab, setactiveTab] = useState("role");
   if (isLoading || !data) {
     return <PageLoader />;
   }

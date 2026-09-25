@@ -8,13 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { cn, getInitials } from "@/lib/utils";
 
-export type Employee = {
-  id: string;
-  name: string;
-  role?: string;
-  avatar?: string;
-};
-
 type EmployeeMultiSelectProps = {
   name: string;
   employees: Employee[];
@@ -52,8 +45,8 @@ export function EmployeeMultiSelect({
 
     return employees.filter((employee) => {
       const matchesSearch =
-        employee.name.toLowerCase().includes(query) ||
-        employee.role?.toLowerCase().includes(query);
+        employee.id.toLowerCase().includes(query) ||
+        employee.roleId?.toLowerCase().includes(query);
 
       const isSelected = selectedEmployees.some(
         (selected) => selected === employee.id
@@ -117,24 +110,24 @@ export function EmployeeMultiSelect({
               {/* Avatar */}
               <Avatar>
                 <AvatarImage
-                  src={employee.avatar}
-                  alt={employee.name}
+                  src={employee.id}
+                  alt={employee.id}
                   className="size-10 rounded-full border-2 border-white object-cover"
                 />
                 <AvatarFallback className="flex size-10 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#2864e8]">
-                  {getInitials(employee.name)}
+                  {getInitials(employee.id)}
                 </AvatarFallback>
               </Avatar>
 
               {/* Employee information */}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-[#252936]">
-                  {employee.name}
+                  {employee.id}
                 </p>
 
-                {employee.role && (
+                {employee.roleId && (
                   <p className="truncate text-xs text-[#737b8f]">
-                    {employee.role}
+                    {employee.roleId}
                   </p>
                 )}
               </div>
@@ -167,25 +160,23 @@ export function EmployeeMultiSelect({
                   className={cn("bg-white flex justify-center items-center")}
                 >
                   <AvatarImage
-                    src={item?.avatar}
-                    alt={item?.name}
+                    src={item?.id}
+                    alt={item?.id}
                     className="size-8 rounded-full border-2 border-white object-cover"
                   />
                   <AvatarFallback className="flex size-8 text-xs text-[#2864e8]">
-                    {getInitials(item?.name || "")}
+                    {getInitials(item?.id || "")}
                   </AvatarFallback>
                 </Avatar>
 
                 {/* Name */}
-                <span className="font-semibold text-[#5d687b]">
-                  {item?.name}
-                </span>
+                <span className="font-semibold text-[#5d687b]">{item?.id}</span>
 
                 {/* Remove */}
                 <div
                   onClick={() => removeEmployee(item?.id || "")}
                   className="flex ml-2 cursor-pointer size-5 items-center justify-center rounded-full text-[#657084] transition-colors hover:bg-white hover:text-[#252936]"
-                  aria-label={`Remove ${item?.name}`}
+                  aria-label={`Remove ${item?.id}`}
                 >
                   <X className="size-4" />
                 </div>

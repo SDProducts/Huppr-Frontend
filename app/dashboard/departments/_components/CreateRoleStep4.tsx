@@ -1,10 +1,17 @@
 /* eslint-disable react/no-unescaped-entities */
+import RolePreview from "@/app/dashboard/departments/_components/CreateRoleStep5";
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import Checkbox from "@/components/form/Checkbox";
 import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
-import Button from "@/components/ui/CustomButton";
 import {
+  CreateRoleStep2Skeleton,
+  SelectInputSkeleton,
+} from "@/components/skeletons";
+import Button from "@/components/ui/CustomButton";
+import { useModal } from "@/context/modal.state";
+import {
+  useGetRoles,
   useGetRolesById,
   usePatchNewRole,
 } from "@/hooks/employer/useDepartment";
@@ -15,28 +22,64 @@ interface Prop {
   roleId: string;
 }
 const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
-  const { data: roleData } = useGetRolesById(roleId);
+  const modal = useModal();
+  const { data: roleData, isLoading } = useGetRolesById(roleId);
+  const { data: rolesListData, isLoading: isLoadingRoles } = useGetRoles();
 
   const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
+  if (isLoading || (!roleData && roleId)) {
+    return <CreateRoleStep2Skeleton />;
+  }
 
+  const REPORTING_LINE: Option[] =
+    rolesListData?.items.map((item) => ({
+      label: item.name,
+      value: item.name,
+    })) || [];
   const LEAVE_POLICIES: Option[] = [
-    { label: "Annual Leave", value: "Annual Leave" },
-    { label: "Sick Leave", value: "Sick Leave" },
-    { label: "Study Leave", value: "Study Leave" },
+    { label: "Annual Leave", value: "annual" },
+    { label: "Sick Leave", value: "sick" },
+    { label: "Study Leave", value: "study" },
+  ];
+  const SALARY_REVIEW_FREQUECY: Option[] = [
+    { label: "Annually", value: "annual" },
+    { label: "Bi-annualy", value: "bi-annual" },
+    { label: "Quartly", value: "quartly" },
+  ];
+  const PROBATION_PERIOD: Option[] = [
+    { label: "3 months", value: "3" },
+    { label: "6 months", value: "6" },
+    { label: "12 months", value: "12" },
+    { label: "24 months", value: "24" },
   ];
   const BENEFITS: Option[] = [
-    { label: "Health Benefits", value: "Health Benefits" },
-    { label: "Pension Benefits", value: "Pension Benefits" },
+    { label: "Health Benefits", value: "Health benefits" },
+    { label: "Pension Benefits", value: "Pension benefits" },
+    { label: "Learning budget", value: "Learning budget" },
     { label: "Commissions", value: "Commissions" },
     { label: "Profit Sharing", value: "Profit Sharing" },
   ];
   const initialValues: CreateRolePayload = {
     benefits: {
-      maximumSalary: roleData?.benefits.maximumSalary,
-      minimumSalary: roleData?.benefits.minimumSalary,
+      maximumSalary: roleData?.benefits?.maximumSalary || 0,
+      minimumSalary: roleData?.benefits?.minimumSalary || 0,
+      benefits: roleData?.benefits?.benefits || [],
+      reportingLine: roleData?.benefits?.reportingLine || "",
+      salaryReviewFrequency: roleData?.benefits?.salaryReviewFrequency || "",
+      probationMonths: roleData?.benefits?.probationMonths,
+      leaveTypes: roleData?.benefits?.leaveTypes || [],
+      successionPath: roleData?.benefits?.successionPath,
+      growthReviewFrequency: roleData?.benefits?.growthReviewFrequency,
     },
   };
-  const submit = () => {};
+  const submit = (values: typeof initialValues) => {
+    modal.open({
+      content: <RolePreview roleId={roleId} />,
+      size: "sm:w-3xl",
+      bgColor: "bg-gray-100",
+    });
+    // patchRole(values);
+  };
 
   return (
     <div className="px-4 space-y-10">
@@ -48,7 +91,7 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
       </div>
       <Stepper currentStep={4} />
       <Formik initialValues={initialValues} onSubmit={submit}>
-        {({ values, setFieldValue }) => {
+        {({ values }) => {
           return (
             <Form>
               <div className="grid grid-cols-[2fr_1fr] gap-4">
@@ -63,12 +106,14 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
                     <div className="grid grid-cols-2 gap-2">
                       <Input
                         label="Minimum Salary"
-                        name="minSalary"
+                        name="benefits.minimumSalary"
+                        type="number"
                         formatMoney
                       />
                       <Input
                         label="Maximum Salary"
-                        name="maxSalary"
+                        name="benefits.maximumSalary"
+                        type="number"
                         formatMoney
                       />
                     </div>
@@ -76,10 +121,10 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
                   <div className="p-4 rounded-md bg-white">
                     <div className="font-bold text-xl -mb-5">Leave Policy</div>
                     <Checkbox
-                      name="responsibilities"
+                      name="benefits.leaveTypes"
                       type="multiple"
                       options={LEAVE_POLICIES}
-                      label="Select the workflows this role has authority to approve."
+                      label="Specify the annual leave entitlement and specific policies."
                       orientationStyle="grid"
                       optionClassName="border-none!"
                     />
@@ -96,36 +141,46 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-2">
                         <SearchableSelect
-                          name="review_frequency"
+                          name="benefits.salaryReviewFrequency"
                           label="Salary Review Frequency"
-                          options={[]}
+                          options={SALARY_REVIEW_FREQUECY}
                           labelClassName="text-sm"
                         />
                         <SearchableSelect
-                          name="probation_period"
+                          name="benefits.probationMonths"
                           label="Probation Duration"
-                          options={[]}
+                          options={PROBATION_PERIOD}
                           labelClassName="text-sm"
                         />
                       </div>
                       <SearchableSelect
-                        name="promotion"
+                        name="benefits.growthReviewFrequency"
                         label="Promotion & Growth Track"
-                        options={[]}
+                        options={SALARY_REVIEW_FREQUECY}
                         labelClassName="text-sm"
                       />
-                      <Input
-                        label="Succession Path"
-                        name="succession"
-                        placeholder="e.g., Senior Engineer to Lead Engineer"
-                        LabelClassName="text-sm"
-                      />
-                      <SearchableSelect
-                        name="promotion"
-                        label="Reporting Line"
-                        options={[]}
-                        labelClassName="text-sm"
-                      />
+                      {isLoadingRoles ? (
+                        <SelectInputSkeleton />
+                      ) : (
+                        <SearchableSelect
+                          label="Succession Path"
+                          name="benefits.successionPath"
+                          options={REPORTING_LINE}
+                          placeholder="e.g., Senior Engineer to Lead Engineer"
+                          labelClassName="text-sm"
+                        />
+                      )}
+
+                      {isLoadingRoles ? (
+                        <SelectInputSkeleton />
+                      ) : (
+                        <SearchableSelect
+                          name="benefits.reportingLine"
+                          label="Reporting Line"
+                          options={REPORTING_LINE}
+                          labelClassName="text-sm"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -133,7 +188,7 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
                   <div className="p-4 rounded-md bg-white space-y-4">
                     <div className="font-bold text-xl">Benefits Checklist</div>
                     <Checkbox
-                      name="responsibilities"
+                      name="benefits.benefits"
                       type="multiple"
                       options={BENEFITS}
                       label=""
@@ -173,10 +228,19 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
+                    onClick={() => patchRole(values)}
                     label="Save as draft"
                     className="bg-transparent! text-primary! border"
+                    disabled={isPending}
+                    isLoading={isPending}
                   />
-                  <Button label="Continue" rightIcon={<ArrowRight />} />
+                  <Button
+                    label="Continue"
+                    type="submit"
+                    rightIcon={<ArrowRight />}
+                    disabled={isPending}
+                    isLoading={isPending}
+                  />
                 </div>
               </div>
             </Form>

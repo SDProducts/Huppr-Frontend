@@ -47,7 +47,7 @@ export interface JobItem {
   location: string;
   workArrangement: WorkArrangement;
   requirements: JobRequirements;
-  benefits: JobBenefits;
+  benefits?: JobBenefits;
   reportsToUserId: string;
   permissionIds: string[];
   revision: number;

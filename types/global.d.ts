@@ -498,6 +498,24 @@ type ActivityFilters = {
   from?: string;
   to?: string;
 };
+type EmployeeFilters = {
+  payrollId?: string;
+  employeeId?: string;
+  departmentId?: string;
+  date?: string;
+  search?: string;
+  status?:
+    | "pending"
+    | "approved"
+    | "declined"
+    | "cancelled"
+    | "draft"
+    | "finalized"
+    | "open"
+    | "closed";
+  page?: number;
+  limit?: number;
+};
 type TeamsFilters = {
   organisationId?: string;
   departmentId?: string;
@@ -675,4 +693,27 @@ interface CreateRolePayload {
   };
   reportsToUserId?: string;
   permissionIds?: string[];
+}
+
+interface EmployeesResponse {
+  items: Employee[];
+  total: 0;
+  page: 1;
+  limit: 50;
+}
+interface Employee {
+  userId: string;
+  departmentId: string;
+  roleId: string;
+  startsOn: string;
+  endsOn: string;
+  birthDate: string;
+  probationEndsOn: string;
+  salaryReviewOn: string;
+  annualSalary: number;
+  currency: string;
+  id: string;
+  organizationId: string;
+  employeeId: string;
+  status: string;
 }

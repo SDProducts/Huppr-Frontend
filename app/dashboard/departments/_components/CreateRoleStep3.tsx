@@ -2,12 +2,18 @@ import CreateRoleStep4 from "@/app/dashboard/departments/_components/CreateRoleS
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import Checkbox from "@/components/form/Checkbox";
 import SearchableSelect from "@/components/form/SearchableSelect";
+import {
+  CreateRoleStep2Skeleton,
+  SelectInputSkeleton,
+} from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import { useModal } from "@/context/modal.state";
 import {
   useGetRolesById,
+  useInvalidateQueries,
   usePatchNewRole,
 } from "@/hooks/employer/useDepartment";
+import { useGetEmployees } from "@/hooks/hr/useHr";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -25,12 +31,25 @@ interface Prop {
 const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
   const myId = Cookies.get("user_id");
   const modal = useModal();
-  const { data: roleData } = useGetRolesById(roleId);
+  const clearQuery = useInvalidateQueries();
+  const { data: roleData, isLoading } = useGetRolesById(roleId);
+  const { data: employeesData, isLoading: gettingEmployess } =
+    useGetEmployees();
 
+  const employees =
+    employeesData?.items.map((item) => ({
+      label: item.employeeId,
+      value: item.id,
+    })) || [];
   const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
+  if (isLoading || (!roleData && roleId)) {
+    return <CreateRoleStep2Skeleton />;
+  }
+
   const initialValues: CreateRolePayload = {
     reportsToUserId: roleData?.reportsToUserId,
-    permissionIds: [],
+    permissionIds: roleData?.permissionIds,
+    expectedRevision: 0,
   };
   const RESPONSIBILITIES: Option[] = [
     {
@@ -75,13 +94,15 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
     },
   ];
   const submit = (values: typeof initialValues) => {
-    patchRole(values, {
+    const { permissionIds, ...payload } = values;
+    patchRole(payload, {
       onSuccess(data) {
         modal.open({
           content: <CreateRoleStep4 roleId={data.id} />,
           size: "sm:w-3xl",
           bgColor: "bg-gray-100",
           goBack() {
+            clearQuery(["roles"]);
             modal.open({
               content: <CreateRoleStep3 roleId={data.id} />,
               size: "sm:w-2xl",
@@ -94,7 +115,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
   };
   // helper — the shape your backend wants
   const permissionKey = (permId: string, action: string) =>
-    `${permId}.${action}`;
+    `${permId}s.${action}`;
 
   const togglePermission = (
     current: string[],
@@ -124,12 +145,19 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
               <div className="space-y-4">
                 <div className="p-4 rounded-md bg-white space-y-1">
                   <div className="text-xl font-bold">Hierarchy</div>
-                  <SearchableSelect
-                    label="Reports to"
-                    name="reportsToUserId"
-                    options={[{ label: "Report to me", value: myId || "" }]}
-                    labelClassName="text-sm"
-                  />
+                  {gettingEmployess ? (
+                    <SelectInputSkeleton />
+                  ) : (
+                    <SearchableSelect
+                      label="Reports to"
+                      name="reportsToUserId"
+                      options={[
+                        ...employees,
+                        { label: "Report to me", value: myId || "" },
+                      ]}
+                      labelClassName="text-sm"
+                    />
+                  )}
                   <div className="text-xs">
                     This determines where the role sits in the organizational
                     chart.

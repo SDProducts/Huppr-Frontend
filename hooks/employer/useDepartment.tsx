@@ -24,7 +24,6 @@ export const useGetDepartments = (filters: ActivityFilters = {}) => {
       );
       return response.data;
     },
-    enabled: !!organisationId,
   });
 };
 export const useGetDepartmentByID = (id?: string) => {
@@ -130,7 +129,7 @@ export const useGetRolesById = (roleID?: string) => {
   return useQuery<JobItem>({
     queryKey: ["role", roleID],
     queryFn: async () => {
-      const response = await api.get(`/organization/roles/${roleID}}`);
+      const response = await api.get(`/organization/roles/${roleID}`);
       return response.data;
     },
     enabled: !!roleID,
@@ -192,7 +191,7 @@ export const useCreateNewRole = () => {
       qc.invalidateQueries({
         queryKey: ["roles"],
       });
-      toast.success("Created new role");
+      toast.success("Draft saved");
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data
@@ -230,7 +229,7 @@ export const usePatchNewRole = (roleId: string) => {
       qc.invalidateQueries({
         queryKey: ["roles"],
       });
-      toast.success("Created new role");
+      toast.success("Draft saved");
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data
@@ -253,4 +252,14 @@ export const usePatchNewRole = (roleId: string) => {
       }
     },
   });
+};
+
+export const useInvalidateQueries = () => {
+  const qc = useQueryClient();
+  const clearQuery = (keys: string[]) => {
+    qc.invalidateQueries({
+      queryKey: keys,
+    });
+  };
+  return clearQuery;
 };

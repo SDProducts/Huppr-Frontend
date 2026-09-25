@@ -3,13 +3,17 @@ import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import Input from "@/components/form/Input";
 import RadioGroup from "@/components/form/RadioGroup";
 import SearchableSelect from "@/components/form/SearchableSelect";
-import { SelectInputSkeleton } from "@/components/skeletons";
+import {
+  CreateRoleStep2Skeleton,
+  SelectInputSkeleton,
+} from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import { useModal } from "@/context/modal.state";
 import {
   useCreateNewRole,
   useGetDepartments,
   useGetRolesById,
+  useInvalidateQueries,
   usePatchNewRole,
 } from "@/hooks/employer/useDepartment";
 import { Form, Formik } from "formik";
@@ -34,13 +38,14 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
   const { data, isLoading } = useGetDepartments({
     organisationId: organisationId,
   });
+  const clearQuery = useInvalidateQueries();
   const { mutate: createRole, isPending } = useCreateNewRole();
   const { mutate: patchRole, isPending: isPatching } = usePatchNewRole(
     roleID || ""
   );
   const { data: roleData } = useGetRolesById(roleID);
-  if (isLoading) {
-    return <div className="">Loading...</div>;
+  if (isLoading || (!roleData && roleID)) {
+    return <CreateRoleStep2Skeleton />;
   }
   const departments = data?.items.map((item) => ({
     label: item.name,
@@ -74,6 +79,7 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
     employmentType: roleData?.employmentType || "",
     location: roleData?.location || "",
     workArrangement: roleData?.workArrangement || "",
+    description: roleData?.description || "",
     status: "draft",
   };
   const submit = (values: typeof initialValues) => {
@@ -85,8 +91,9 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
             size: "sm:w-[80%] md:w-4xl",
             bgColor: "bg-[#F7F9FC]",
             goBack: () => {
+              clearQuery(["roles"]);
               modal.open({
-                content: <CreateRoleStep1 />,
+                content: <CreateRoleStep1 roleID={data.id} />,
                 size: "sm:w-3xl",
                 bgColor: "bg-[#F7F9FC]",
               });
@@ -121,7 +128,7 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
       </div>
       <Stepper currentStep={1} />
       <Formik initialValues={initialValues} onSubmit={submit}>
-        {() => {
+        {({ values }) => {
           return (
             <Form>
               <div className="bg-white p-5 rounded-lg space-y-7">
@@ -195,6 +202,14 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
                 <div className="flex items-center gap-2">
                   <Button
                     label="Save as draft"
+                    loadingLabel="Saving..."
+                    onClick={() => {
+                      if (roleID) {
+                        patchRole(values);
+                      } else {
+                        createRole(values);
+                      }
+                    }}
                     className="bg-transparent! text-primary! border"
                     isLoading={isPending || isPatching}
                     disabled={isPending || isPatching}
@@ -205,6 +220,7 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
                     isLoading={isPending || isPatching}
                     disabled={isPending || isPatching}
                     rightIcon={<ArrowRight />}
+                    loadingLabel="Saving..."
                   />
                 </div>
               </div>

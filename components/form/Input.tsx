@@ -70,7 +70,7 @@ const Input: React.FC<InputProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputVal = e.target.value.replace(/[^0-9]/g, "");
     if (formatMoney) {
-      setValue(inputVal);
+      setValue(Number(inputVal));
       setDisplayValue(formatPrice(inputVal));
     } else {
       setValue(inputVal);

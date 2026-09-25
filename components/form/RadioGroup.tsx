@@ -6,7 +6,7 @@ import React, { ReactNode } from "react";
 interface Option {
   label: string;
   description?: string;
-  value: string;
+  value: string | number;
   icon?: ReactNode;
 }
 

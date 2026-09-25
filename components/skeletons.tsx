@@ -314,3 +314,185 @@ export function TeamsGridSkeleton({
     </div>
   );
 }
+
+interface CreateRoleStep2SkeletonProps {
+  className?: string;
+}
+
+export function CreateRoleStep2Skeleton({
+  className,
+}: CreateRoleStep2SkeletonProps) {
+  return (
+    <div className={cn("min-h-[400px] space-y-10 px-4", className)}>
+      {/* Header */}
+      <div className="space-y-2">
+        <div className="h-7 w-56 animate-pulse rounded bg-[#e8ebef]" />
+        <div className="h-4 w-full max-w-2xl animate-pulse rounded bg-[#e8ebef]" />
+      </div>
+
+      {/* Stepper */}
+      <div className="flex items-start">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="relative flex flex-1 flex-col items-center">
+            {i > 0 && (
+              <span className="absolute left-[-50%] right-[50%] top-5 h-px bg-[#e6e9ee]" />
+            )}
+            <div
+              className={cn(
+                "relative z-10 h-10 w-10 animate-pulse rounded-full",
+                i === 0 ? "bg-[#c7d2e5]" : "bg-[#e8ebef]"
+              )}
+            />
+            <div className="mt-3 h-4 w-16 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+        ))}
+      </div>
+
+      <div className="space-y-7">
+        <div className="grid grid-cols-1 gap-2 lg:grid-cols-[2fr_1fr]">
+          {/* LEFT COLUMN */}
+          <div className="space-y-4">
+            {/* Responsibilities block */}
+            <div className="space-y-5 rounded-lg border border-gray-200 bg-white p-4">
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <div className="h-5 w-40 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-3 w-56 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="h-7 w-24 animate-pulse rounded-lg bg-[#e8ebef]" />
+              </div>
+
+              <div className="space-y-2">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-stretch gap-1">
+                    <div className="h-8 w-8 shrink-0 animate-pulse rounded-sm bg-[#e8ebef]" />
+                    <div className="h-9 flex-1 animate-pulse rounded-sm bg-[#e8ebef]" />
+                    <div className="h-9 w-9 shrink-0 animate-pulse rounded-sm bg-[#e8ebef]" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Skills + Qualifications */}
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {/* Skills */}
+              <div className="flex flex-col justify-between space-y-4 rounded-md bg-white p-4">
+                <div className="space-y-2">
+                  <div className="h-5 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-3 w-40 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-7 w-20 animate-pulse rounded-full bg-[#e8ebef]"
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Qualifications */}
+              <div className="space-y-4 rounded-md bg-white p-4">
+                <div className="space-y-2">
+                  <div className="h-5 w-36 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-3 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <div className="h-3 w-24 animate-pulse rounded bg-[#e8ebef]" />
+                    <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="h-3 w-20 animate-pulse rounded bg-[#e8ebef]" />
+                    <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Other requirements */}
+            <div className="space-y-3 rounded-md bg-white p-4">
+              <div className="space-y-2">
+                <div className="h-5 w-40 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-64 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+              <div className="h-16 w-full animate-pulse rounded bg-[#e8ebef]" />
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="space-y-4">
+            {/* Experience */}
+            <div className="space-y-6 rounded-md bg-white p-4">
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-5 w-28 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+              <div className="flex items-end gap-2">
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-3 w-14 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="mb-5 h-0.5 w-10 bg-gray-300" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-3 w-14 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+              </div>
+            </div>
+
+            {/* Certifications + Languages */}
+            <div className="space-y-4 rounded-md bg-white p-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-5 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-5 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+
+              <div className="my-6 h-px w-full bg-gray-200" />
+
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-5 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-5 w-20 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from({ length: 2 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-7 w-20 animate-pulse rounded-full bg-[#e8ebef]"
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* AI Suggestion card */}
+            <div className="mt-7 space-y-2 rounded-md bg-primary-100 p-4">
+              <div className="flex items-start gap-2">
+                <div className="h-5 w-5 animate-pulse rounded bg-[#c7d2e5]" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-28 animate-pulse rounded bg-[#c7d2e5]" />
+                  <div className="h-3 w-full animate-pulse rounded bg-[#c7d2e5]" />
+                  <div className="h-3 w-4/5 animate-pulse rounded bg-[#c7d2e5]" />
+                  <div className="h-4 w-32 animate-pulse rounded bg-[#c7d2e5]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between pb-5 pt-12">
+          <div className="h-10 w-24 animate-pulse rounded-lg bg-[#e8ebef]" />
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-32 animate-pulse rounded-lg bg-[#e8ebef]" />
+            <div className="h-10 w-28 animate-pulse rounded-lg bg-[#e8ebef]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -28,8 +28,9 @@ export const logout = async () => {
   Cookies.remove("access_token");
   Cookies.remove("refresh_token");
   Cookies.remove("user_role");
+  Cookies.remove("user_id");
   Cookies.remove("onboarding_complete");
-  Cookies.remove("onboarding_complete");
+  Cookies.remove("organisationId");
   localStorage.removeItem("user-state"); // Clear persisted user state
   // window.location.reload(); // Optional: Refresh page to clear UI state
   // toast.success("Logged out successfully!"); // Show logout success message

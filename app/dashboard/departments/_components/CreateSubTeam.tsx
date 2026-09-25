@@ -7,6 +7,7 @@ import {
   useCreateSubteam,
   useGetDepartmentByID,
 } from "@/hooks/employer/useDepartment";
+import { useGetEmployees } from "@/hooks/hr/useHr";
 import { createSubTeamSchema } from "@/lib/validation/validations";
 import { Form, Formik } from "formik";
 import { LockKeyhole, UserPlus2 } from "lucide-react";
@@ -17,33 +18,10 @@ const CreateSubTeam = () => {
   const modal = useModal();
   const { data, isLoading } = useGetDepartmentByID(String(department));
   const { mutate: createSubteam, isPending } = useCreateSubteam();
+  const { data: employeesData, isLoading: isGettingEmployees } =
+    useGetEmployees();
   const id = department?.toString();
-  const employees = [
-    {
-      id: "1",
-      name: "Sarah Jenkins",
-      role: "Product Designer",
-      avatar: "/avatars/sarah.jpg",
-    },
-    {
-      id: "2",
-      name: "Marcus Chen",
-      role: "Frontend Developer",
-      avatar: "/avatars/marcus.jpg",
-    },
-    {
-      id: "3",
-      name: "David Williams",
-      role: "Product Manager",
-      avatar: "/avatars/david.jpg",
-    },
-    {
-      id: "4",
-      name: "Emily Johnson",
-      role: "HR Manager",
-      avatar: "/avatars/emily.jpg",
-    },
-  ];
+  const employees = employeesData?.items || [];
   const initialValues = {
     expectedRevision: 0,
     departmentId: id || "",

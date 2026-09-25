@@ -3,13 +3,15 @@ import CreateRoleStep3 from "@/app/dashboard/departments/_components/CreateRoleS
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import Input from "@/components/form/Input";
 import ListInputField from "@/components/form/ListInput";
-import Select from "@/components/form/Select";
+import SearchableSelect from "@/components/form/SearchableSelect";
 import TagsInput from "@/components/form/TagsInput";
+import { CreateRoleStep2Skeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/context/modal.state";
 import {
   useGetRolesById,
+  useInvalidateQueries,
   usePatchNewRole,
 } from "@/hooks/employer/useDepartment";
 import { Form, Formik } from "formik";
@@ -27,10 +29,15 @@ interface Prop {
 }
 const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
   const modal = useModal();
-  const { data: roleData } = useGetRolesById(roleID);
+  const { data: roleData, isLoading } = useGetRolesById(roleID);
   const { mutate: patchRole, isPending } = usePatchNewRole(roleID || "");
+  const clearQuery = useInvalidateQueries();
+  if (isLoading || (!roleData && roleID)) {
+    return <CreateRoleStep2Skeleton />;
+  }
 
   const initialValues: CreateRolePayload = {
+    expectedRevision: 0,
     requirements: {
       responsibilities: roleData?.requirements.responsibilities || [""],
       minYears: roleData?.requirements.minYears || 1,
@@ -51,6 +58,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
           size: "sm:w-2xl",
           bgColor: "bg-gray-100",
           goBack: () => {
+            clearQuery(["roles"]);
             modal.open({
               content: <CreateRoleStep2 roleID={data.id} />,
               size: "sm:w-[80%] md:w-4xl",
@@ -74,7 +82,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
       <Stepper currentStep={2} />
 
       <Formik initialValues={initialValues} onSubmit={submit}>
-        {() => {
+        {({ values }) => {
           return (
             <Form>
               <div className="space-y-7">
@@ -106,10 +114,21 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                           </div>
                           <p className="text-xs">Eductaional background.</p>
                         </div>
-                        <Select
+                        <SearchableSelect
                           label="Minimum Degree"
                           name="requirements.minimumDegree"
-                          options={[]}
+                          options={[
+                            {
+                              label: "Bachelors Degree",
+                              value: "Bachelors Degree",
+                            },
+                            { value: "High School", label: "High School" },
+                            { value: "College", label: "College" },
+                            {
+                              value: "Elementry School",
+                              label: "Elementry School",
+                            },
+                          ]}
                           labelClassName="text-sm"
                         />
                         <Input
@@ -158,10 +177,10 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                       <div className=" space-y-4">
                         <div className="flex items-center gap-1 font-semibold text-lg">
                           <Award className="text-primary" />{" "}
-                          <div className="">Certificationss</div>
+                          <div className="">Certifications</div>
                         </div>
-                        <Input
-                          name="requirements.certificate"
+                        <TagsInput
+                          name="requirements.certifications"
                           placeholder="e.g., AWS Certified Solutions Architect"
                         />
                       </div>
@@ -209,6 +228,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
+                    onClick={() => patchRole(values)}
                     label="Save as draft"
                     isLoading={isPending}
                     disabled={isPending}
