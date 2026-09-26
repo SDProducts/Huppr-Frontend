@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react/no-unescaped-entities */
 import CreateRoleStep3 from "@/app/dashboard/departments/_components/CreateRoleStep3";
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
@@ -39,15 +40,15 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
   const initialValues: CreateRolePayload = {
     expectedRevision: 0,
     requirements: {
-      responsibilities: roleData?.requirements.responsibilities || [""],
-      minYears: roleData?.requirements.minYears || 1,
-      maxYears: roleData?.requirements.maxYears || 10,
-      languages: roleData?.requirements.languages || [],
-      certifications: roleData?.requirements.certifications || [],
-      skills: roleData?.requirements.skills || [],
-      minimumDegree: roleData?.requirements.minimumDegree || "",
-      fieldOfStudy: roleData?.requirements.fieldOfStudy || "",
-      otherRequirements: roleData?.requirements.otherRequirements || "",
+      responsibilities: roleData?.requirements?.responsibilities || [""],
+      minYears: roleData?.requirements?.minYears || 1,
+      maxYears: roleData?.requirements?.maxYears || 10,
+      languages: roleData?.requirements?.languages || [],
+      certifications: roleData?.requirements?.certifications || [],
+      skills: roleData?.requirements?.skills || [],
+      minimumDegree: roleData?.requirements?.minimumDegree || "",
+      fieldOfStudy: roleData?.requirements?.fieldOfStudy || "",
+      otherRequirements: roleData?.requirements?.otherRequirements || "",
     },
   };
   const submit = (values: typeof initialValues) => {
@@ -71,7 +72,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
   };
 
   return (
-    <div className="min-h-[400px] px-4 space-y-10">
+    <div className="min-h-[400px] sm:px-4 space-y-10">
       <div className="">
         <h2 className="text-2xl font-bold">Role Requirements</h2>
         <p className="text-sm">
@@ -86,7 +87,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
           return (
             <Form>
               <div className="space-y-7">
-                <div className="grid grid-cols-[2fr_1fr] gap-2 ">
+                <div className="grid sm:grid-cols-[2fr_1fr] gap-2 ">
                   <div className="space-y-4">
                     <ListInputField
                       className="bg-white p-4"
@@ -95,8 +96,8 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                       helpText="What will this person do on a daily basis?"
                       placeholder="Type responsibility here."
                     />
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="p-4 bg-white rounded-md space-y-4 flex flex-col justify-between">
+                    <div className="grid sm:grid-cols-2 gap-2">
+                      <div className="p-2 sm:p-4 bg-white rounded-md space-y-4 flex flex-col justify-between">
                         <div className="">
                           <div className="font-semibold text-lg">
                             Required Skills
@@ -107,7 +108,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                         </div>
                         <TagsInput name="requirements.skills" />
                       </div>
-                      <div className="p-4 bg-white rounded-md space-y-4">
+                      <div className="p-2 sm:p-4 bg-white rounded-md space-y-4">
                         <div className="">
                           <div className="font-semibold text-lg">
                             Qualifications{" "}
@@ -139,7 +140,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                         />
                       </div>
                     </div>
-                    <div className="p-4 bg-white rounded-md">
+                    <div className="p-2 sm:p-4 bg-white rounded-md">
                       <Input
                         type="textarea"
                         name="requirements.otherRequirements"
@@ -150,7 +151,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <div className="p-4 bg-white rounded-md space-y-6">
+                    <div className="p-2 sm:p-4 bg-white rounded-md space-y-6">
                       <div className="flex items-center gap-1 font-semibold text-lg">
                         <BriefcaseBusiness className="text-primary" />{" "}
                         <div className="">Experience</div>
@@ -173,7 +174,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                         />
                       </div>
                     </div>
-                    <div className="p-4 bg-white rounded-md space-y-4">
+                    <div className="p-2 sm:p-4 bg-white rounded-md space-y-4">
                       <div className=" space-y-4">
                         <div className="flex items-center gap-1 font-semibold text-lg">
                           <Award className="text-primary" />{" "}
@@ -217,7 +218,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                   </div>
                 </div>
               </div>
-              <div className="pt-12 pb-5 flex items-center justify-between">
+              <div className="pt-12 pb-5 flex items-end sm:items-center justify-between">
                 <div className="">
                   <Button
                     label="Back"
@@ -226,7 +227,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
                     className="w-fit! bg-transparent text-gray-500!"
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                   <Button
                     onClick={() => patchRole(values)}
                     label="Save as draft"

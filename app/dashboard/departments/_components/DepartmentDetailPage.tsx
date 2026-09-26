@@ -65,8 +65,8 @@ const DepartmentDetailPage = () => {
   const { headcount, subteams, openRoles } = data.metrics;
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-start py-5">
-        <div className="w-1/2 space-y-2">
+      <div className="sm:flex justify-between items-start py-5">
+        <div className="sm:w-1/2 space-y-2">
           <h2 className="text-3xl font-extrabold capitalize">{data.name}</h2>
           <p>
             Monitor organizational health across key sectors with real-time
@@ -99,7 +99,7 @@ const DepartmentDetailPage = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-4 divide-x divide-gray-200 bg-white border border-gray-200 rounded-lg p-2">
+      <div className="grid sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200 bg-white border border-gray-200 rounded-lg p-2">
         <div className="p-4">
           <div className="flex items-center gap-1">
             <Users className="w-3 h-3" />

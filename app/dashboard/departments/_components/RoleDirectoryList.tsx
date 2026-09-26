@@ -14,8 +14,17 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/context/modal.state";
 import { useGetRoles, useGetTeams } from "@/hooks/employer/useDepartment";
-import { cn } from "@/lib/utils";
-import { ArrowRight, MoreVertical, Server, UserSquare } from "lucide-react";
+import { cn, labelCase } from "@/lib/utils";
+import {
+  ArrowRight,
+  Eye,
+  MoreVertical,
+  PenBox,
+  Server,
+  Trash2,
+  UserSquare,
+} from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 const RoleDirectoryList = () => {
@@ -45,7 +54,7 @@ const RoleDirectoryList = () => {
               <div className="flex-1">
                 <div className="font-semibold">{item.name}</div>
                 <div className="text-sm capitalize">
-                  {item.workArrangement} / {item.location}
+                  {labelCase(item.workArrangement)} / {item.location}
                 </div>
               </div>
             </div>
@@ -76,7 +85,13 @@ const RoleDirectoryList = () => {
               <DropdownMenuItem
                 className={cn("hover:bg-primary-100! hover:text-primary!")}
               >
-                View
+                <Link
+                  href={`/dashboard/departments/${department}/roles/${item.id}`}
+                  className="flex items-center gap-1"
+                >
+                  <Eye className="h-3 w-3" />
+                  View
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
@@ -86,8 +101,11 @@ const RoleDirectoryList = () => {
                     bgColor: "bg-[#F7F9FC]",
                   });
                 }}
-                className={cn("hover:bg-primary-100! hover:text-primary!")}
+                className={cn(
+                  "hover:bg-primary-100! hover:text-primary! flex items-center gap-1"
+                )}
               >
+                <PenBox className="h-3 w-3" />
                 Edit
               </DropdownMenuItem>
 
@@ -101,9 +119,10 @@ const RoleDirectoryList = () => {
 
               <DropdownMenuItem
                 className={cn(
-                  "hover:bg-red-100! text-red-500 hover:text-red-500!"
+                  "hover:bg-red-100! text-red-500 hover:text-red-500! flex items-center gap-1"
                 )}
               >
+                <Trash2 className="h-3 w-3" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>

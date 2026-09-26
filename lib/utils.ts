@@ -31,3 +31,6 @@ export const gettTime = (date: string) => {
   });
   return time;
 };
+
+export const labelCase = (s?: string) =>
+  s ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "—";

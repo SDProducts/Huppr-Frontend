@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable react/no-unescaped-entities */
 import RolePreview from "@/app/dashboard/departments/_components/CreateRoleStep5";
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";

@@ -46,7 +46,7 @@ export interface JobItem {
   employmentType: EmploymentType;
   location: string;
   workArrangement: WorkArrangement;
-  requirements: JobRequirements;
+  requirements?: JobRequirements;
   benefits?: JobBenefits;
   reportsToUserId: string;
   permissionIds: string[];

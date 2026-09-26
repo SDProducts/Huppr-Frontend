@@ -42,7 +42,10 @@ interface RolePreviewProps {
   roleId: string;
 }
 
-export default function RolePreview({ roleId, className }: RolePreviewProps) {
+export default function RoleDetailPage({
+  roleId,
+  className,
+}: RolePreviewProps) {
   const { data: role, isLoading } = useGetRolesById(roleId);
   if (isLoading || !role) {
     return <CreateRoleStep2Skeleton />;

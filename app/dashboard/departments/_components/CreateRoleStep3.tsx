@@ -1,3 +1,4 @@
+"use client";
 import CreateRoleStep4 from "@/app/dashboard/departments/_components/CreateRoleStep4";
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import Checkbox from "@/components/form/Checkbox";
@@ -94,8 +95,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
     },
   ];
   const submit = (values: typeof initialValues) => {
-    const { permissionIds, ...payload } = values;
-    patchRole(payload, {
+    patchRole(values, {
       onSuccess(data) {
         modal.open({
           content: <CreateRoleStep4 roleId={data.id} />,
@@ -130,7 +130,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
   };
 
   return (
-    <div className="px-4 space-y-10">
+    <div className="sm:px-4 space-y-10">
       <div className="">
         <h2 className="text-2xl font-bold">Organization & Access</h2>
         <p className="text-sm">
@@ -143,7 +143,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
           return (
             <Form>
               <div className="space-y-4">
-                <div className="p-4 rounded-md bg-white space-y-1">
+                <div className="p-2 sm:p-4 rounded-md bg-white space-y-1">
                   <div className="text-xl font-bold">Hierarchy</div>
                   {gettingEmployess ? (
                     <SelectInputSkeleton />
@@ -163,20 +163,20 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                     chart.
                   </div>
                 </div>
-                <div className="p-4 rounded-md bg-white">
+                <div className="p-2 sm:p-4 rounded-md bg-white">
                   <div className="font-bold text-xl -mb-5">
                     Approval Responsibilities
                   </div>
                   <Checkbox
-                    name="responsibilities"
+                    name="permissionIds"
                     type="multiple"
                     options={RESPONSIBILITIES}
                     label="Select the workflows this role has authority to approve."
-                    orientationStyle="grid grid-cols-2 gap-1"
+                    orientationStyle="grid sm:grid-cols-2 gap-1"
                     optionClassName=""
                   />
                 </div>
-                <div className="p-4 rounded-md bg-white space-y-4">
+                <div className="p-2 sm:p-4 rounded-md bg-white space-y-4">
                   <div className="">
                     <div className="text-xl font-bold">System Permissions</div>
                     <div className="text-xs">
@@ -190,7 +190,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                           <perm.icon size={15} />
                           <div className="">{perm.name}</div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           {perm.actions.map((action) => {
                             const key = permissionKey(perm.id, action);
                             const active = values.permissionIds?.includes(key);
@@ -218,31 +218,12 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                             );
                           })}
                         </div>
-
-                        {/* <div className="flex items-center gap-2">
-                          {perm.actions.map((action, i) => (
-                            <div
-                              onClick={() =>
-                                setFieldValue("permissionIds", [
-                                  ...values.permissionIds,
-                                  `${action}.${perm.id}`,
-                                ])
-                              }
-                              className={cn(
-                                "px-4 py-1 text-sm bg-gray-200 rounded-full cursor-pointer"
-                              )}
-                              key={i}
-                            >
-                              {action} {perm.id}s
-                            </div>
-                          ))}
-                        </div> */}
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="pt-20 pb-5 flex items-center justify-between">
+              <div className="pt-20 pb-5 flex items-end sm:items-center justify-between">
                 <div className="">
                   <Button
                     label="Back"
@@ -251,9 +232,10 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                     className="w-fit! bg-transparent text-gray-500!"
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                   <Button
                     label="Save as draft"
+                    onClick={() => patchRole(values)}
                     isLoading={isPending}
                     disabled={isPending}
                     className="bg-transparent! text-primary! border"

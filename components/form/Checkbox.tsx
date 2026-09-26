@@ -294,7 +294,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
             }
              ${field.value ? "bg-transparent border-primary" : "bg-white"}
             `}
-            onClick={handleChange}
+            // onClick={handleChange}
           >
             {field.value && <Check className="w-3 h-3 text-primary" />}
           </div>

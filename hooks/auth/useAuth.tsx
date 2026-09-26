@@ -215,7 +215,7 @@ export const useConfirmOTP = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OTPPayload) => {
-      const res = await api.post(`/auth/confrim-otp/`, payload);
+      const res = await api.post(`/auth/confrim-email-otp/`, payload);
       return res.data;
     },
     onSuccess: () => {

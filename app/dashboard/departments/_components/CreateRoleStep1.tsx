@@ -1,3 +1,4 @@
+"use client";
 import CreateRoleStep2 from "@/app/dashboard/departments/_components/CreateRoleStep2";
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import Input from "@/components/form/Input";
@@ -121,7 +122,7 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
     }
   };
   return (
-    <div className="min-h-[400px] px-4 space-y-10">
+    <div className="min-h-[400px] sm:px-4 space-y-10">
       <div className="">
         <h2 className="text-2xl font-bold">Create Role</h2>
         <p className="text-sm">Define the foundation for this new position.</p>
@@ -131,8 +132,8 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
         {({ values }) => {
           return (
             <Form>
-              <div className="bg-white p-5 rounded-lg space-y-7">
-                <div className="grid grid-cols-2 gap-2 ">
+              <div className="bg-white p-2 sm:p-5 rounded-lg space-y-7">
+                <div className="grid sm:grid-cols-2 gap-2 ">
                   {isLoading || !departments ? (
                     <SelectInputSkeleton />
                   ) : (
@@ -150,10 +151,10 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
                     label="Role Name"
                     name="name"
                     LabelClassName="text-sm line-clamp-1"
-                    placeholder="e.g.www.sterlingtech.com"
+                    placeholder="e.g. Customer support"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid sm:grid-cols-3 gap-2">
                   <SearchableSelect
                     label="Role level"
                     name="level"
@@ -191,7 +192,7 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
                   rows={2}
                 />
               </div>
-              <div className="pt-20 pb-5 flex items-center justify-between">
+              <div className="pt-20 pb-5 flex items-end sm:items-center justify-between">
                 <div className="">
                   <Button
                     label="Back"
@@ -199,7 +200,7 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
                     className="w-fit! bg-transparent text-gray-500!"
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                   <Button
                     label="Save as draft"
                     loadingLabel="Saving..."
