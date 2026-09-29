@@ -50,7 +50,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
   const initialValues: CreateRolePayload = {
     reportsToUserId: roleData?.reportsToUserId,
     permissionIds: roleData?.permissionIds,
-    expectedRevision: 0,
+    // expectedRevision: roleData?.revision,
   };
   const RESPONSIBILITIES: Option[] = [
     {

@@ -496,3 +496,22 @@ export function CreateRoleStep2Skeleton({
     </div>
   );
 }
+
+export function ProjectListTableSkeleton() {
+  return (
+    <div className="space-y-0 py-2">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          className="grid grid-cols-[1fr_1fr_2fr_1fr_1fr] py-2 gap-2 animate-pulse"
+          key={i}
+        >
+          <div className="h-5 bg-gray-200 rounded-sm"></div>
+          <div className="h-5 bg-gray-200 rounded-sm"></div>
+          <div className="h-5 bg-gray-200 rounded-sm"></div>
+          <div className="h-5 bg-gray-200 rounded-sm"></div>
+          <div className="h-5 bg-gray-200 rounded-sm"></div>
+        </div>
+      ))}
+    </div>
+  );
+}

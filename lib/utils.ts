@@ -31,6 +31,21 @@ export const gettTime = (date: string) => {
   });
   return time;
 };
+export const getShortDate = (date: string) => {
+  const shortDate = new Date(date).toLocaleDateString("en-NG", {
+    month: "short",
+    day: "numeric",
+  });
+  return shortDate;
+};
+export const getDate = (date: string) => {
+  const fullDate = new Date(date).toLocaleDateString("en-NG", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  return fullDate;
+};
 
 export const labelCase = (s?: string) =>
   s ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "—";

@@ -38,7 +38,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
   }
 
   const initialValues: CreateRolePayload = {
-    expectedRevision: 0,
+    // expectedRevision: 0,
     requirements: {
       responsibilities: roleData?.requirements?.responsibilities || [""],
       minYears: roleData?.requirements?.minYears || 1,

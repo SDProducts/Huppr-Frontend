@@ -129,8 +129,8 @@ const Input: React.FC<InputProps> = ({
             rows={isTextarea ? rows : undefined}
             className={`${
               theme === "dark" ? "text-gray-300" : "text-gray-900"
-            } text-sm rounded-lg focus:ring-0 block w-full px-5 outline-none resize-none ${
-              isTextarea ? "min-h-15" : ""
+            } text-sm rounded-lg focus:ring-0 block w-full px-5 outline-none resize-y ${
+              isTextarea ? "min-h-15 py-0!" : ""
             }`}
           />
         )}

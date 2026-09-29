@@ -9,6 +9,7 @@ import {
   GraduationCap,
   HelpCircle,
   LayoutTemplate,
+  Rocket,
   Settings,
   UserPlus2,
   Users2,
@@ -65,6 +66,11 @@ class Navigation {
       path: "/dashboard/employees",
     },
     {
+      label: "Projects",
+      icon: Rocket,
+      path: "/dashboard/projects",
+    },
+    {
       label: "Onboarding",
       icon: UserPlus2,
       path: "/dashboard/onboarding",
@@ -115,3 +121,30 @@ class Navigation {
   ];
 }
 export const navigation = new Navigation();
+
+class InitialValues {
+  createProjectPayload = {
+    departmentId: "",
+    teamId: "",
+    name: "",
+    description: "",
+    priority: "",
+    status: "todo",
+    startDate: "",
+    endDate: "",
+    resourceManagerId: "",
+  };
+  createTask = {
+    name: "",
+    description: "",
+    priority: "normal",
+    assignee: undefined,
+    startDate: "",
+    dueDate: "",
+    status: "todo",
+  };
+  addTaskNote = {
+    body: "",
+  };
+}
+export const initialvalues = new InitialValues();

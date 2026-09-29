@@ -46,7 +46,7 @@ const RoleDirectoryList = () => {
           className="flex items-center gap-2 bg-white p-4 rounded-lg"
           key={i}
         >
-          <div className="grid grid-cols-[3fr_1fr_1fr_2fr] flex-1">
+          <div className="grid grid-cols-[2fr_1fr_1fr_2fr] flex-1 ">
             <div className="flex items-center gap-2">
               <div className="h-10 w-10 flex items-center justify-center bg-primary-100 rounded-md">
                 <UserSquare />
@@ -76,7 +76,9 @@ const RoleDirectoryList = () => {
             </div>
           </div>
           <DropdownMenu>
-            <DropdownMenuTrigger className={"p-0!"}>
+            <DropdownMenuTrigger
+              className={"p-2 rounded-lg cursor-pointer hover:bg-gray-200"}
+            >
               <div>
                 <MoreVertical size={18} />
               </div>
@@ -202,6 +204,8 @@ export const SubteamsList = () => {
                 </AvatarGroup>
               </div>
               <Button
+                type="link"
+                href={`/dashboard/departments/${team.departmentId}/teams/${team.id}`}
                 label="View"
                 rightIcon={<ArrowRight size={16} />}
                 className="bg-transparent text-gray-700! w-fit!"
