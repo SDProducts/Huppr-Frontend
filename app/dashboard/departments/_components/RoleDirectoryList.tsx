@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import { Pill } from "@/components/utils/Pills";
 import { useModal } from "@/context/modal.state";
 import { useGetRoles, useGetTeams } from "@/hooks/employer/useDepartment";
 import { cn, labelCase } from "@/lib/utils";
@@ -62,17 +63,21 @@ const RoleDirectoryList = () => {
               <div className="font-semibold">Positions</div>
               <div className="text-sm">{item.metrics.openPositions || 0}</div>
             </div>
-            <div className="bg-green-100 text-green-500 h-fit w-fit text-sm px-3 py-0.5 rounded-2xl">
-              {item.status}
+            <div className="">
+              <Pill priority={item.status} />
             </div>
             <div className="">
-              <AvatarGroup>
-                {item.metrics.members.map((staff) => (
-                  <Avatar key={staff} className={cn("bg-white")}>
-                    <AvatarFallback>{staff}</AvatarFallback>
-                  </Avatar>
-                ))}
-              </AvatarGroup>
+              {item.metrics.members.length > 0 ? (
+                <AvatarGroup>
+                  {item.metrics.members.map((staff) => (
+                    <Avatar key={staff} className={cn("bg-white")}>
+                      <AvatarFallback>{staff}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                </AvatarGroup>
+              ) : (
+                "No Members Yet"
+              )}
             </div>
           </div>
           <DropdownMenu>
@@ -91,8 +96,8 @@ const RoleDirectoryList = () => {
                   href={`/dashboard/departments/${department}/roles/${item.id}`}
                   className="flex items-center gap-1"
                 >
-                  <Eye className="h-3 w-3" />
-                  View
+                  <Eye className="size-3" />
+                  <div className="flex-1">View</div>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -107,7 +112,7 @@ const RoleDirectoryList = () => {
                   "hover:bg-primary-100! hover:text-primary! flex items-center gap-1"
                 )}
               >
-                <PenBox className="h-3 w-3" />
+                <PenBox className="size-3" />
                 Edit
               </DropdownMenuItem>
 
@@ -121,10 +126,10 @@ const RoleDirectoryList = () => {
 
               <DropdownMenuItem
                 className={cn(
-                  "hover:bg-red-100! text-red-500 hover:text-red-500! flex items-center gap-1"
+                  "hover:bg-red-100! text-red-500! hover:text-red-500! flex items-center gap-1"
                 )}
               >
-                <Trash2 className="h-3 w-3" />
+                <Trash2 className="size-3" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -205,7 +210,7 @@ export const SubteamsList = () => {
               </div>
               <Button
                 type="link"
-                href={`/dashboard/departments/${team.departmentId}/teams/${team.id}`}
+                href={`/dashboard/teams/${team.id}`}
                 label="View"
                 rightIcon={<ArrowRight size={16} />}
                 className="bg-transparent text-gray-700! w-fit!"

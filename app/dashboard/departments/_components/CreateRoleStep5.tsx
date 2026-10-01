@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  ArrowLeft,
+  ArrowRight,
   Award,
   BriefcaseBusiness,
   CalendarClock,
@@ -18,7 +20,12 @@ import {
 
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
 import { CreateRoleStep2Skeleton } from "@/components/skeletons";
-import { useGetRolesById } from "@/hooks/employer/useDepartment";
+import Button from "@/components/ui/CustomButton";
+import { useModal } from "@/context/modal.state";
+import {
+  useGetRolesById,
+  usePatchNewRole,
+} from "@/hooks/employer/useDepartment";
 import { cn, labelCase } from "@/lib/utils";
 
 const currency = (n: number, code: string) =>
@@ -43,13 +50,24 @@ interface RolePreviewProps {
 }
 
 export default function RolePreview({ roleId, className }: RolePreviewProps) {
+  const modal = useModal();
   const { data: role, isLoading } = useGetRolesById(roleId);
+  const { mutate: completeRole, isPending } = usePatchNewRole(roleId);
   if (isLoading || !role) {
     return <CreateRoleStep2Skeleton />;
   }
 
   const { requirements, benefits } = role;
-
+  const handleCompete = () => {
+    completeRole(
+      { status: "active" },
+      {
+        onSuccess() {
+          modal.close();
+        },
+      }
+    );
+  };
   return (
     <div className={cn("space-y-10 px-4", className)}>
       <div className="space-y-4">
@@ -255,43 +273,31 @@ export default function RolePreview({ roleId, className }: RolePreviewProps) {
           </div>
         </div>
       </div>
-      {/* Members */}
-      {/* {metrics.members.length > 0 && (
-        <Section title="Current Members" icon={Users}>
-          <div className="space-y-2">
-            {metrics.members.map((m) => (
-              <div
-                key={m.userId}
-                className="flex items-center gap-3 rounded-xl border border-slate-100 p-3"
-              >
-                {m.avatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={m.avatarUrl}
-                    alt={m.displayName}
-                    className="h-10 w-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600">
-                    {m.displayName.slice(0, 2).toUpperCase()}
-                  </div>
-                )}
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-slate-900">
-                    {m.displayName}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    Started {date(m.startsOn)}
-                  </p>
-                </div>
-                <span className="font-mono text-[11px] text-slate-400">
-                  {m.employeeId.slice(0, 8)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Section>
-      )} */}
+
+      <div className="py-5 flex items-center justify-between">
+        <div className="">
+          <Button
+            onClick={modal.goBack}
+            label="Back"
+            icon={<ArrowLeft />}
+            className="w-fit! bg-transparent text-gray-500!"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            label="Cancel"
+            className="bg-transparent! text-gray-800!"
+            onClick={modal.close}
+          />
+          <Button
+            label="Complete"
+            onClick={handleCompete}
+            rightIcon={<ArrowRight />}
+            disabled={isPending}
+            isLoading={isPending}
+          />
+        </div>
+      </div>
     </div>
   );
 }

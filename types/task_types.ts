@@ -102,3 +102,15 @@ export interface TaskActivityListResponse {
   page: number;
   limit: number;
 }
+
+export interface FileItem {
+  id: string;
+  fileName: string;
+  contentType: string;
+  fileSize: number;
+  createdAt: string;
+}
+
+export interface FileListResponse {
+  items: FileItem[];
+}

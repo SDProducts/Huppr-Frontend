@@ -134,17 +134,28 @@ class InitialValues {
     endDate: "",
     resourceManagerId: "",
   };
-  createTask = {
+  createTask: {
+    name?: string;
+    description?: string;
+    priority?: string;
+    assignee?: string | undefined;
+    startDate?: string;
+    dueDate?: string;
+    status?: string;
+  } = {
     name: "",
     description: "",
     priority: "normal",
-    assignee: undefined,
+    assignee: undefined, // Or "" if you want an empty string default
     startDate: "",
     dueDate: "",
     status: "todo",
   };
   addTaskNote = {
     body: "",
+  };
+  uploadTaskAttachment = {
+    file: undefined,
   };
 }
 export const initialvalues = new InitialValues();

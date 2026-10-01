@@ -1,18 +1,20 @@
 import { labelCase } from "@/lib/utils";
 
-const priorityStyles: Record<string, string> = {
+const pillStyles: Record<string, string> = {
   low: "bg-blue-100 text-blue-700 border-blue-200",
   medium: "bg-amber-100 text-amber-700 border-amber-200",
+  draft: "bg-amber-100 text-amber-700 border-amber-200",
   normal: "bg-amber-100 text-amber-700 border-amber-200",
   high: "bg-red-100 text-red-700 border-red-200",
+  active: "bg-green-100 text-green-700 border-green-200",
   urgent: "bg-rose-100 text-rose-800 border-rose-300 font-semibold",
 };
 
 // Helper component for Priority Pill
-export const PriorityPill = ({ priority }: { priority: string }) => {
+export const Pill = ({ priority }: { priority: string }) => {
   const normalizedPriority = priority?.toLowerCase() || "";
   const styles =
-    priorityStyles[normalizedPriority] ||
+    pillStyles[normalizedPriority] ||
     "bg-gray-100 text-gray-700 border-gray-200";
 
   return (

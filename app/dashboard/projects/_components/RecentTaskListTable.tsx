@@ -3,7 +3,7 @@ import CreateTask from "@/app/dashboard/projects/_components/CreateTask";
 import ActivityEmptyState from "@/components/EmptyState";
 import { RolesListSkeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
-import { PriorityPill, TaskStatusPill } from "@/components/utils/Pills";
+import { Pill, TaskStatusPill } from "@/components/utils/Pills";
 import { useModal } from "@/context/modal.state";
 import { useGetTasks } from "@/hooks/employer/useDepartment";
 import { getDate } from "@/lib/utils";
@@ -54,7 +54,7 @@ const RecentTaskListTable = () => {
               {getDate(task.dueDate)}
             </div>
             <div className="line-clamp-1" title={task.priority}>
-              <PriorityPill priority={task.priority} />
+              <Pill priority={task.priority} />
             </div>
           </div>
         ))}

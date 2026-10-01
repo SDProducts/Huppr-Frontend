@@ -505,13 +505,36 @@ export function ProjectListTableSkeleton() {
           className="grid grid-cols-[1fr_1fr_2fr_1fr_1fr] py-2 gap-2 animate-pulse"
           key={i}
         >
-          <div className="h-5 bg-gray-200 rounded-sm"></div>
-          <div className="h-5 bg-gray-200 rounded-sm"></div>
-          <div className="h-5 bg-gray-200 rounded-sm"></div>
-          <div className="h-5 bg-gray-200 rounded-sm"></div>
-          <div className="h-5 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
         </div>
       ))}
+    </div>
+  );
+}
+
+export function CreateRoleStep5Skeleton() {
+  return (
+    <div className="">
+      <div className="bg-white p-8 rounded-lg">
+        <div className="grid grid-cols-[2fr_1fr] gap-4">
+          <div className="">
+            <div className="w-2/3 h-10 rounded-sm bg-gray-400" />
+            <div className="w-1/3 h-10 rounded-sm bg-gray-400" />
+            <div className="grid grid-cols-4 gap-2">
+              <div className="h-10 rounded-sm bg-gray-400" />
+              <div className="h-10 rounded-sm bg-gray-400" />
+              <div className="h-10 rounded-sm bg-gray-400" />
+              <div className="h-10 rounded-sm bg-gray-400" />
+            </div>
+          </div>
+          <div className=""></div>
+        </div>
+      </div>
+      <div className="grid grid-cols-[2fr_1fr] gap-4"></div>
     </div>
   );
 }

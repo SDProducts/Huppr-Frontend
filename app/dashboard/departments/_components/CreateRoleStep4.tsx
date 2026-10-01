@@ -15,6 +15,7 @@ import { useModal } from "@/context/modal.state";
 import {
   useGetRoles,
   useGetRolesById,
+  useInvalidateQueries,
   usePatchNewRole,
 } from "@/hooks/employer/useDepartment";
 import { Form, Formik } from "formik";
@@ -27,7 +28,7 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
   const modal = useModal();
   const { data: roleData, isLoading } = useGetRolesById(roleId);
   const { data: rolesListData, isLoading: isLoadingRoles } = useGetRoles();
-
+  const clearQuery = useInvalidateQueries();
   const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
   if (isLoading || (!roleData && roleId)) {
     return <CreateRoleStep2Skeleton />;
@@ -72,15 +73,38 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
       leaveTypes: roleData?.benefits?.leaveTypes || [],
       successionPath: roleData?.benefits?.successionPath,
       growthReviewFrequency: roleData?.benefits?.growthReviewFrequency,
+      currency: "NGN",
     },
+    expectedRevision: roleData?.revision,
   };
   const submit = (values: typeof initialValues) => {
-    modal.open({
-      content: <RolePreview roleId={roleId} />,
-      size: "sm:w-3xl",
-      bgColor: "bg-gray-100",
-    });
-    // patchRole(values);
+    if (values.benefits) {
+      const { probationMonths, ...rest } = values.benefits;
+      const payload = {
+        benefits: {
+          ...rest,
+          probationMonths: Number(probationMonths),
+        },
+        expectedRevision: values.expectedRevision,
+      };
+      patchRole(payload, {
+        onSuccess(data) {
+          modal.open({
+            content: <RolePreview roleId={roleId} />,
+            size: "sm:w-3xl",
+            bgColor: "bg-gray-100",
+            goBack() {
+              clearQuery(["roles"]);
+              modal.open({
+                content: <CreateRoleStep4 roleId={data.id} />,
+                size: "sm:w-2xl",
+                bgColor: "bg-gray-100",
+              });
+            },
+          });
+        },
+      });
+    }
   };
 
   return (

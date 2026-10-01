@@ -49,3 +49,52 @@ export const getDate = (date: string) => {
 
 export const labelCase = (s?: string) =>
   s ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "—";
+
+export const formatFileSizeMB = (bytes: number): string => {
+  const mb = bytes / (1024 * 1024);
+  return `${mb.toFixed(2)} MB`;
+};
+
+/**
+ * Maps content type or file name extension to a clean display label (e.g., "PDF", "CSV")
+ */
+export const getFileDisplayType = (
+  contentType: string,
+  fileName?: string
+): string => {
+  // Map common MIME types to short display labels
+  const mimeMap: Record<string, string> = {
+    "application/pdf": "PDF",
+    "text/csv": "CSV",
+    "application/vnd.ms-excel": "XLS",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "XLSX",
+    "application/msword": "DOC",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      "DOCX",
+    "application/json": "JSON",
+    "application/zip": "ZIP",
+    "image/jpeg": "JPEG",
+    "image/png": "PNG",
+    "image/gif": "GIF",
+    "image/webp": "WEBP",
+    "text/plain": "TXT",
+  };
+
+  if (mimeMap[contentType]) {
+    return mimeMap[contentType];
+  }
+
+  // Fallback: extract extension from fileName if available
+  if (fileName && fileName.includes(".")) {
+    const ext = fileName.split(".").pop();
+    if (ext) return ext.toUpperCase();
+  }
+
+  // Fallback: parse secondary part of MIME type (e.g., "application/x-rar" -> "X-RAR")
+  const parts = contentType.split("/");
+  if (parts.length > 1) {
+    return parts[1].replace("vnd.", "").replace("x-", "").toUpperCase();
+  }
+
+  return "FILE";
+};

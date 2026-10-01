@@ -13,6 +13,7 @@ import {
   useGetRolesById,
   useInvalidateQueries,
   usePatchNewRole,
+  usePatchRolePermissions,
 } from "@/hooks/employer/useDepartment";
 import { useGetEmployees } from "@/hooks/hr/useHr";
 import { cn } from "@/lib/utils";
@@ -43,6 +44,8 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
       value: item.id,
     })) || [];
   const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
+  const { mutate: patchPermissions, isPending: isPatchingPermissions } =
+    usePatchRolePermissions(roleId);
   if (isLoading || (!roleData && roleId)) {
     return <CreateRoleStep2Skeleton />;
   }
@@ -95,6 +98,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
     },
   ];
   const submit = (values: typeof initialValues) => {
+    const { reportsToUserId, ...permissionsPayload } = values;
     patchRole(values, {
       onSuccess(data) {
         modal.open({
@@ -112,6 +116,31 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
         });
       },
     });
+
+    // patchPermissions(permissionsPayload, {
+    //   onSuccess() {
+    //     patchRole(
+    //       { reportsToUserId },
+    //       {
+    //         onSuccess(data) {
+    //           modal.open({
+    //             content: <CreateRoleStep4 roleId={data.id} />,
+    //             size: "sm:w-3xl",
+    //             bgColor: "bg-gray-100",
+    //             goBack() {
+    //               clearQuery(["roles"]);
+    //               modal.open({
+    //                 content: <CreateRoleStep3 roleId={data.id} />,
+    //                 size: "sm:w-2xl",
+    //                 bgColor: "bg-gray-100",
+    //               });
+    //             },
+    //           });
+    //         },
+    //       }
+    //     );
+    //   },
+    // });
   };
   // helper — the shape your backend wants
   const permissionKey = (permId: string, action: string) =>
@@ -236,15 +265,15 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                   <Button
                     label="Save as draft"
                     onClick={() => patchRole(values)}
-                    isLoading={isPending}
-                    disabled={isPending}
+                    isLoading={isPending || isPatchingPermissions}
+                    disabled={isPending || isPatchingPermissions}
                     className="bg-transparent! text-primary! border"
                   />
                   <Button
                     label="Continue"
                     type="submit"
-                    isLoading={isPending}
-                    disabled={isPending}
+                    isLoading={isPending || isPatchingPermissions}
+                    disabled={isPending || isPatchingPermissions}
                     rightIcon={<ArrowRight />}
                   />
                 </div>

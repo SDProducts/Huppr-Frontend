@@ -25,16 +25,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
 import { navigation } from "@/data/constants";
-import { useGetDepartments } from "@/hooks/employer/useDepartment";
+import { useGetDepartments, useGetTeams } from "@/hooks/employer/useDepartment";
 import { cn } from "@/lib/utils";
 import Cookies from "js-cookie";
 
 export function HeaderMenu() {
   const organisationId = Cookies.get("organisationId");
-  const { data } = useGetDepartments(
+  const { data, isLoading: isgettingDept } = useGetDepartments(
     organisationId ? { organisationId: organisationId } : {}
   );
+  const { data: teamsResponse, isLoading: isGettingTeam } = useGetTeams();
   const departments = data?.items || [];
+  const teams = teamsResponse?.items || [];
   return (
     <header className="w-full border-b border-gray-200">
       <div className="hidden sm:flex h-[72px] w-full items-center px-5">
@@ -74,22 +76,39 @@ export function HeaderMenu() {
               >
                 Teams
               </NavigationMenuTrigger>
-
-              <NavigationMenuContent>
-                <ul className="w-[250px] p-2">
-                  <ListItem href="/teams/admin" title="PR Team">
-                    4 Employees
-                  </ListItem>
-
-                  <ListItem href="/teams/developers" title="Engineering Team">
-                    10 Employees
-                  </ListItem>
-
-                  <ListItem href="/teams/sales" title="Sales Team">
-                    6 Employees
-                  </ListItem>
-                </ul>
-              </NavigationMenuContent>
+              {isGettingTeam || !teamsResponse ? (
+                <NavigationMenuContent className={cn("min-h-50 min-w-65")}>
+                  <div className="space-y-2.5 animate-pulse p-4">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div className="space-y-1" key={i}>
+                        <div className="h-7 bg-gray-200 rounded-md" />
+                        <div className="h-4 w-2/4 bg-gray-200 rounded-sm" />
+                      </div>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              ) : (
+                <NavigationMenuContent>
+                  <ul className="w-[250px] p-2">
+                    {teams.slice(0, 5).map((team, i) => (
+                      <ListItem
+                        href={`/dashboard/teams/${team.id}`}
+                        title={team.name}
+                        key={i}
+                      >
+                        {team.memberCount || 0} Members
+                      </ListItem>
+                    ))}
+                    <Link
+                      href={"/dashboard/teams"}
+                      className="p-3 rounded-md flex items-center justify-between text-sm text-primary hover:bg-primary/5"
+                    >
+                      <div className="">View more</div>
+                      <ArrowRight size={16} />
+                    </Link>
+                  </ul>
+                </NavigationMenuContent>
+              )}
             </NavigationMenuItem>
 
             {/* Departments */}
@@ -105,27 +124,39 @@ export function HeaderMenu() {
               >
                 Departments
               </NavigationMenuTrigger>
-
-              <NavigationMenuContent>
-                <ul className="w-[250px] p-2">
-                  {departments.slice(0, 5).map((department, i) => (
-                    <ListItem
-                      href={`/dashboard/departments/${department.id}`}
-                      title={department.name}
-                      key={i}
+              {isgettingDept || !data ? (
+                <NavigationMenuContent className={cn("min-h-50 min-w-65")}>
+                  <div className="space-y-2.5 animate-pulse p-4">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div className="space-y-1" key={i}>
+                        <div className="h-7 bg-gray-200 rounded-md" />
+                        <div className="h-4 w-2/4 bg-gray-200 rounded-sm" />
+                      </div>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              ) : (
+                <NavigationMenuContent>
+                  <ul className="w-[250px] p-2">
+                    {departments.slice(0, 5).map((department, i) => (
+                      <ListItem
+                        href={`/dashboard/departments/${department.id}`}
+                        title={department.name}
+                        key={i}
+                      >
+                        {department.metrics.headcount || 0} Employees
+                      </ListItem>
+                    ))}
+                    <Link
+                      href={"/dashboard/departments"}
+                      className="p-3 rounded-md flex items-center justify-between text-sm text-primary hover:bg-primary/5"
                     >
-                      {department.metrics.headcount || 0} Employees
-                    </ListItem>
-                  ))}
-                  <Link
-                    href={"/dashboard/departments"}
-                    className="p-3 rounded-md flex items-center justify-between text-sm text-primary hover:bg-primary/5"
-                  >
-                    <div className="">View more</div>
-                    <ArrowRight size={16} />
-                  </Link>
-                </ul>
-              </NavigationMenuContent>
+                      <div className="">View more</div>
+                      <ArrowRight size={16} />
+                    </Link>
+                  </ul>
+                </NavigationMenuContent>
+              )}
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

@@ -8,6 +8,7 @@ import {
 import { SubTeamDetailResponse } from "@/types/subteam_by_id";
 import { SubTeamListResponse } from "@/types/subteams";
 import {
+  FileListResponse,
   TaskActivityListResponse,
   TaskItem,
   TaskListResponse,
@@ -265,6 +266,44 @@ export const usePatchNewRole = (roleId: string) => {
     },
   });
 };
+export const usePatchRolePermissions = (roleId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: PatchPermissionsPayload) => {
+      const response = await api.put(
+        `/organization/roles/${roleId}/permissions`,
+        payload
+      );
+      return response.data;
+    },
+    onSuccess: (data: JobItem) => {
+      qc.invalidateQueries({
+        queryKey: ["roles"],
+      });
+      toast.success("Updated permissions");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
 
 export const useInvalidateQueries = () => {
   const qc = useQueryClient();
@@ -429,7 +468,61 @@ export const useCreateTask = (projectId: string) => {
       qc.invalidateQueries({
         queryKey: ["project"],
       });
+      qc.invalidateQueries({
+        queryKey: ["task-activity-history"],
+      });
       toast.success("New task created");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+export const useEditTask = (taskId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: typeof initialvalues.createTask) => {
+      const response = await api.patch(
+        `/organization/tasks/${taskId}`,
+        payload
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+      qc.invalidateQueries({
+        queryKey: ["task"],
+      });
+      qc.invalidateQueries({
+        queryKey: ["projects"],
+      });
+      qc.invalidateQueries({
+        queryKey: ["project"],
+      });
+      qc.invalidateQueries({
+        queryKey: ["task-activity-history"],
+      });
+
+      toast.success("Updated task");
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data
@@ -520,6 +613,10 @@ export const useAddNoteToTask = (taskId: string) => {
       qc.invalidateQueries({
         queryKey: ["project"],
       });
+      qc.invalidateQueries({
+        queryKey: ["task-activity-history"],
+      });
+
       toast.success("Added new note");
     },
     onError: (error: AxiosError<LoginError>) => {
@@ -560,6 +657,74 @@ export const useGetTaskHistory = (taskId: string) => {
     queryKey: ["task-activity-history", taskId],
     queryFn: async () => {
       const response = await api.get(`/organization/tasks/${taskId}/history`);
+      return response.data;
+    },
+    enabled: !!taskId,
+  });
+};
+
+export const useAttachTaskFiles = (taskId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: typeof initialvalues.uploadTaskAttachment) => {
+      const response = await api.post(
+        `/organization/tasks/${taskId}/attachments`,
+
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ["tasks"],
+      });
+      qc.invalidateQueries({
+        queryKey: ["task"],
+      });
+      qc.invalidateQueries({
+        queryKey: ["task-attachments"],
+      });
+      qc.invalidateQueries({
+        queryKey: ["task-activity-history"],
+      });
+
+      toast.success("Added Attached File to Task");
+    },
+    onError: (error: AxiosError<LoginError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+
+export const useGetTaskAttachemnts = (taskId: string) => {
+  return useQuery<FileListResponse>({
+    queryKey: ["task-attachments", taskId],
+    queryFn: async () => {
+      const response = await api.get(
+        `/organization/tasks/${taskId}/attachments`
+      );
       return response.data;
     },
     enabled: !!taskId,

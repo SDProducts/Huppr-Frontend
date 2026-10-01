@@ -695,6 +695,11 @@ interface CreateRolePayload {
   permissionIds?: string[];
 }
 
+interface PatchPermissionsPayload {
+  expectedRevision?: number;
+  permissionIds?: string[];
+}
+
 interface EmployeesResponse {
   items: Employee[];
   total: 0;
@@ -716,4 +721,9 @@ interface Employee {
   organizationId: string;
   employeeId: string;
   status: string;
+}
+
+interface DeletePayload {
+  action: string;
+  api_path: string;
 }

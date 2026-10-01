@@ -1,15 +1,17 @@
 "use client";
-import CreateTask from "@/app/dashboard/projects/_components/CreateTask";
 import AddTaskNote from "@/app/dashboard/tasks/_components/AddTaskNote";
+import EditTask from "@/app/dashboard/tasks/_components/EditTask";
 import TaskActivityHistory from "@/app/dashboard/tasks/_components/TaskActivityHistory";
+import TaskAttachments from "@/app/dashboard/tasks/_components/TaskAttachments";
 import { Breadcrumb } from "@/components/global/Breadcrumb";
+import ConfirmDelete from "@/components/global/ConfirmDelete";
 import { PageLoader } from "@/components/global/PageLoader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
-import { PriorityPill } from "@/components/utils/Pills";
+import { Pill } from "@/components/utils/Pills";
 import { useModal } from "@/context/modal.state";
-import { useGetTaskById } from "@/hooks/employer/useDepartment";
-import { getDate, getInitials } from "@/lib/utils";
+import { useEditTask, useGetTaskById } from "@/hooks/employer/useDepartment";
+import { cn, getDate, getInitials } from "@/lib/utils";
 import { CalendarRange, CheckCircle2, Pen, Trash2 } from "lucide-react";
 import { useParams } from "next/navigation";
 
@@ -17,6 +19,8 @@ const TaskDetailPage = () => {
   const { taskId } = useParams();
   const modal = useModal();
   const { data, isLoading } = useGetTaskById(String(taskId));
+  const { mutate: editTask, isPending } = useEditTask(String(taskId));
+
   if (isLoading || !data) {
     return <PageLoader />;
   }
@@ -34,12 +38,35 @@ const TaskDetailPage = () => {
             label="Delete Task"
             icon={<Trash2 size={16} />}
             className="w-fit! px-5 bg-transparent text-red-500! border border-red-500/20"
+            onClick={() => {
+              modal.open({
+                content: (
+                  <ConfirmDelete
+                    queries={["task", "tasks"]}
+                    api_path={`organization/tasks/${taskId}`}
+                    action="Task"
+                  />
+                ),
+                size: "sm:w-sm",
+                bgColor: "",
+              });
+            }}
           />
           <Button
-            onClick={() => {}}
+            onClick={() => {
+              editTask({ status: "done" });
+            }}
             icon={<CheckCircle2 size={16} />}
-            label="Complete Task"
-            className="w-fit! px-5 bg-transparent text-primary! border border-primary/20"
+            isLoading={isPending}
+            disabled={isPending || data.status === "done"}
+            label={data.status === "done" ? "Completed" : "Complete Task"}
+            loadingLabel="Completing..."
+            className={cn(
+              "w-fit! px-5 border ",
+              data.status === "done"
+                ? "bg-green-500! text-white! opacity-100!"
+                : "bg-transparent text-primary! border-primary/20"
+            )}
           />
           <Button
             icon={<Pen size={16} />}
@@ -47,9 +74,7 @@ const TaskDetailPage = () => {
             className="w-fit! px-5"
             onClick={() => {
               modal.open({
-                content: (
-                  <CreateTask project={{ name: data.name, id: data.id }} />
-                ),
+                content: <EditTask />,
                 size: "sm:w-2xl",
                 bgColor: "",
               });
@@ -85,7 +110,7 @@ const TaskDetailPage = () => {
             <div className="bg-white p-4 rounded-lg space-y-2">
               <div className="uppercase text-sm">PRIORITY</div>
               <div className="flex items-start gap-1">
-                <PriorityPill priority={data.priority} />
+                <Pill priority={data.priority} />
               </div>
             </div>
             <div className="bg-white p-4 rounded-lg space-y-2">
@@ -100,7 +125,8 @@ const TaskDetailPage = () => {
           </div>
           <AddTaskNote taskId={String(taskId)} />
         </div>
-        <div className="">
+        <div className="space-y-4">
+          <TaskAttachments />
           <TaskActivityHistory taskId={String(taskId)} />
         </div>
       </div>

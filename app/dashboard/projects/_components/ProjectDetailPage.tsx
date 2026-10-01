@@ -8,13 +8,13 @@ import { Breadcrumb } from "@/components/global/Breadcrumb";
 import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import { Progress } from "@/components/ui/progress";
-import { PriorityPill, TaskStatusPill } from "@/components/utils/Pills";
+import { Pill, TaskStatusPill } from "@/components/utils/Pills";
 import { useModal } from "@/context/modal.state";
 import { useGetProjectById } from "@/hooks/employer/useDepartment";
 import {
   CalendarDays,
+  CircleDashed,
   ClipboardCheck,
-  Dot,
   LineChart,
   PenLine,
   Plus,
@@ -68,7 +68,7 @@ const ProjectDetailPage = () => {
               <Breadcrumb />
             </div>
             <h2 className="text-3xl font-extrabold capitalize">{data.name}</h2>
-            <p className="line-clamp-1">{data.description}</p>
+            <p className="">{data.description}</p>
           </div>
           <div className="flex flex-col lg:flex-row items-end lg:items-center gap-2">
             <Button
@@ -105,7 +105,7 @@ const ProjectDetailPage = () => {
               <div className="font-bold text-sm">{item.label}</div>
               {item.label === "Priority" ? (
                 <div className="">
-                  <PriorityPill priority={item.value || ""} />
+                  <Pill priority={item.value || ""} />
                 </div>
               ) : item.label === "Status" ? (
                 <div className="">
@@ -119,7 +119,11 @@ const ProjectDetailPage = () => {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4">
-        <ProjectMetricCard title="status" value={data.status} icon={Dot} />
+        <ProjectMetricCard
+          title="status"
+          value={data.status}
+          icon={CircleDashed}
+        />
         <ProjectMetricCard
           title="Progress"
           value={`${data.progress.percent || 0} %`}
