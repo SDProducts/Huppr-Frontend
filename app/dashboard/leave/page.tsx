@@ -1,3 +1,5 @@
+import LeaveOverviewPage from "@/app/dashboard/leave/_components/LeaveOverviewPage";
+
 export default function page() {
-  return <div className=""></div>;
+  return <LeaveOverviewPage />;
 }

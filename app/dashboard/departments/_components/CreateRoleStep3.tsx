@@ -13,7 +13,6 @@ import {
   useGetRolesById,
   useInvalidateQueries,
   usePatchNewRole,
-  usePatchRolePermissions,
 } from "@/hooks/employer/useDepartment";
 import { useGetEmployees } from "@/hooks/hr/useHr";
 import { cn } from "@/lib/utils";
@@ -44,8 +43,8 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
       value: item.id,
     })) || [];
   const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
-  const { mutate: patchPermissions, isPending: isPatchingPermissions } =
-    usePatchRolePermissions(roleId);
+  // const { mutate: patchPermissions, isPending: isPatchingPermissions } =
+  //   usePatchRolePermissions(roleId);
   if (isLoading || (!roleData && roleId)) {
     return <CreateRoleStep2Skeleton />;
   }
@@ -58,22 +57,22 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
   const RESPONSIBILITIES: Option[] = [
     {
       label: "Approve Leave",
-      value: "leave",
+      value: "approve.leave",
       description: "Review and approve PTO and sick leave requests.",
     },
     {
       label: "Approve Attendance",
-      value: "Attendance",
+      value: "approve.attendance",
       description: "Validate timesheets and attendance records.",
     },
     {
       label: "Performance Reviews",
-      value: "Reviews",
+      value: "review.performance",
       description: "Final sign-off on direct reports' evaluations.",
     },
     {
       label: "Expense Claims",
-      value: "Claims",
+      value: "claim.expense",
       description: "Approve team reimbursements up to tier limits.",
     },
   ];
@@ -98,7 +97,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
     },
   ];
   const submit = (values: typeof initialValues) => {
-    const { reportsToUserId, ...permissionsPayload } = values;
+    // const { reportsToUserId, ...permissionsPayload } = values;
     patchRole(values, {
       onSuccess(data) {
         modal.open({
@@ -265,15 +264,15 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                   <Button
                     label="Save as draft"
                     onClick={() => patchRole(values)}
-                    isLoading={isPending || isPatchingPermissions}
-                    disabled={isPending || isPatchingPermissions}
+                    isLoading={isPending}
+                    disabled={isPending}
                     className="bg-transparent! text-primary! border"
                   />
                   <Button
                     label="Continue"
                     type="submit"
-                    isLoading={isPending || isPatchingPermissions}
-                    disabled={isPending || isPatchingPermissions}
+                    isLoading={isPending}
+                    disabled={isPending}
                     rightIcon={<ArrowRight />}
                   />
                 </div>
