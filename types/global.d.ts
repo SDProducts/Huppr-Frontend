@@ -727,3 +727,16 @@ interface DeletePayload {
   action: string;
   api_path: string;
 }
+
+interface Permissions {
+  id: string;
+  name: string;
+  description: string;
+  group: string;
+  type: string;
+  grantable: boolean;
+}
+
+interface ReferencePermissionsResponse {
+  items: Permissions[];
+}

@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { ErrorMessage, useField } from "formik";
 import { Check, Info } from "lucide-react";
 import React, { useEffect } from "react";
@@ -16,6 +17,7 @@ interface CheckboxProps {
   defaultSelectAll?: boolean; // New prop for default select all
   orientationStyle?: string;
   optionClassName?: string;
+  labelClassName?: string;
   size?: "xs" | "sm" | "md" | "lg";
 }
 
@@ -32,6 +34,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   defaultSelectAll = false, // Default to false
   orientationStyle,
   optionClassName,
+  labelClassName,
   size = "sm",
 }) => {
   const [field, meta, helpers] = useField(name);
@@ -141,7 +144,14 @@ const Checkbox: React.FC<CheckboxProps> = ({
       <div className={`w-full ${className}`}>
         {label && (
           <div className="flex justify-between items-center mb-2">
-            <p className="font-medium text-gray-700 text-sm">{label}</p>
+            <p
+              className={cn(
+                "font-medium text-gray-700 text-sm",
+                labelClassName
+              )}
+            >
+              {label}
+            </p>
 
             {/* Select All / Deselect All button */}
             {options.length > 1 && !disabled && !defaultSelectAll && (
@@ -272,7 +282,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     <div className={`w-full text-left ${className}`}>
       <label className="flex items-center cursor-pointer">
         {label && labelPosition === "left" && (
-          <span className="text-sm mr-2">{label}</span>
+          <span className={cn("text-sm mr-2", labelClassName)}>{label}</span>
         )}
 
         <div className={`relative flex items-center`}>
@@ -308,7 +318,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
         </div>
 
         {label && labelPosition === "right" && (
-          <span className="text-sm ml-2">{label}</span>
+          <span className={cn("text-sm ml-2", labelClassName)}>{label}</span>
         )}
       </label>
 

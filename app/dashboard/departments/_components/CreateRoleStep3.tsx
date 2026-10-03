@@ -15,16 +15,10 @@ import {
   usePatchNewRole,
 } from "@/hooks/employer/useDepartment";
 import { useGetEmployees } from "@/hooks/hr/useHr";
-import { cn } from "@/lib/utils";
+import { useGetPermissions } from "@/hooks/references/useReferences";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
-import {
-  ArrowLeft,
-  ArrowRight,
-  BriefcaseBusiness,
-  ClipboardList,
-  Users,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import React from "react";
 interface Prop {
   roleId: string;
@@ -36,68 +30,76 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
   const { data: roleData, isLoading } = useGetRolesById(roleId);
   const { data: employeesData, isLoading: gettingEmployess } =
     useGetEmployees();
-
+  const { data: permissionsResponse, isLoading: isGettingPermissions } =
+    useGetPermissions();
   const employees =
     employeesData?.items.map((item) => ({
       label: item.employeeId,
       value: item.id,
     })) || [];
   const { mutate: patchRole, isPending } = usePatchNewRole(roleId);
-  // const { mutate: patchPermissions, isPending: isPatchingPermissions } =
-  //   usePatchRolePermissions(roleId);
-  if (isLoading || (!roleData && roleId)) {
+  const rawPermissions = permissionsResponse?.items || [];
+  const groupedPermissions = rawPermissions.reduce<
+    Record<string, Permissions[]>
+  >((accumulator, permission) => {
+    const group = permission.group;
+
+    // If the category doesn't exist yet, initialize it as an empty array
+    if (!accumulator[group]) {
+      accumulator[group] = [];
+    }
+
+    // Push the product into the appropriate category array
+    accumulator[group].push(permission);
+
+    return accumulator;
+  }, {}); // {} initializes the accumulator as an empty object
+
+  console.log(groupedPermissions);
+  const groupedPermissionsArray = Object.entries(groupedPermissions).map(
+    ([group, permissions]) => ({
+      group: group,
+      options: permissions.map((permission) => ({
+        label: permission.name,
+        description: permission.description,
+        value: permission.id,
+      })),
+    })
+  );
+  if (
+    isLoading ||
+    isGettingPermissions ||
+    !permissionsResponse ||
+    (!roleData && roleId)
+  ) {
     return <CreateRoleStep2Skeleton />;
   }
 
   const initialValues: CreateRolePayload = {
     reportsToUserId: roleData?.reportsToUserId,
     permissionIds: roleData?.permissionIds,
-    // expectedRevision: roleData?.revision,
   };
-  const RESPONSIBILITIES: Option[] = [
-    {
-      label: "Approve Leave",
-      value: "approve.leave",
-      description: "Review and approve PTO and sick leave requests.",
-    },
-    {
-      label: "Approve Attendance",
-      value: "approve.attendance",
-      description: "Validate timesheets and attendance records.",
-    },
-    {
-      label: "Performance Reviews",
-      value: "review.performance",
-      description: "Final sign-off on direct reports' evaluations.",
-    },
-    {
-      label: "Expense Claims",
-      value: "claim.expense",
-      description: "Approve team reimbursements up to tier limits.",
-    },
-  ];
-  const PERMISSIONS = [
-    {
-      name: "Team Management",
-      icon: Users,
-      id: "team",
-      actions: ["view", "manage"],
-    },
-    {
-      name: "Employee Records",
-      icon: ClipboardList,
-      id: "employee",
-      actions: ["view", "manage"],
-    },
-    {
-      name: "Recruitment",
-      icon: BriefcaseBusiness,
-      id: "job",
-      actions: ["view", "manage"],
-    },
-  ];
+  // const PERMISSIONS = [
+  //   {
+  //     name: "Team Management",
+  //     icon: Users,
+  //     id: "team",
+  //     actions: ["view", "manage"],
+  //   },
+  //   {
+  //     name: "Employee Records",
+  //     icon: ClipboardList,
+  //     id: "employee",
+  //     actions: ["view", "manage"],
+  //   },
+  //   {
+  //     name: "Recruitment",
+  //     icon: BriefcaseBusiness,
+  //     id: "job",
+  //     actions: ["view", "manage"],
+  //   },
+  // ];
   const submit = (values: typeof initialValues) => {
-    // const { reportsToUserId, ...permissionsPayload } = values;
     patchRole(values, {
       onSuccess(data) {
         modal.open({
@@ -115,47 +117,22 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
         });
       },
     });
-
-    // patchPermissions(permissionsPayload, {
-    //   onSuccess() {
-    //     patchRole(
-    //       { reportsToUserId },
-    //       {
-    //         onSuccess(data) {
-    //           modal.open({
-    //             content: <CreateRoleStep4 roleId={data.id} />,
-    //             size: "sm:w-3xl",
-    //             bgColor: "bg-gray-100",
-    //             goBack() {
-    //               clearQuery(["roles"]);
-    //               modal.open({
-    //                 content: <CreateRoleStep3 roleId={data.id} />,
-    //                 size: "sm:w-2xl",
-    //                 bgColor: "bg-gray-100",
-    //               });
-    //             },
-    //           });
-    //         },
-    //       }
-    //     );
-    //   },
-    // });
   };
   // helper — the shape your backend wants
-  const permissionKey = (permId: string, action: string) =>
-    `${permId}s.${action}`;
+  // const permissionKey = (permId: string, action: string) =>
+  //   `${permId}s.${action}`;
 
-  const togglePermission = (
-    current: string[],
-    key: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setFieldValue: (field: string, value: any) => void
-  ) => {
-    const next = current.includes(key)
-      ? current.filter((p) => p !== key)
-      : [...current, key];
-    setFieldValue("permissionIds", next);
-  };
+  // const togglePermission = (
+  //   current: string[],
+  //   key: string,
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   setFieldValue: (field: string, value: any) => void
+  // ) => {
+  //   const next = current.includes(key)
+  //     ? current.filter((p) => p !== key)
+  //     : [...current, key];
+  //   setFieldValue("permissionIds", next);
+  // };
 
   return (
     <div className="sm:px-4 space-y-10">
@@ -167,7 +144,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
       </div>
       <Stepper currentStep={3} />
       <Formik initialValues={initialValues} onSubmit={submit}>
-        {({ values, setFieldValue }) => {
+        {({ values }) => {
           return (
             <Form>
               <div className="space-y-4">
@@ -191,20 +168,28 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                     chart.
                   </div>
                 </div>
-                <div className="p-2 sm:p-4 rounded-md bg-white">
-                  <div className="font-bold text-xl -mb-5">
-                    Approval Responsibilities
+                <div className="p-2 sm:p-4 space-y-4 rounded-md bg-white">
+                  <div className="">
+                    <div className="text-xl font-bold">System Permissions</div>
+                    <div className="text-xs">
+                      Granular platform access control.
+                    </div>
                   </div>
-                  <Checkbox
-                    name="permissionIds"
-                    type="multiple"
-                    options={RESPONSIBILITIES}
-                    label="Select the workflows this role has authority to approve."
-                    orientationStyle="grid sm:grid-cols-2 gap-1"
-                    optionClassName=""
-                  />
+                  <div className="space-y-4">
+                    {groupedPermissionsArray.map((item, i) => (
+                      <Checkbox
+                        key={i}
+                        name="permissionIds"
+                        type="multiple"
+                        options={item.options}
+                        label={`${item.group} Permissions`}
+                        orientationStyle="grid sm:grid-cols-2 gap-1"
+                        labelClassName="font-bold text-primary! underline underline-offset-6"
+                      />
+                    ))}
+                  </div>
                 </div>
-                <div className="p-2 sm:p-4 rounded-md bg-white space-y-4">
+                {/* <div className="p-2 sm:p-4 rounded-md bg-white space-y-4">
                   <div className="">
                     <div className="text-xl font-bold">System Permissions</div>
                     <div className="text-xs">
@@ -249,7 +234,7 @@ const CreateRoleStep3: React.FC<Prop> = ({ roleId }) => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="pt-20 pb-5 flex items-end sm:items-center justify-between">
                 <div className="">

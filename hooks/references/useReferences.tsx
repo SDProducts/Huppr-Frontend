@@ -55,3 +55,13 @@ export const useGetLocales = () => {
     },
   });
 };
+
+export const useGetPermissions = () => {
+  return useQuery<ReferencePermissionsResponse>({
+    queryKey: ["ref-permissions"],
+    queryFn: async () => {
+      const response = await api.get("/organization/permissions");
+      return response.data;
+    },
+  });
+};
