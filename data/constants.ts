@@ -157,5 +157,20 @@ class InitialValues {
   uploadTaskAttachment = {
     file: undefined,
   };
+  createJobPayload = {
+    name: "",
+    description: "",
+    role: "",
+    responsibilities: [],
+    benefits: [],
+    maximumSalary: 0,
+    minimumSalary: 0,
+    maxYears: 0,
+    minYears: 0,
+    fieldOfStudy: "",
+    minimumDegree: "",
+    languages: [],
+    certifications: [],
+  };
 }
 export const initialvalues = new InitialValues();

@@ -81,7 +81,7 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
     location: roleData?.location || "",
     workArrangement: roleData?.workArrangement || "",
     description: roleData?.description || "",
-    status: "draft",
+    status: roleData?.status || "draft",
   };
   const submit = (values: typeof initialValues) => {
     if (roleID) {

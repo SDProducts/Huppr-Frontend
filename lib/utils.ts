@@ -98,3 +98,10 @@ export const getFileDisplayType = (
 
   return "FILE";
 };
+
+export const getCurrency = (n: number, code: string) =>
+  new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: code,
+    maximumFractionDigits: 0,
+  }).format(n);

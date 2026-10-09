@@ -9,6 +9,8 @@ interface SelectProps {
   options: Array<{
     value: string | number;
     label: string;
+    subText?: string;
+    icon?: React.ReactNode;
   }>;
   placeholder?: string;
   className?: string;
@@ -120,7 +122,24 @@ const SearchableSelect: React.FC<SelectProps> = ({
                 : "text-gray-400"
             }`}
           >
-            {selectedOption?.label || placeholder}
+            {selectedOption?.label ? (
+              <div className="flex">
+                <div className="flex items-center gap-2">
+                  {selectedOption.icon && selectedOption.icon}
+                  <div className="">
+                    <div>{selectedOption.label}</div>
+                    {selectedOption.subText && (
+                      <div className="text-gray-500 text-xs line-clamp-1">
+                        {selectedOption.subText}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              placeholder
+            )}
+            {/* {selectedOption?.label || placeholder} */}
           </div>
 
           <div className="flex items-center px-0 pointer-events-none">
@@ -140,7 +159,7 @@ const SearchableSelect: React.FC<SelectProps> = ({
 
         {open && !disabled && (
           <div
-            className={`absolute z-50 left-0 right-0 mt-2 rounded-lg border shadow-lg overflow-hidden ${
+            className={`absolute min-w-70 z-50 left-0 right-0 mt-2 rounded-lg border shadow-lg overflow-hidden ${
               theme === "dark"
                 ? "bg-gray-900 border-gray-700"
                 : "bg-white border-gray-200"
@@ -190,7 +209,17 @@ const SearchableSelect: React.FC<SelectProps> = ({
                           : ""
                       }`}
                     >
-                      <span>{option.label}</span>
+                      <div className="flex items-center gap-2">
+                        {option.icon && option.icon}
+                        <div className="">
+                          <div>{option.label}</div>
+                          {option.subText && (
+                            <div className="text-gray-500 text-xs line-clamp-1">
+                              {option.subText}
+                            </div>
+                          )}
+                        </div>
+                      </div>
 
                       {isSelected && <Check className="w-4 h-4 shrink-0" />}
                     </div>

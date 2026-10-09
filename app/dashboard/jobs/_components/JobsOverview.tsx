@@ -19,6 +19,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 /* -------------------------------------------------------------------------- */
 /* TYPES                                                                      */
@@ -193,6 +194,11 @@ export default function JobsPage() {
 /* -------------------------------------------------------------------------- */
 
 function JobsHeader() {
+  const router = useRouter();
+  function handleCreateJob() {
+    router.push("/dashboard/jobs/create-job?step=1");
+  }
+
   return (
     <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
       <div>
@@ -214,7 +220,10 @@ function JobsHeader() {
           Talent Pool
         </Button>
 
-        <Button className="h-11 bg-blue-600 px-5 hover:bg-blue-700">
+        <Button
+          className="h-11 bg-blue-600 px-5 hover:bg-blue-700"
+          onClick={handleCreateJob}
+        >
           <Plus className="mr-2 h-4 w-4" />
           Create Job
         </Button>

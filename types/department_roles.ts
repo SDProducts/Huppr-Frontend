@@ -59,7 +59,7 @@ export interface JobItem {
     totalPositions: number;
     filledPositions: number;
     plannedPositions: number;
-    averageSalaryByCurrency: [];
+    averageSalaryByCurrency: number[];
   };
 }
 

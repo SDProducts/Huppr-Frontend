@@ -53,7 +53,12 @@ const RoleDirectoryList = () => {
                 <UserSquare />
               </div>
               <div className="flex-1">
-                <div className="font-semibold">{item.name}</div>
+                <Link
+                  href={`/dashboard/roles/${item.id}`}
+                  className="font-semibold"
+                >
+                  {item.name}
+                </Link>
                 <div className="text-sm capitalize">
                   {labelCase(item.workArrangement)} / {item.location}
                 </div>
@@ -93,8 +98,8 @@ const RoleDirectoryList = () => {
                 className={cn("hover:bg-primary-100! hover:text-primary!")}
               >
                 <Link
-                  href={`/dashboard/departments/${department}/roles/${item.id}`}
-                  className="flex items-center gap-1"
+                  href={`/dashboard/roles/${item.id}`}
+                  className="flex items-center gap-1 w-full"
                 >
                   <Eye className="size-3" />
                   <div className="flex-1">View</div>

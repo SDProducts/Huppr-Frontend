@@ -650,7 +650,7 @@ interface CreateRolePayload {
   name?: string;
   departmentId?: string;
   iconId?: string;
-  status?: "draft" | "active";
+  status?: "draft" | "active" | string;
   description?: string;
   level?: string;
   employmentType?: string;

@@ -2,8 +2,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import CreateRoleStep3 from "@/app/dashboard/departments/_components/CreateRoleStep3";
 import Stepper from "@/app/dashboard/departments/_components/Steps&Progress";
+import DragableListInput from "@/components/form/DragagbleListInput";
 import Input from "@/components/form/Input";
-import ListInputField from "@/components/form/ListInput";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import TagsInput from "@/components/form/TagsInput";
 import { CreateRoleStep2Skeleton } from "@/components/skeletons";
@@ -89,13 +89,23 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
               <div className="space-y-7">
                 <div className="grid sm:grid-cols-[2fr_1fr] gap-2 ">
                   <div className="space-y-4">
-                    <ListInputField
-                      className="bg-white p-4"
-                      name="requirements.responsibilities"
-                      label="Job Responsobilities"
-                      helpText="What will this person do on a daily basis?"
-                      placeholder="Type responsibility here."
-                    />
+                    <div className="p-2 sm:p-4 bg-white rounded-md space-y-4">
+                      <div className="">
+                        <div className="text-lg font-semibold">
+                          Job Responsobilities
+                        </div>
+                        <div className="text-xs">
+                          What will this person do on a daily basis?
+                        </div>
+                      </div>
+                      <DragableListInput
+                        className=""
+                        name="requirements.responsibilities"
+                        // label="Job Responsobilities"
+                        // helpText="What will this person do on a daily basis?"
+                        placeholder="Type responsibility here and press Enter."
+                      />
+                    </div>
                     <div className="grid sm:grid-cols-2 gap-2">
                       <div className="p-2 sm:p-4 bg-white rounded-md space-y-4 flex flex-col justify-between">
                         <div className="">
