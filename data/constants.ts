@@ -1,3 +1,4 @@
+import { CreateJobPayload } from "@/types/create_job_payload";
 import Cookies from "js-cookie";
 import {
   BarChartBig,
@@ -157,20 +158,38 @@ class InitialValues {
   uploadTaskAttachment = {
     file: undefined,
   };
-  createJobPayload = {
-    name: "",
-    description: "",
-    role: "",
-    responsibilities: [],
-    benefits: [],
-    maximumSalary: 0,
-    minimumSalary: 0,
-    maxYears: 0,
-    minYears: 0,
-    fieldOfStudy: "",
-    minimumDegree: "",
-    languages: [],
-    certifications: [],
+  createJobPayload: CreateJobPayload = {
+    title: undefined,
+    roleId: undefined,
+    departmentId: undefined,
+    teamId: undefined,
+    reportingManagerId: undefined,
+    reference: undefined,
+    summary: undefined,
+    employmentType: "full_time",
+    workArrangement: "hybrid",
+    seniorityLevel: undefined,
+    experienceMinYears: 0,
+    educationRequirement: undefined,
+    primaryTooling: undefined,
+    reviewSlaHours: 24,
+    locationCountry: undefined,
+    locationCity: undefined,
+    salaryMin: 0,
+    salaryMax: 0,
+    currency: "NGN",
+    positions: 1,
+    postedOn: undefined,
+    closesOn: undefined,
+    responsibilities: undefined,
+    qualifications: undefined,
+    skills: undefined,
+    screeningQuestions: undefined,
+    stages: undefined,
+    channels: undefined,
+    benefits: undefined,
+    hiringTeam: undefined,
+    expectedRevision: 0,
   };
 }
 export const initialvalues = new InitialValues();

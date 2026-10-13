@@ -1,7 +1,7 @@
 "use client";
 
 import { ErrorMessage, useField } from "formik";
-import { AlertCircle, Check, ChevronDown, Search } from "lucide-react";
+import { AlertCircle, CheckCircle2, ChevronDown, Search } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 interface SelectProps {
@@ -197,7 +197,7 @@ const SearchableSelect: React.FC<SelectProps> = ({
                       key={option.value}
                       // type="button"
                       onClick={() => handleSelect(option.value)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm text-left transition-colors ${
+                      className={`w-full flex cursor-pointer items-center justify-between px-3 py-2.5 rounded-md text-sm text-left transition-colors ${
                         theme === "dark"
                           ? "text-gray-300 hover:bg-gray-800"
                           : "text-gray-700 hover:bg-gray-100"
@@ -221,7 +221,9 @@ const SearchableSelect: React.FC<SelectProps> = ({
                         </div>
                       </div>
 
-                      {isSelected && <Check className="w-4 h-4 shrink-0" />}
+                      {isSelected && (
+                        <CheckCircle2 className="size-4 shrink-0" />
+                      )}
                     </div>
                   );
                 })

@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import Button from "@/components/ui/CustomButton";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,6 @@ export type RoleRequirement = {
   title: string;
   category: RequirementCategory;
   isMustHave: boolean;
-  enabled: boolean;
   note: string;
 };
 
@@ -55,41 +54,6 @@ const CATEGORY_DETAILS: Record<RequirementCategory, string> = {
   Education: "Education requirement",
   Other: "Additional screening criteria",
 };
-
-const INITIAL_REQUIREMENTS: RoleRequirement[] = [
-  {
-    id: "req-1",
-    title: "Minimum 4+ years B2B SaaS Product Design experience",
-    category: "Experience",
-    isMustHave: true,
-    enabled: true,
-    note: CATEGORY_DETAILS.Experience,
-  },
-  {
-    id: "req-2",
-    title: "Advanced Figma, Design Tokens & System Architecture",
-    category: "Skills",
-    isMustHave: true,
-    enabled: true,
-    note: CATEGORY_DETAILS.Skills,
-  },
-  {
-    id: "req-3",
-    title: "Valid Work Authorisation / Right to Work",
-    category: "Compliance",
-    isMustHave: true,
-    enabled: true,
-    note: CATEGORY_DETAILS.Compliance,
-  },
-  {
-    id: "req-4",
-    title: "Experience with high-volume design sprints & user testing",
-    category: "Methodology",
-    isMustHave: false,
-    enabled: true,
-    note: CATEGORY_DETAILS.Methodology,
-  },
-];
 
 function getRequirementIcon(category: RequirementCategory) {
   switch (category) {
@@ -123,7 +87,6 @@ export default function RoleRequirementsField({
       title: "",
       category: "Skills",
       isMustHave: false,
-      enabled: true,
       note: CATEGORY_DETAILS.Skills,
     };
 
@@ -154,14 +117,11 @@ export default function RoleRequirementsField({
         </div>
 
         <Button
-          type="button"
-          variant="secondary"
           onClick={addRequirement}
-          className="shrink-0 gap-2 self-start bg-slate-100 text-blue-600 hover:bg-slate-200 sm:self-center"
-        >
-          <Plus className="size-4" />
-          Add Requirement
-        </Button>
+          className="shrink-0 w-fit! gap-2 self-start bg-slate-100 text-primary! text-sm hover:bg-slate-200 sm:self-center"
+          icon={<Plus className="size-4" />}
+          label="Add Requirement"
+        />
       </div>
 
       <FieldArray name={name}>
@@ -169,15 +129,11 @@ export default function RoleRequirementsField({
           <div className="space-y-3">
             {requirements.map((requirement, index) => {
               const isMustHave = requirement.isMustHave;
-              const isEnabled = requirement.enabled;
 
               return (
                 <div
                   key={requirement.id}
-                  className={cn(
-                    "rounded-xl bg-slate-50 p-4",
-                    !isEnabled && "opacity-60"
-                  )}
+                  className={cn("rounded-xl bg-slate-50 p-4")}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
@@ -187,7 +143,7 @@ export default function RoleRequirementsField({
                     <div className="min-w-0 flex-1 space-y-0">
                       <Input
                         value={requirement.title}
-                        disabled={!isEnabled}
+                        // disabled={!isMustHave}
                         onChange={(event) =>
                           setFieldValue(
                             `${name}[${index}].title`,
@@ -202,16 +158,16 @@ export default function RoleRequirementsField({
                         className="h-auto min-h-7 border-transparent bg-transparent px-0 py-0 text-sm font-semibold text-slate-900 shadow-none focus-visible:border-transparent focus-visible:ring-0"
                       />
 
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="flex mt-1 flex-wrap items-center gap-2">
                         <button
                           type="button"
-                          disabled={!isEnabled}
-                          onClick={() =>
-                            setFieldValue(
-                              `${name}[${index}].isMustHave`,
-                              !isMustHave
-                            )
-                          }
+                          disabled={!isMustHave}
+                          // onClick={() =>
+                          //   setFieldValue(
+                          //     `${name}[${index}].isMustHave`,
+                          //     !isMustHave
+                          //   )
+                          // }
                           className={cn(
                             "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
                             isMustHave
@@ -234,7 +190,7 @@ export default function RoleRequirementsField({
                         <select
                           id={`${name}-${index}-category`}
                           value={requirement.category}
-                          disabled={!isEnabled}
+                          // disabled={!isMustHave}
                           onChange={(event) => {
                             const category = event.target
                               .value as RequirementCategory;
@@ -263,7 +219,7 @@ export default function RoleRequirementsField({
 
                         <Input
                           value={requirement.note}
-                          disabled={!isEnabled}
+                          // disabled={!isMustHave}
                           onChange={(event) =>
                             setFieldValue(
                               `${name}[${index}].note`,
@@ -279,11 +235,11 @@ export default function RoleRequirementsField({
 
                     <div className="flex shrink-0 items-center gap-3 pt-1">
                       <Switch
-                        checked={isEnabled}
+                        checked={isMustHave}
                         onCheckedChange={(checked) =>
-                          setFieldValue(`${name}[${index}].enabled`, checked)
+                          setFieldValue(`${name}[${index}].isMustHave`, checked)
                         }
-                        aria-label={`Enable requirement ${index + 1}`}
+                        aria-label={`Must have requirement ${index + 1}`}
                       />
 
                       <button
@@ -306,14 +262,11 @@ export default function RoleRequirementsField({
                   No requirements added yet.
                 </p>
                 <Button
-                  type="button"
-                  variant="link"
                   onClick={addRequirement}
-                  className="mt-2 text-blue-600"
-                >
-                  <Plus className="mr-1 size-4" />
-                  Add your first requirement
-                </Button>
+                  className="mt-2 text-primary! w-fit! bg-transparent hover:underline underline-offset-4"
+                  icon={<Plus className="mr-1 size-4" />}
+                  label="Add your first requirement"
+                />
               </div>
             )}
           </div>
@@ -326,5 +279,3 @@ export default function RoleRequirementsField({
     </section>
   );
 }
-
-export { INITIAL_REQUIREMENTS };

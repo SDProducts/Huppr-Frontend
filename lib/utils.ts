@@ -8,6 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export const getInitials = (text: string) =>
   text
     .split(" ")
+    .slice(0, 2)
     .map((el) => el[0])
     .join("");
 

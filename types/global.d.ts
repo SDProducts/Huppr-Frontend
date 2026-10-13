@@ -2,6 +2,12 @@ interface Window {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fbq: (...args: any[]) => void;
 }
+interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  limit: number;
+  offset: number;
+}
 
 interface ModalState {
   isCloseable: boolean;
@@ -45,7 +51,15 @@ type ExperienceLevel =
 
 type WorkMode = "remote" | "onsite" | "hybrid";
 
-type JobStatus = "active" | "inactive" | "draft" | "closed";
+type JobStatus =
+  | "all"
+  | "open"
+  | "draft"
+  | "on_hold"
+  | "active"
+  | "inactive"
+  | "closed";
+// | string;
 
 //  type Job = {
 //   id: string;
@@ -176,6 +190,14 @@ interface LoginResponse {
 interface ErrorMsg {
   message: string;
 }
+type ApiError = {
+  statusCode: string;
+  message: string | string[];
+  error: string;
+  path: string;
+  requestId: string;
+  timestamp: string;
+};
 type LoginError = {
   statusCode: string;
   message: string | string[];
@@ -521,6 +543,15 @@ type TeamsFilters = {
   departmentId?: string;
   projectId?: string;
   teamId?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+};
+
+type JobsFilters = {
+  organisationId?: string;
+  departmentId?: string;
+  status?: JobStatus;
   search?: string;
   page?: number;
   limit?: number;

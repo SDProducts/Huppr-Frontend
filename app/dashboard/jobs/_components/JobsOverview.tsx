@@ -1,13 +1,11 @@
 "use client";
 
 import {
+  ArrowRight,
   BriefcaseBusiness,
   CalendarDays,
-  ChevronDown,
   ChevronRight,
   FileText,
-  Filter,
-  MoreHorizontal,
   Plus,
   UserCheck,
   UserRound,
@@ -16,9 +14,14 @@ import {
 } from "lucide-react";
 import React from "react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import JobsListTable from "@/app/dashboard/jobs/_components/JobsListTable";
+import { MetricsCardSkeleton } from "@/components/skeletons";
+import { Card, CardContent } from "@/components/ui/card";
+import Button from "@/components/ui/CustomButton";
+import { useGetJobOverviewMetrics } from "@/hooks/employer/useJobs";
 import { cn } from "@/lib/utils";
+import { JobsMetricSummary } from "@/types/job";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 /* -------------------------------------------------------------------------- */
@@ -146,13 +149,9 @@ const activities: Activity[] = [
 /* -------------------------------------------------------------------------- */
 
 export default function JobsPage() {
-  const [activeTab, setActiveTab] = React.useState("All");
-
-  const filteredJobs = React.useMemo(() => {
-    if (activeTab === "All") return jobs;
-
-    return jobs.filter((job) => job.status === activeTab);
-  }, [activeTab]);
+  const { data: metricsData, isLoading: isGettingMetrics } =
+    useGetJobOverviewMetrics();
+  const metrics = metricsData?.summary;
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-950">
@@ -162,14 +161,29 @@ export default function JobsPage() {
         {/* TOP CONTENT */}
         <div className="mt-7 grid gap-7 xl:grid-cols-[minmax(0,1fr)_315px]">
           <div className="min-w-0">
-            <JobStats />
+            {isGettingMetrics || !metrics ? (
+              <div className="">
+                <MetricsCardSkeleton number={4} />
+              </div>
+            ) : (
+              <JobStats metrics={metrics} />
+            )}
 
-            <div className="mt-7">
-              <JobsTable
-                jobs={filteredJobs}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
+            <div className="mt-7 bg-white rounded-xl">
+              <div className="px-6 pt-4">
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <h2 className="text-xl font-bold">Open Jobs</h2>
+
+                  <Link
+                    href={`/dashboard/jobs/list`}
+                    className="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  >
+                    View all jobs
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </div>
+              </div>
+              <JobsListTable />
             </div>
 
             <div className="mt-7">
@@ -213,20 +227,16 @@ function JobsHeader() {
 
       <div className="flex items-center gap-3">
         <Button
-          variant="outline"
-          className="h-11 border-slate-200 bg-white px-5"
-        >
-          <Users className="mr-2 h-4 w-4" />
-          Talent Pool
-        </Button>
-
+          label="Talent Pool"
+          icon={<Users className="size-4" />}
+          className="w-fit! bg-white text-primary! border border-primary-100"
+        />
         <Button
-          className="h-11 bg-blue-600 px-5 hover:bg-blue-700"
+          label="Create Job"
+          icon={<Plus className="size-4" />}
           onClick={handleCreateJob}
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Create Job
-        </Button>
+          className="w-fit!"
+        />{" "}
       </div>
     </div>
   );
@@ -236,14 +246,14 @@ function JobsHeader() {
 /* STATS                                                                      */
 /* -------------------------------------------------------------------------- */
 
-function JobStats() {
+function JobStats({ metrics }: { metrics: JobsMetricSummary }) {
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-2 lg:grid-cols-5">
       <JobStatCard
         icon={BriefcaseBusiness}
         iconClass="bg-blue-100 text-blue-600"
         label="Open Jobs"
-        value="12"
+        value={metrics.openJobs}
         change="2 from last month"
       />
 
@@ -251,7 +261,7 @@ function JobStats() {
         icon={FileText}
         iconClass="bg-green-100 text-green-600"
         label="Total Applications"
-        value="346"
+        value={metrics.totalApplications}
         change="18% from last month"
       />
 
@@ -259,7 +269,7 @@ function JobStats() {
         icon={Users}
         iconClass="bg-orange-100 text-orange-600"
         label="Candidates in Review"
-        value="28"
+        value={metrics.candidatesInReview}
         change="7 from last month"
       />
 
@@ -267,7 +277,7 @@ function JobStats() {
         icon={UserCheck}
         iconClass="bg-purple-100 text-purple-600"
         label="Interviews"
-        value="16"
+        value={metrics.interviewsOverdue}
         change="4 from last month"
       />
 
@@ -275,7 +285,7 @@ function JobStats() {
         icon={UserRoundPlus}
         iconClass="bg-pink-100 text-pink-600"
         label="Offers Extended"
-        value="5"
+        value={metrics.offersExtended}
         change="1 from last month"
       />
     </div>
@@ -292,12 +302,12 @@ function JobStatCard({
   icon: React.ElementType;
   iconClass: string;
   label: string;
-  value: string;
+  value: string | number;
   change: string;
 }) {
   return (
-    <Card className="rounded-xl border-slate-200 bg-white shadow-none">
-      <CardContent className="p-4">
+    <div className="rounded-lg border border-slate-200 bg-white shadow-none">
+      <div className="p-3 space-y-1.5">
         <div
           className={cn(
             "flex h-10 w-10 items-center justify-center rounded-lg",
@@ -307,239 +317,23 @@ function JobStatCard({
           <Icon className="h-5 w-5" />
         </div>
 
-        <p className="mt-5 text-xs font-medium text-slate-500">{label}</p>
+        <p
+          className="text-xs mt-4 font-medium text-slate-500 line-clamp-1"
+          title={label}
+        >
+          {label}
+        </p>
 
-        <p className="mt-1 text-2xl font-bold text-slate-900">{value}</p>
+        <p className="text-2xl font-extrabold text-slate-900">{value}</p>
 
-        <p className="mt-3 text-[11px] font-medium text-green-500">
+        <p
+          className="text-[9px] font-medium text-green-500 line-clamp-1"
+          title={change}
+        >
           ↑ {change}
         </p>
-      </CardContent>
-    </Card>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* JOBS TABLE                                                                 */
-/* -------------------------------------------------------------------------- */
-
-function JobsTable({
-  jobs,
-  activeTab,
-  setActiveTab,
-}: {
-  jobs: Job[];
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-}) {
-  const tabs = ["All", "Open", "On Hold", "Closed", "Draft"];
-
-  return (
-    <Card className="overflow-hidden rounded-xl border-slate-200 bg-white shadow-none">
-      <CardHeader className="border-b border-slate-100 px-6 pb-0 pt-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <h2 className="text-lg font-bold">Open Jobs</h2>
-
-          <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">
-            View all jobs →
-          </button>
-        </div>
-
-        <div className="mt-5 flex items-center justify-between">
-          <div className="flex gap-0 overflow-x-auto">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={cn(
-                  "relative whitespace-nowrap pb-4 text-sm font-medium transition",
-                  activeTab === tab
-                    ? "text-blue-600"
-                    : "text-slate-500 hover:text-slate-900"
-                )}
-              >
-                {tab}
-
-                {activeTab === tab && (
-                  <span className="absolute bottom-0 left-0 h-0.5 w-full rounded-full bg-blue-600" />
-                )}
-              </button>
-            ))}
-          </div>
-
-          <Button variant="outline" className="ml-2 hidden shrink-0 md:flex">
-            <Filter className="mr-2 h-4 w-4" />
-            Filters
-            <ChevronDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </CardHeader>
-
-      <CardContent className="p-0">
-        {/* DESKTOP TABLE */}
-        <div className="hidden overflow-x-auto md:block">
-          <table className="w-full min-w-[850px]">
-            <thead>
-              <tr className="border-b border-slate-100">
-                <TableHead>JOB TITLE</TableHead>
-                <TableHead>DEPARTMENT</TableHead>
-                <TableHead>LOCATION</TableHead>
-                <TableHead>APPLICANTS</TableHead>
-                <TableHead>STATUS</TableHead>
-                <TableHead>POSTED ON</TableHead>
-                <th className="w-12 px-4" />
-              </tr>
-            </thead>
-
-            <tbody>
-              {jobs.map((job) => (
-                <JobRow key={job.id} job={job} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* MOBILE */}
-        <div className="divide-y divide-slate-100 md:hidden">
-          {jobs.map((job) => (
-            <MobileJobRow key={job.id} job={job} />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function TableHead({ children }: { children: React.ReactNode }) {
-  return (
-    <th className="px-6 py-4 text-left text-[11px] font-medium tracking-wide text-slate-500">
-      {children}
-    </th>
-  );
-}
-
-function JobRow({ job }: { job: Job }) {
-  return (
-    <tr className="border-b border-slate-100 last:border-0">
-      <td className="px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={cn(
-              "flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-xs font-bold",
-              job.initialsClass
-            )}
-          >
-            {job.initials}
-          </div>
-
-          <div>
-            <p className="whitespace-nowrap text-sm font-bold text-slate-900">
-              {job.title}
-            </p>
-
-            <p className="mt-1 whitespace-nowrap text-xs text-slate-500">
-              Full-time • ID: {job.id}
-            </p>
-          </div>
-        </div>
-      </td>
-
-      <td className="px-6 py-4 text-sm text-slate-500">{job.department}</td>
-
-      <td className="px-6 py-4">
-        <p className="whitespace-nowrap text-sm text-slate-500">
-          {job.location}
-        </p>
-        <p className="mt-1 text-xs text-slate-500">{job.workType}</p>
-      </td>
-
-      <td className="px-6 py-4">
-        <p className="text-sm font-bold">{job.applicants}</p>
-        <p className="text-xs font-semibold text-blue-600">
-          New: {job.newApplicants}
-        </p>
-      </td>
-
-      <td className="px-6 py-4">
-        <StatusBadge status={job.status} />
-      </td>
-
-      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">
-        {job.postedOn}
-      </td>
-
-      <td className="px-4">
-        <button className="rounded-md p-2 text-slate-500 hover:bg-slate-100">
-          <MoreHorizontal className="h-4 w-4" />
-        </button>
-      </td>
-    </tr>
-  );
-}
-
-function MobileJobRow({ job }: { job: Job }) {
-  return (
-    <div className="p-5">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex gap-3">
-          <div
-            className={cn(
-              "flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-xs font-bold",
-              job.initialsClass
-            )}
-          >
-            {job.initials}
-          </div>
-
-          <div>
-            <p className="text-sm font-bold">{job.title}</p>
-
-            <p className="mt-1 text-xs text-slate-500">
-              {job.department} • {job.location}
-            </p>
-
-            <p className="mt-1 text-xs text-slate-500">
-              {job.workType} • {job.id}
-            </p>
-          </div>
-        </div>
-
-        <button>
-          <MoreHorizontal className="h-4 w-4 text-slate-500" />
-        </button>
-      </div>
-
-      <div className="mt-4 flex items-center justify-between">
-        <div>
-          <p className="text-sm font-bold">{job.applicants} applicants</p>
-          <p className="text-xs font-semibold text-blue-600">
-            New: {job.newApplicants}
-          </p>
-        </div>
-
-        <StatusBadge status={job.status} />
       </div>
     </div>
-  );
-}
-
-function StatusBadge({ status }: { status: JobStatus }) {
-  const styles: Record<JobStatus, string> = {
-    Open: "bg-green-100 text-green-700",
-    "On Hold": "bg-orange-100 text-orange-700",
-    Closed: "bg-slate-100 text-slate-600",
-    Draft: "bg-purple-100 text-purple-700",
-  };
-
-  return (
-    <span
-      className={cn(
-        "inline-flex rounded-full px-3 py-1 text-xs font-semibold",
-        styles[status]
-      )}
-    >
-      {status}
-    </span>
   );
 }
 

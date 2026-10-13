@@ -7,7 +7,7 @@ const JobStepFormsWrapper = () => {
   const params = useSearchParams();
   const { replace } = useRouter();
   const currentStep = Number(params.get("step"));
-  const jobId = Number(params.get("jobId"));
+  const jobId = params.get("jobId");
   if (currentStep === 1) {
     return <CreateJobStep1 />;
   }

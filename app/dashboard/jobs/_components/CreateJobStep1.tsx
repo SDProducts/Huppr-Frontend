@@ -12,7 +12,9 @@ import { Progress } from "@/components/ui/progress";
 import { useModal } from "@/context/modal.state";
 import { initialvalues } from "@/data/constants";
 import { useGetDepartments, useGetRoles } from "@/hooks/employer/useDepartment";
+import { useCreateJob } from "@/hooks/employer/useJobs";
 import { getDate, labelCase } from "@/lib/utils";
+import { CreateJobPayload } from "@/types/create_job_payload";
 import { JobItem } from "@/types/department_roles";
 import { Form, Formik, useFormikContext } from "formik";
 import {
@@ -61,60 +63,73 @@ const BENEFITS: Option[] = [
 
 // Observer component to update form values when the selected role changes
 function RoleObserver({ roles }: { roles: JobItem[] }) {
-  const { values, setFieldValue } =
-    useFormikContext<typeof initialvalues.createJobPayload>();
+  const { values, setFieldValue } = useFormikContext<CreateJobPayload>();
 
   useEffect(() => {
-    if (!values.role) return;
+    if (!values.roleId) return;
 
     // Find the selected role object from the list
-    const selectedRole = roles.find((r) => r.id === values.role);
+    const selectedRole = roles.find((r) => r.id === values.roleId);
 
     if (selectedRole) {
-      // Auto-fill form fields with selected role data
-      setFieldValue("name", selectedRole.name || "");
-      setFieldValue("description", selectedRole.description || "");
+      // Auto-fill form fields mapping to CreateJobPayload schema keys
+      setFieldValue("title", selectedRole.name || "");
+      setFieldValue("summary", selectedRole.description || "");
       setFieldValue("departmentId", selectedRole.departmentId || "");
+      setFieldValue("roleId", selectedRole.id || "");
+
+      // Map requirements.responsibilities string array to objects if payload expects objects or handle as strings
       setFieldValue(
         "responsibilities",
         selectedRole.requirements?.responsibilities || []
+        // (selectedRole.requirements?.responsibilities || []).map((resp) => ({
+        //   body: resp,
+        // }))
       );
-      setFieldValue("benefits", selectedRole.benefits?.benefits || []);
-      setFieldValue("maximumSalary", selectedRole.benefits?.maximumSalary || 0);
-      setFieldValue("minimumSalary", selectedRole.benefits?.minimumSalary || 0);
+
+      // Map benefits array of strings to objects matching JobBenefit { label: string }
       setFieldValue(
-        "certifications",
-        selectedRole.requirements?.certifications || []
+        "benefits",
+        (selectedRole.benefits?.benefits || []).map((b) => ({ label: b }))
       );
-      setFieldValue("languages", selectedRole.requirements?.languages || []);
-      setFieldValue("skills", selectedRole.requirements?.skills || []);
-      setFieldValue("maxYears", selectedRole.requirements?.maxYears || 0);
-      setFieldValue("minYears", selectedRole.requirements?.minYears || 0);
+
+      setFieldValue("salaryMax", selectedRole.benefits?.maximumSalary || 0);
+      setFieldValue("salaryMin", selectedRole.benefits?.minimumSalary || 0);
+
+      // Map skills if needed or qualifications
       setFieldValue(
-        "fieldOfStudy",
-        selectedRole.requirements?.fieldOfStudy || ""
+        "skills",
+        (selectedRole.requirements?.skills || []).map((s) => ({
+          name: s,
+          level: "working",
+          isRequired: true,
+        }))
+      );
+
+      setFieldValue(
+        "experienceMinYears",
+        selectedRole.requirements?.minYears || 0
       );
       setFieldValue(
-        "minimumDegree",
+        "educationRequirement",
         selectedRole.requirements?.minimumDegree || ""
       );
       setFieldValue("workArrangement", selectedRole.workArrangement || "");
       setFieldValue("employmentType", selectedRole.employmentType || "");
-      setFieldValue("level", selectedRole.level || "");
-      setFieldValue("location", selectedRole.location || "");
+      setFieldValue("seniorityLevel", selectedRole.level || "");
+      setFieldValue("locationCity", selectedRole.location || "");
       setFieldValue("currency", selectedRole.benefits?.currency || "NGN");
-
-      // Map and update any other fields from the selected role here
-      // e.g., setFieldValue("experience", selectedRole.experience);
     }
-  }, [values.role, roles, setFieldValue]);
+  }, [values.roleId, roles, setFieldValue]);
 
   return null;
 }
 
 const CreateJobStep1 = () => {
+  const searchParams = new URLSearchParams();
   const modal = useModal();
   const router = useRouter();
+  const { mutate: createJob, isPending: creatingJob } = useCreateJob();
   const { data, isLoading: isgettingRoles } = useGetRoles({});
   const { data: departmentData, isLoading: isGettingDepartments } =
     useGetDepartments({});
@@ -146,12 +161,25 @@ const CreateJobStep1 = () => {
       bgColor: "bg-[#F7F9FC]",
     });
   }
-  const submit = () => {
-    const searchParams = new URLSearchParams();
-
-    searchParams.set("step", "2");
-    searchParams.set("jobId", "322");
-    router.replace(`/dashboard/jobs/create-job?${searchParams.toString()}`);
+  const submit = (values: CreateJobPayload) => {
+    // Transform string array into the expected { body: string }[] structure for submission
+    const formattedValues: CreateJobPayload = {
+      ...values,
+      responsibilities: (values.responsibilities || []).map((resp) => {
+        // If it's already an object (e.g. from role synchronization), keep it, otherwise wrap the string
+        if (typeof resp === "string") {
+          return { body: resp };
+        }
+        return resp; // already { body: string }
+      }),
+    };
+    createJob(formattedValues, {
+      onSuccess(data: JobItem) {
+        searchParams.set("step", "2");
+        searchParams.set("jobId", data.id);
+        router.replace(`/dashboard/jobs/create-job?${searchParams.toString()}`);
+      },
+    });
   };
 
   return (
@@ -185,7 +213,7 @@ const CreateJobStep1 = () => {
                     <SelectInputSkeleton />
                   ) : (
                     <SearchableSelect
-                      name="role"
+                      name="roleId"
                       options={roleOptions}
                       className="bg-primary/5"
                       placeholder="Select Role"
@@ -203,7 +231,7 @@ const CreateJobStep1 = () => {
                   </div>
                 </div>
               </div>
-              {values.role && (
+              {values.roleId && (
                 <div className="space-y-10">
                   <div className="grid grid-cols-[1fr_2fr] gap-6">
                     <div className="space-y-4">
@@ -222,7 +250,7 @@ const CreateJobStep1 = () => {
                         <div className="space-y-4">
                           <Input
                             label="Job Title"
-                            name="name"
+                            name="title"
                             className="bg-gray-200"
                             LabelClassName="text-sm"
                           />
@@ -242,7 +270,7 @@ const CreateJobStep1 = () => {
 
                             <SearchableSelect
                               label="Role Level"
-                              name="level"
+                              name="seniorityLevel"
                               options={LEVELS}
                               className="bg-gray-200"
                               labelClassName="text-sm"
@@ -258,7 +286,7 @@ const CreateJobStep1 = () => {
                             />
                             <SearchableSelect
                               label="Reporting Manager"
-                              name="reportT0"
+                              name="reportingManagerId"
                               options={[]}
                               className="bg-gray-200"
                               labelClassName="text-sm"
@@ -266,18 +294,18 @@ const CreateJobStep1 = () => {
                           </div>
                           <TabsSelectField
                             name="workArrangement"
-                            label="Work Arrangememnt"
+                            label="Work Arrangement"
                             options={WORK_ARRANGEMENT}
                             className="bg-gray-200"
                           />
                           <Input
                             icon={<MapPin className="size-3 text-primary" />}
                             label="Office Location"
-                            name="location"
+                            name="locationCity"
                             className="bg-gray-200"
                             LabelClassName="text-sm"
                           />
-                          <div className="">
+                          <div>
                             <div className="text-sm mb-1">
                               Salary Range (Annual)
                             </div>
@@ -289,18 +317,18 @@ const CreateJobStep1 = () => {
                               />
                               <div className="flex items-center gap-1">
                                 <Input
-                                  name="minimumSalary"
+                                  name="salaryMin"
                                   className="bg-gray-200"
                                   LabelClassName="text-sm"
                                   formatMoney
                                 />
                                 <div className="text-sm px-0.5">to</div>
                                 <Input
-                                  name="maximumSalary"
+                                  name="salaryMax"
                                   className="bg-gray-200"
                                   LabelClassName="text-sm"
                                   formatMoney
-                                />
+                                />{" "}
                               </div>
                             </div>
                             <div className="text-xs mt-4">
@@ -357,7 +385,7 @@ const CreateJobStep1 = () => {
                           </div>
                         </div>
 
-                        <RichTextEditor name="description" />
+                        <RichTextEditor name="summary" />
                       </div>
 
                       <div className="bg-white p-7 rounded-2xl space-y-4">
@@ -400,19 +428,19 @@ const CreateJobStep1 = () => {
                           <div className="bg-gray-300 p-5 rounded-md">
                             <div className="uppercase">Experience</div>
                             <div className="font-bold text-lg">
-                              {values.minYears}+ Year
+                              {values.experienceMinYears}+ Year
                             </div>
                           </div>
                           <div className="bg-gray-300 p-5 rounded-md">
                             <div className="uppercase">Education</div>
                             <div className="font-bold text-lg">
-                              {values.fieldOfStudy} - {values.minimumDegree}
+                              {values.educationRequirement}
                             </div>
                           </div>
                           <div className="bg-gray-300 p-5 rounded-md">
                             <div className="uppercase">PRIMARY TOOLING</div>
                             <div className="font-bold text-lg">
-                              {values.certifications}
+                              {values.primaryTooling}
                             </div>
                           </div>
                         </div>
@@ -436,7 +464,7 @@ const CreateJobStep1 = () => {
                               </div>
                             </div>
                             <div className="flex items-center gap-1 text-xs">
-                              {values.benefits.length} Selected
+                              {values.benefits?.length} Selected
                             </div>
                           </div>
                           <div className="text-sm">
@@ -467,6 +495,7 @@ const CreateJobStep1 = () => {
                       <Button
                         className="w-fit! bg-gray-200! text-black!"
                         label="Save as Draft"
+                        disabled={creatingJob}
                         icon={<Bookmark className="size-5" />}
                       />
                     </div>
@@ -481,6 +510,8 @@ const CreateJobStep1 = () => {
                       </div>
                       <Button
                         className="w-fit!"
+                        disabled={creatingJob}
+                        isLoading={creatingJob}
                         label="Continue to ATS & Screening"
                         rightIcon={<ArrowRight className="size-5" />}
                         type="submit"

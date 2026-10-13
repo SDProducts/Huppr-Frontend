@@ -538,3 +538,30 @@ export function CreateRoleStep5Skeleton() {
     </div>
   );
 }
+
+export function MetricsCardSkeleton({ number = 5 }: { number?: number }) {
+  return (
+    <div className={cn("grid", `grid-cols-${number} gap-2`)}>
+      {Array.from({ length: number }).map((_, i) => (
+        <div
+          key={i}
+          className="rounded-lg border border-slate-200 bg-white shadow-none"
+        >
+          <div className="p-4 space-y-2">
+            <div
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 animate-pulse"
+              )}
+            />
+
+            <div className="h-3 bg-gray-200 animate-pulse" />
+
+            <div className="h-6 w-2/3 bg-gray-200 animate-pulse" />
+
+            <div className="h-3 bg-gray-200 animate-pulse" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
