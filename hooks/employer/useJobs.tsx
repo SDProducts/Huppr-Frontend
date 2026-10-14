@@ -42,6 +42,45 @@ export const useCreateJob = () => {
     },
   });
 };
+export const usePatchJob = (jobId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: CreateJobPayload) => {
+      const response = await api.patch(`/employer/jobs/${jobId}`, payload);
+      return response.data;
+    },
+    onSuccess: () => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["jobs"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["job"],
+      });
+      toast.success("Updated job successfully");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
 
 export const useGetJobOverviewMetrics = (filters: TeamsFilters = {}) => {
   const { organisationId, teamId, departmentId, search, page, limit } = filters;

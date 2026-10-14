@@ -1,3 +1,4 @@
+import ActivityEmptyState from "@/components/EmptyState";
 import Button from "@/components/ui/CustomButton";
 import {
   DropdownMenu,
@@ -74,27 +75,33 @@ const JobsListTable: React.FC<Props> = ({ listLenght }) => {
 
       <div className="p-0">
         {/* DESKTOP TABLE */}
-        <div className="hidden overflow-x-auto md:block">
-          <table className="w-full min-w-[850px]">
-            <thead>
-              <tr className="border-b border-slate-100">
-                <TableHead>JOB TITLE</TableHead>
-                <TableHead>DEPARTMENT</TableHead>
-                <TableHead>LOCATION</TableHead>
-                <TableHead>APPLICANTS</TableHead>
-                <TableHead>STATUS</TableHead>
-                <TableHead>POSTED ON</TableHead>
-                <th className="w-12 px-4" />
-              </tr>
-            </thead>
+        {jobs.length < 1 ? (
+          <div className="p-2">
+            <ActivityEmptyState title="No job found" />
+          </div>
+        ) : (
+          <div className="hidden overflow-x-auto md:block">
+            <table className="w-full min-w-[850px]">
+              <thead>
+                <tr className="border-b border-slate-100">
+                  <TableHead>JOB TITLE</TableHead>
+                  <TableHead>DEPARTMENT</TableHead>
+                  <TableHead>LOCATION</TableHead>
+                  <TableHead>APPLICANTS</TableHead>
+                  <TableHead>STATUS</TableHead>
+                  <TableHead>POSTED ON</TableHead>
+                  <th className="w-12 px-4" />
+                </tr>
+              </thead>
 
-            <tbody>
-              {jobs.map((job) => (
-                <JobRow key={job.id} job={job} />
-              ))}
-            </tbody>
-          </table>
-        </div>
+              <tbody>
+                {jobs.map((job) => (
+                  <JobRow key={job.id} job={job} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* MOBILE */}
         <div className="divide-y divide-slate-100 md:hidden">

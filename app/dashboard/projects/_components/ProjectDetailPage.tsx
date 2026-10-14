@@ -4,7 +4,6 @@ import CreateTask from "@/app/dashboard/projects/_components/CreateTask";
 import ProjectMetricCard from "@/app/dashboard/projects/_components/ProjectMetricCard";
 import ProjectTimeline from "@/app/dashboard/projects/_components/ProjectTimeline";
 import RecentTaskListTable from "@/app/dashboard/projects/_components/RecentTaskListTable";
-import { Breadcrumb } from "@/components/global/Breadcrumb";
 import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import { Progress } from "@/components/ui/progress";
@@ -62,11 +61,9 @@ const ProjectDetailPage = () => {
   return (
     <div className="space-y-10">
       <div className="space-y-4">
-        <div className="sm:flex justify-between items-start py-5">
+        <div className="sm:flex justify-between items-start py-2">
           <div className="sm:w-1/2 space-y-4">
-            <div className="">
-              <Breadcrumb />
-            </div>
+            <div className="">{/* <Breadcrumb /> */}</div>
             <h2 className="text-3xl font-extrabold capitalize">{data.name}</h2>
             <p className="">{data.description}</p>
           </div>

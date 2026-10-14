@@ -3,7 +3,6 @@ import AddTaskNote from "@/app/dashboard/tasks/_components/AddTaskNote";
 import EditTask from "@/app/dashboard/tasks/_components/EditTask";
 import TaskActivityHistory from "@/app/dashboard/tasks/_components/TaskActivityHistory";
 import TaskAttachments from "@/app/dashboard/tasks/_components/TaskAttachments";
-import { Breadcrumb } from "@/components/global/Breadcrumb";
 import ConfirmDelete from "@/components/global/ConfirmDelete";
 import { PageLoader } from "@/components/global/PageLoader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,11 +25,9 @@ const TaskDetailPage = () => {
   }
   return (
     <div className="space-y-15">
-      <div className="sm:flex justify-between items-start py-5">
+      <div className="sm:flex justify-between items-center py-2">
         <div className="sm:w-1/2 space-y-4">
-          <div className="">
-            <Breadcrumb />
-          </div>
+          <div className="">{/* <Breadcrumb /> */}</div>
           <h2 className="text-3xl font-extrabold capitalize">{data.name}</h2>
         </div>
         <div className="flex flex-col lg:flex-row items-end lg:items-center gap-2">

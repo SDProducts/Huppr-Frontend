@@ -2,13 +2,12 @@
 "use client";
 import JobStepFormsWrapper from "@/app/dashboard/jobs/_components/JobStepFormsWrapper";
 import Steps from "@/app/dashboard/jobs/_components/Steps";
-import { Breadcrumb } from "@/components/global/Breadcrumb";
 import { Stars } from "lucide-react";
 
 const CreateJobPage = () => {
   return (
     <div>
-      <Breadcrumb />
+      {/* <Breadcrumb /> */}
       <div className="flex items-end justify-between py-6">
         <div className="w-2/4 space-y-2">
           <h2 className="text-4xl font-bold">Create a Job</h2>

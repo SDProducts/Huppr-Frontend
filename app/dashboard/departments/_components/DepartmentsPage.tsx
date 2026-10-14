@@ -142,7 +142,7 @@ const DepartmentsPage = () => {
             modal.open({
               content: <CreateNewDepartment />,
               size: "sm:w-2xl",
-              bgColor: "bg-primary-100",
+              bgColor: "bg-indigo-50",
             });
           }}
         />

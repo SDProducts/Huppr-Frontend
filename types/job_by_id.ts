@@ -85,6 +85,23 @@ export interface HiringTeamMember {
   isLead: boolean;
 }
 
+export interface ScreeningQuestion {
+  prompt: string;
+  kind: string;
+  threshold: string;
+  weight: number;
+  isKnockout: boolean;
+  isRequired: boolean;
+  expectedAnswer: string;
+}
+export type RoleRequirement = {
+  id: string;
+  title: string;
+  category: string;
+  isMustHave: boolean;
+  note: string;
+};
+
 export interface JobDetailResponse {
   id: string;
   title: string;
@@ -113,7 +130,7 @@ export interface JobDetailResponse {
   publishedAt: string | null;
   departmentId: string;
   locationCity: string;
-  qualifications: unknown[];
+  qualifications: RoleRequirement[];
   employmentType: EmploymentType;
   organizationId: string;
   positionSummary: PositionSummary;
@@ -124,7 +141,7 @@ export interface JobDetailResponse {
   reviewSlaHours: number;
   workArrangement: WorkArrangement;
   automationPercent: number;
-  screeningQuestions: unknown[];
+  screeningQuestions: ScreeningQuestion[];
   automatedStageCount: number;
   experienceMinYears: number;
   reportingManagerId: string | null;
