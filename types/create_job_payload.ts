@@ -24,7 +24,13 @@ export type PipelineStageCategory =
   | "assessment"
   | "offer"
   | string;
-export type AutomationKind = "email" | "webhook" | "notification" | string;
+export type AutomationKind =
+  | "email"
+  | "webhook"
+  | "notification"
+  | "stage_transition"
+  | "calendar"
+  | string;
 export type ChannelType = "careers_page" | "linkedin" | "internal" | string;
 
 export interface JobResponsibility {

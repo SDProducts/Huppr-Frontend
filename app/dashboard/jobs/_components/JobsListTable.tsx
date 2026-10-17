@@ -138,9 +138,12 @@ function JobRow({ job }: { job: JobListItem }) {
           </div>
 
           <div className="max-w-45">
-            <p className="whitespace-nowrap text-sm font-bold text-slate-900">
+            <Link
+              href={`/dashboard/jobs/${job.id}`}
+              className="whitespace-nowrap hover:underline focus:underline text-sm font-bold text-slate-900"
+            >
               {job.title}
-            </p>
+            </Link>
 
             <p className="mt-1 whitespace-nowrap text-xs text-slate-500 truncate">
               Full-time • ID: {job.id}
@@ -181,7 +184,7 @@ function JobRow({ job }: { job: JobListItem }) {
               <MoreHorizontal className="h-4 w-4" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className={cn("min-w-50")}>
             <DropdownMenuItem
               className={cn("hover:bg-primary-100! hover:text-primary!")}
             >
@@ -202,7 +205,7 @@ function JobRow({ job }: { job: JobListItem }) {
                 </div>
                 Edit
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
+              <DropdownMenuSubContent className={cn("min-w-50")}>
                 <DropdownMenuItem className={cn("hover:bg-gray-100")}>
                   <Link
                     href={`/dashboard/jobs/create-job?step=1&jobId=${job.id}`}

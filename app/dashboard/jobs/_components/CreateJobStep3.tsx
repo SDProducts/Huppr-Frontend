@@ -1,10 +1,13 @@
 "use client";
 import ActivityEmptyState from "@/components/EmptyState";
+import AssessmentSetupField from "@/components/form/AssessmentSetupField";
+import StageAutomationsField from "@/components/form/StageAutomationField";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
 import { Progress } from "@/components/ui/progress";
 import { useGetJobById, usePatchJob } from "@/hooks/employer/useJobs";
 import { cn } from "@/lib/utils";
+import { JobStage } from "@/types/create_job_payload";
 import { Form, Formik } from "formik";
 import {
   ArrowLeft,
@@ -30,13 +33,33 @@ const CreateJobStep3 = () => {
   const { data: jobData, isLoading: isgettingJob } = useGetJobById(jobId || "");
   const { mutate: patchJob, isPending: patchingJob } = usePatchJob(jobId || "");
   const [activeStage, setactiveStage] = useState("screening");
+  if (isgettingJob || !jobData) {
+    return <div className="">Loading...</div>;
+  }
   const job = jobData;
   const jobStages = job?.stages || [];
   const hiringTeam = job?.hiringTeam || [];
+  const jobStagesValues: JobStage[] = jobStages.map((stage) => ({
+    name: stage.name,
+    description: stage.description,
+    category: stage.category,
+    accent: stage.accent,
+    isAssessment: stage.isAssessment,
+    automations: stage.automations.map((automation) => ({
+      kind: automation.kind,
+      label: automation.label,
+      isEnabled: automation.isEnabled,
+      config: automation.config,
+    })),
+  }));
   const formInitialvalues = {
-    stages: [],
+    stages: jobStagesValues,
+    automations: [],
   };
-  const submit = () => {};
+  const stageOptions = jobStages.map((stage) => stage.category);
+  const submit = (values: typeof formInitialvalues) => {
+    patchJob(values);
+  };
   function goBack() {
     urlParams.set("step", "2");
     if (jobId) {
@@ -44,11 +67,10 @@ const CreateJobStep3 = () => {
     }
     router.replace(`/dashboard/jobs/create-job?${urlParams.toString()}`);
   }
-
   return (
     <div>
       <Formik initialValues={formInitialvalues} onSubmit={submit}>
-        {({ isValid }) => {
+        {({ isValid, values, setFieldValue }) => {
           return (
             <Form className="space-y-10">
               <div className="space-y-10">
@@ -129,9 +151,41 @@ const CreateJobStep3 = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-[2fr_1fr] gap-4">
-                  <div className="bg-white rounded-xl">
-                    <div className="bg-white"></div>
-                    <div className="bg-white"></div>
+                  <div className="space-y-4 ">
+                    <div className="bg-white rounded-2xl">
+                      {values.stages.map((stage, index) => {
+                        if (activeStage === stage.category) {
+                          return (
+                            <AssessmentSetupField
+                              key={stage.category}
+                              value={stage.assessment}
+                              onChange={(assessment) =>
+                                setFieldValue(
+                                  `stages.${index}.assessment`,
+                                  assessment
+                                )
+                              }
+                              isAssessment={stage.isAssessment}
+                              onIsAssessmentChange={(enabled) =>
+                                setFieldValue(
+                                  `stages.${index}.isAssessment`,
+                                  enabled
+                                )
+                              }
+                              assessmentTitle={`${stage.name} Assessment`}
+                            />
+                          );
+                        }
+                        return null;
+                      })}
+                    </div>
+                    <div className="">
+                      <StageAutomationsField
+                        name="automations"
+                        stages={stageOptions}
+                        activeStage={activeStage}
+                      />{" "}
+                    </div>
                   </div>
                   <div className="space-y-4">
                     <div className="bg-white p-4 rounded-xl">

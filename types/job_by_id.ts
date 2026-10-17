@@ -36,20 +36,20 @@ export interface JobStageAssessment {
 }
 
 export interface JobStageAutomation {
-  kind?: string;
-  label?: string;
-  isEnabled?: boolean;
-  config?: Record<string, unknown>;
+  kind: string;
+  label: string;
+  isEnabled: boolean;
+  config: Record<string, unknown>;
 }
 
 export interface JobStageDetail {
   id: string;
   name: string;
-  accent: string | null;
+  accent: string;
   category: PipelineCategory;
   assessment: JobStageAssessment;
   automations: JobStageAutomation[];
-  description: string | null;
+  description: string;
   displayOrder: number;
   isAssessment: boolean;
   candidateCount: number;
@@ -110,15 +110,15 @@ export interface JobDetailResponse {
   status: JobStatus;
   roleId: string;
   summary: string;
-  teamId: string | null;
+  teamId: string;
   benefits: JobBenefitDetail[];
   channels: JobChannelDetail[];
   currency: string;
   revision: number;
-  closesOn: string | null;
+  closesOn: string;
   positions: number;
-  postedOn: string | null;
-  reference: string | null;
+  postedOn: string;
+  reference: string;
   createdAt: string;
   createdBy: string;
   hiringTeam: HiringTeamMember[];
@@ -126,17 +126,17 @@ export interface JobDetailResponse {
   salaryMin: number;
   stageCount: number;
   updatedAt: string;
-  publicSlug: string | null;
-  publishedAt: string | null;
+  publicSlug: string;
+  publishedAt: string;
   departmentId: string;
   locationCity: string;
   qualifications: RoleRequirement[];
   employmentType: EmploymentType;
   organizationId: string;
   positionSummary: PositionSummary;
-  primaryTooling: string | null;
+  primaryTooling: string;
   seniorityLevel: string;
-  locationCountry: string | null;
+  locationCountry: string;
   responsibilities: JobResponsibilityDetail[];
   reviewSlaHours: number;
   workArrangement: WorkArrangement;
@@ -144,6 +144,6 @@ export interface JobDetailResponse {
   screeningQuestions: ScreeningQuestion[];
   automatedStageCount: number;
   experienceMinYears: number;
-  reportingManagerId: string | null;
+  reportingManagerId: string;
   educationRequirement: string;
 }

@@ -343,18 +343,26 @@ export const useGetMyDetails = () => {
 
   return response;
 };
-
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
-    mutationFn: logout,
+    mutationFn: async () => {
+      const res = await api.post(`/auth/sign-out`);
+      return res.data;
+    },
     onSuccess: () => {
       // Refetch relevant data if needed
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
       toast.success("User logged out");
+      Cookies.remove("access_token");
+      Cookies.remove("refresh_token");
+      Cookies.remove("user_role");
+      Cookies.remove("user_id");
+      Cookies.remove("onboarding_complete");
+      Cookies.remove("organisationId");
       router.refresh();
     },
     onError: (error) => {
