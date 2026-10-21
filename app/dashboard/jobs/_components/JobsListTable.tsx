@@ -137,18 +137,15 @@ function JobRow({ job }: { job: JobListItem }) {
             {getInitials(job.title)}
           </div>
 
-          <div className="max-w-45">
-            <Link
-              href={`/dashboard/jobs/${job.id}`}
-              className="whitespace-nowrap hover:underline focus:underline text-sm font-bold text-slate-900"
-            >
+          <Link href={`/dashboard/jobs/${job.id}`} className="max-w-45">
+            <div className="whitespace-nowrap hover:underline focus:underline text-sm font-bold text-slate-900">
               {job.title}
-            </Link>
+            </div>
 
             <p className="mt-1 whitespace-nowrap text-xs text-slate-500 truncate">
               Full-time • ID: {job.id}
             </p>
-          </div>
+          </Link>
         </div>
       </td>
 
@@ -295,10 +292,97 @@ function MobileJobRow({ job }: { job: JobListItem }) {
             </p> */}
           </div>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className={
+              "p-2 rounded-lg cursor-pointer text-slate-500 hover:bg-gray-200"
+            }
+          >
+            <div className="">
+              <MoreHorizontal className="h-4 w-4" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className={cn("min-w-50")}>
+            <DropdownMenuItem
+              className={cn("hover:bg-primary-100! hover:text-primary!")}
+            >
+              <Link
+                href={`/dashboard/jobs/${job.id}`}
+                className="flex items-center gap-2 w-full"
+              >
+                <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
+                  <Eye className="size-3" />
+                </div>
+                <div className="flex-1">View</div>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <div className="h-6 w-6 bg-accent flex justify-center items-center rounded-md">
+                  <Edit className="size-3" />
+                </div>
+                Edit
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className={cn("min-w-50")}>
+                <DropdownMenuItem className={cn("hover:bg-gray-100")}>
+                  <Link
+                    href={`/dashboard/jobs/create-job?step=1&jobId=${job.id}`}
+                    className="flex items-center gap-2 w-full text-sm text-gray-600"
+                  >
+                    <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
+                      <Pen className="size-3" />
+                    </div>
+                    Job Details (step 1)
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className={cn("hover:bg-gray-100")}>
+                  <Link
+                    href={`/dashboard/jobs/create-job?step=2&jobId=${job.id}`}
+                    className="flex items-center gap-2 w-full text-sm text-gray-600"
+                  >
+                    <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
+                      <Pen className="size-3" />
+                    </div>
+                    ATS & Screening (step 2)
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className={cn("hover:bg-gray-100")}>
+                  <Link
+                    href={`/dashboard/jobs/create-job?step=3&jobId=${job.id}`}
+                    className="flex items-center gap-2 w-full text-sm text-gray-600"
+                  >
+                    <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
+                      <Pen className="size-3" />
+                    </div>
+                    Hiring Process (step 3)
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className={cn("hover:bg-gray-100")}>
+                  <Link
+                    href={`/dashboard/jobs/create-job?step=4&jobId=${job.id}`}
+                    className="flex items-center gap-2 w-full text-sm text-gray-600"
+                  >
+                    <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
+                      <Pen className="size-3" />
+                    </div>
+                    Publish changes (step 4)
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
 
-        <button className="rounded-md p-2 text-slate-500 hover:bg-slate-100">
-          <MoreHorizontal className="h-4 w-4 text-slate-500" />
-        </button>
+            <DropdownMenuItem
+              className={cn(
+                "hover:bg-red-100! text-red-500! hover:text-red-500! flex items-center gap-1"
+              )}
+            >
+              <div className="h-6 w-6 bg-red-100 flex justify-center items-center rounded-md">
+                <Trash2 className="size-3" />
+              </div>
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>{" "}
       </div>
 
       <div className="mt-2 flex items-center justify-between">

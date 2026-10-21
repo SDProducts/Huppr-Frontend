@@ -2,6 +2,7 @@
 import CreateJobStep1 from "@/app/dashboard/jobs/_components/CreateJobStep1";
 import CreateJobStep2 from "@/app/dashboard/jobs/_components/CreateJobStep2";
 import CreateJobStep3 from "@/app/dashboard/jobs/_components/CreateJobStep3";
+import EditJobStep1 from "@/app/dashboard/jobs/_components/EditJobStep1";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const JobStepFormsWrapper = () => {
@@ -10,7 +11,11 @@ const JobStepFormsWrapper = () => {
   const currentStep = Number(params.get("step"));
   const jobId = params.get("jobId");
   if (currentStep === 1) {
-    return <CreateJobStep1 />;
+    if (jobId) {
+      return <EditJobStep1 />;
+    } else {
+      return <CreateJobStep1 />;
+    }
   }
   if (currentStep === 2) {
     if (jobId) {

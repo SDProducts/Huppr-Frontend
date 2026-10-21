@@ -52,7 +52,7 @@ const OTPForm: React.FC = () => {
     if (email) {
       confirm({
         email,
-        otp,
+        token: otp,
       });
     }
   };

@@ -208,22 +208,49 @@ export const useResendOTP = () => {
   });
 };
 interface OTPPayload {
-  otp: string;
+  token: string;
   email: string;
 }
 export const useConfirmOTP = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
-    mutationFn: async (payload: OTPPayload) => {
-      const res = await api.post(`/auth/confrim-email-otp/`, payload);
+    mutationFn: async (payload: OTPPayload): Promise<LoginResponse> => {
+      const res = await api.post(`/auth/confirm-email-otp/`, payload);
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       // Refetch relevant data if needed
       queryClient.invalidateQueries({
         queryKey: ["user"],
       });
       toast.success("OTP sent successfully");
+      Cookies.set("access_token", data.session.access_token, {
+        expires: data.session.expires_in,
+        secure: true,
+        // sameSite: "Strict",
+      });
+      Cookies.set("refresh_token", data.session.refresh_token, {
+        expires: data.session.expires_in,
+        secure: true,
+        // sameSite: "Strict",
+      });
+      Cookies.set("user_role", data.user.user_metadata.role, {
+        expires: data.session.expires_in,
+        secure: true,
+      });
+      if (data.user.user_metadata.role === "employer") {
+        if (data.onboardingComplete) {
+          toast.success("Login successfully");
+          router.push("/dashboard");
+        } else {
+          toast.success("Login successfully, let's setup your workspace");
+          router.push("/onboarding");
+        }
+      } else if (data.user.user_metadata.role === "job_seeker") {
+        toast.success("Login successfully");
+        router.push("/jobs");
+      }
     },
     onError: (error: AxiosError<LoginError>) => {
       // Check if this is an Axios error with response data

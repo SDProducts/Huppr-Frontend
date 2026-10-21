@@ -20,7 +20,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Button from "@/components/ui/CustomButton";
 import { useGetJobOverviewMetrics } from "@/hooks/employer/useJobs";
 import { cn } from "@/lib/utils";
-import { JobsMetricSummary } from "@/types/job";
+import { JobsMetricSummary, PipelineStageMetric } from "@/types/job";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -152,6 +152,7 @@ export default function JobsPage() {
   const { data: metricsData, isLoading: isGettingMetrics } =
     useGetJobOverviewMetrics();
   const metrics = metricsData?.summary;
+  const pipeline_stages = metricsData?.pipeline || [];
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-950">
@@ -187,7 +188,7 @@ export default function JobsPage() {
             </div>
 
             <div className="mt-7">
-              <HiringPipeline />
+              <HiringPipeline pipeline_stages={pipeline_stages} />
             </div>
           </div>
 
@@ -560,7 +561,11 @@ function ActivityRow({ activity }: { activity: Activity }) {
 /* HIRING PIPELINE                                                            */
 /* -------------------------------------------------------------------------- */
 
-function HiringPipeline() {
+function HiringPipeline({
+  pipeline_stages,
+}: {
+  pipeline_stages: PipelineStageMetric[];
+}) {
   const stages = [
     {
       label: "Applied",
@@ -601,18 +606,20 @@ function HiringPipeline() {
           <h2 className="text-lg font-bold">Hiring Pipeline Overview</h2>
         </div>
 
-        <div className="mt-7 flex items-center gap-2 overflow-x-auto pb-2">
-          {stages.map((stage, index) => (
-            <React.Fragment key={stage.label}>
+        <div className="mt-7 flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2">
+          {pipeline_stages.map((stage, index) => (
+            <React.Fragment key={index}>
               <div
                 className={cn(
-                  "min-w-[84px] rounded-lg px-4 py-4",
-                  stage.className
+                  "min-w-[84px] w-fit overflow-hidden rounded-lg p-2 sm:p-4 bg-primary/5 text-primary"
+                  // stage.className
                 )}
               >
-                <p className="text-xs opacity-70">{stage.label}</p>
+                <p className="text-xs text-gray-400 capitalize truncate">
+                  {stage.key}
+                </p>
 
-                <p className="mt-1 text-2xl font-bold">{stage.value}</p>
+                <p className="mt-1 text-2xl font-extrabold">{stage.count}</p>
               </div>
 
               {index !== stages.length - 1 && (
@@ -623,14 +630,14 @@ function HiringPipeline() {
         </div>
 
         {/* PIPELINE PROGRESS */}
-        <div className="mt-5 flex h-1 overflow-hidden rounded-full">
+        {/* <div className="mt-5 flex h-1 overflow-hidden rounded-full">
           <div className="w-[35%] bg-blue-600" />
           <div className="w-[25%] bg-orange-500" />
           <div className="w-[15%] bg-purple-500" />
           <div className="w-[10%] bg-green-500" />
           <div className="w-[10%] bg-red-500" />
           <div className="w-[5%] bg-teal-500" />
-        </div>
+        </div> */}
 
         <button className="mt-6 text-sm font-semibold text-blue-600 hover:text-blue-700">
           View full pipeline report →

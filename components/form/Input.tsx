@@ -31,6 +31,7 @@ interface InputProps {
   icon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   className?: string;
+  inputClassName?: string;
   LabelClassName?: string;
   rows?: number;
   theme?: string;
@@ -47,6 +48,7 @@ const Input: React.FC<InputProps> = ({
   icon,
   rightIcon,
   className = "",
+  inputClassName = "",
   LabelClassName = "",
   rows = 6,
   theme = "light",
@@ -117,7 +119,7 @@ const Input: React.FC<InputProps> = ({
             onBlur={handleBlur}
             placeholder={placeholder}
             readOnly={readonly}
-            className={`text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-5 outline-none resize-none`}
+            className={`text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-5 outline-none resize-none ${inputClassName}`}
           />
         ) : (
           <Field
@@ -129,7 +131,7 @@ const Input: React.FC<InputProps> = ({
             rows={isTextarea ? rows : undefined}
             className={`${
               theme === "dark" ? "text-gray-300" : "text-gray-900"
-            } text-sm rounded-lg focus:ring-0 block w-full px-5 outline-none resize-y ${
+            } ${inputClassName} text-sm rounded-lg focus:ring-0 block w-full px-5 outline-none resize-y ${
               isTextarea ? "min-h-15 py-0!" : ""
             }`}
           />
