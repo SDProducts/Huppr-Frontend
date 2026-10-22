@@ -2,8 +2,8 @@
 
 import {
   ArrowLeftRight,
-  CircleDollarSign,
   CircleHelp,
+  CircleStar,
   ClipboardCheck,
   Clock3,
   Eye,
@@ -66,10 +66,10 @@ export default function AssessmentSetupField({
   };
 
   return (
-    <section className="space-y-6 rounded-2xl bg-white p-6">
+    <section className="space-y-6 rounded-2xl bg-white">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div className="flex items-start gap-3">
+      <div className="flex justify-end">
+        <div className="hidden items-start gap-3">
           <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
             <ClipboardCheck className="size-5" />
           </div>
@@ -87,7 +87,7 @@ export default function AssessmentSetupField({
         <div className="flex items-center gap-4">
           <Label
             htmlFor="require-assessment"
-            className="max-w-32 text-sm font-normal leading-5"
+            className="min-w-32 text-sm font-normal leading-5"
           >
             Require Skills Assessment
           </Label>
@@ -102,9 +102,9 @@ export default function AssessmentSetupField({
       {isAssessment && (
         <>
           {/* Assessment summary */}
-          <Card className="border-0 bg-slate-100 shadow-none">
-            <CardContent className="space-y-5 p-5 sm:p-7">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
+          <Card className="border-none! bg-slate-100 shadow-none">
+            <CardContent className="space-y-5 p-5">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
                 <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-white text-primary shadow-sm">
                   <CircleHelp className="size-7" />
                 </div>
@@ -168,7 +168,7 @@ export default function AssessmentSetupField({
                 />
                 <Metric
                   label="Total Weight"
-                  icon={<CircleDollarSign className="size-4" />}
+                  icon={<CircleStar className="size-4" />}
                   value={`${assessment.pointsTotal} Points`}
                 />
                 <Metric
@@ -255,7 +255,7 @@ export default function AssessmentSetupField({
 
             <div className="min-w-0 flex-1">
               <h4 className="font-semibold">Automated Trigger Execution</h4>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              <p className="mt-1.5 text-sm text-slate-600">
                 {triggerDescription ??
                   "Send assessment automatically via invite email as soon as a candidate enters the Assessment stage. Candidate has 5 days to complete from issuance."}
               </p>

@@ -323,6 +323,11 @@ interface Option {
   description?: string;
   value: string;
 }
+interface SwitchOption {
+  label: string;
+  isEnabled: boolean;
+  description?: string;
+}
 
 interface Industry {
   name: string;

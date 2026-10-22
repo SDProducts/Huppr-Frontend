@@ -4,6 +4,7 @@ import { JobListResponse, JobsDashboardResponse } from "@/types/job";
 import { JobDetailResponse } from "@/types/job_by_id";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export const useCreateJob = () => {
@@ -58,6 +59,47 @@ export const usePatchJob = (jobId: string) => {
         queryKey: ["job"],
       });
       toast.success("Updated job successfully");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+export const usePublishJob = (jobId: string) => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async (): Promise<JobDetailResponse> => {
+      const response = await api.patch(`/employer/jobs/${jobId}/publish`);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["jobs"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["job"],
+      });
+      toast.success("Published job successfully");
+      router.push(`/dashboard/jobs/${data.id}`);
     },
     onError: (error: AxiosError<ApiError>) => {
       // Check if this is an Axios error with response data

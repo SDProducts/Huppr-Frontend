@@ -12,8 +12,10 @@ import {
   ArrowLeft,
   ArrowRight,
   Bookmark,
+  ClipboardCheck,
   LineChart,
   MoreVertical,
+  Plus,
   UserPlus2,
   Users2,
 } from "lucide-react";
@@ -38,7 +40,25 @@ import {
 } from "@dnd-kit/sortable";
 
 import { SortableStageCard } from "@/app/dashboard/jobs/_components/SortableStageCard";
+import ColorInput from "@/components/form/ColorInput";
+import Input from "@/components/form/Input";
+import { JobItem } from "@/types/department_roles";
 import { arrayMove } from "@dnd-kit/sortable";
+
+const createPipelineStage = (index: number): JobStage => ({
+  name: `New Stage ${index + 1}`,
+  category: `custom`,
+  description: "",
+  accent: "#3b82f6",
+  isAssessment: false,
+  assessment: {
+    durationMinutes: 45,
+    format: "2 challenges",
+    pointsTotal: 50,
+    passingPercent: 80,
+  },
+  automations: [],
+});
 
 const CreateJobStep3 = () => {
   const searchParams = useSearchParams();
@@ -47,7 +67,7 @@ const CreateJobStep3 = () => {
   const jobId = searchParams.get("jobId");
   const { data: jobData, isLoading: isgettingJob } = useGetJobById(jobId || "");
   const { mutate: patchJob, isPending: patchingJob } = usePatchJob(jobId || "");
-  const [activeStage, setactiveStage] = useState("screening");
+  const [activeStage, setactiveStage] = useState("Screening");
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 6 },
@@ -78,11 +98,16 @@ const CreateJobStep3 = () => {
   }));
   const formInitialvalues = {
     stages: jobStagesValues,
-    automations: [],
   };
   const stageOptions = jobStages.map((stage) => stage.category);
   const submit = (values: typeof formInitialvalues) => {
-    patchJob(values);
+    patchJob(values, {
+      onSuccess(data: JobItem) {
+        urlParams.set("step", "4");
+        urlParams.set("jobId", data.id);
+        router.replace(`/dashboard/jobs/create-job?${urlParams.toString()}`);
+      },
+    });
   };
   function goBack() {
     urlParams.set("step", "2");
@@ -116,6 +141,13 @@ const CreateJobStep3 = () => {
             );
           };
 
+          const handleAddStage = () => {
+            const newStage = createPipelineStage(values.stages.length);
+
+            setFieldValue("stages", [...values.stages, newStage]);
+            setactiveStage(newStage.name);
+          };
+
           return (
             <Form className="space-y-10">
               <div className="space-y-10">
@@ -130,130 +162,127 @@ const CreateJobStep3 = () => {
                         {jobStages.length} Active stages
                       </div>
                     </div>
+                    <Button
+                      label="Add Pipeline Stage"
+                      icon={<Plus className="size-4" />}
+                      className="w-fit!"
+                      onClick={handleAddStage}
+                    />
                   </div>
-
-                  <div className="flex w-full gap-4 overflow-x-auto rounded-xl bg-white p-4">
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={handleDragEnd}
-                    >
-                      <SortableContext
-                        items={values.stages.map((stage) => stage.category)}
-                        strategy={horizontalListSortingStrategy}
+                  <div className="rounded-xl bg-white h-auto flex items-center relative overflow-hidden">
+                    <div className="w-10 h-full bg-linear-to-r from-white via-white to-transparent z-10 absolute left-0" />
+                    <div className="flex-1 flex w-full gap-4 overflow-x-auto scrollbar-hide p-4">
+                      <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
                       >
-                        {values.stages.map((stage, index) => (
-                          <SortableStageCard
-                            key={stage.category}
-                            stage={stage}
-                            index={index}
-                            activeStage={activeStage}
-                            onSelect={() => setactiveStage(stage.category)}
-                          />
-                        ))}
-                      </SortableContext>
-                    </DndContext>
-                  </div>
-
-                  {/* <div className="flex w-full overflow-x-scroll p-4 rounded-xl bg-white gap-4">
-                    {jobStages.map((stage, i) => (
-                      <div
-                        className="flex items-center gap-4 cursor-pointer"
-                        key={i}
-                        onClick={() => setactiveStage(stage.category)}
-                      >
-                        {i > 0 && (
-                          <div className="">
-                            <ChevronRight
-                              className={cn(
-                                "size-10",
-                                activeStage === stage.category
-                                  ? "text-primary"
-                                  : "text-gray-300"
-                              )}
-                              strokeWidth={4}
-                            />
-                          </div>
-                        )}
-
-                        <div
-                          className={cn(
-                            "p-4 rounded-lg w-55 space-y-4 relative",
-                            activeStage === stage.category
-                              ? "bg-primary/15 text-primary"
-                              : "bg-primary/5"
-                          )}
+                        <SortableContext
+                          items={values.stages.map((stage) => stage.category)}
+                          strategy={horizontalListSortingStrategy}
                         >
-                          {activeStage === stage.category && (
-                            <div className="absolute -top-2 right-4 bg-primary text-white px-3 py-0.5 rounded-full text-xs">
-                              Configuring
-                            </div>
-                          )}
-                          <div className="text-sm font-semibold">
-                            0{i + 1} .{" "}
-                            {activeStage === stage.category
-                              ? "selected"
-                              : "stage"}
-                          </div>
-                          <div className="">
-                            <div className="font-bold">{stage.name}</div>
-                            <div className="">{stage.description || "..."}</div>
-                          </div>
-                          <div className="flex justify-between">
-                            <div className="flex gap-1 text-xs items-center">
-                              {stage.hasEnabledAutomation ? (
-                                <>
-                                  <Bot className="size-4" />
-                                  Automated
-                                </>
-                              ) : (
-                                <>
-                                  <BotOff className="size-4" />
-                                  Not Automated
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div> */}
+                          {values.stages.map((stage, index) => (
+                            <SortableStageCard
+                              key={index}
+                              stage={stage}
+                              index={index}
+                              activeStage={activeStage}
+                              onSelect={() => setactiveStage(stage.name)}
+                            />
+                          ))}
+                        </SortableContext>
+                      </DndContext>
+                    </div>
+                    <div className="w-10 h-full bg-linear-to-l from-white via-white to-transparent z-10 absolute right-0" />
+                  </div>
                 </div>
                 <div className="grid grid-cols-[2fr_1fr] gap-4">
                   <div className="space-y-4 ">
-                    <div className="bg-white rounded-2xl">
+                    <div className="bg-white rounded-2xl p-6">
                       {values.stages.map((stage, index) => {
-                        if (activeStage === stage.category) {
+                        if (activeStage === stage.name) {
                           return (
-                            <AssessmentSetupField
-                              key={stage.category}
-                              value={stage.assessment}
-                              onChange={(assessment) =>
-                                setFieldValue(
-                                  `stages.${index}.assessment`,
-                                  assessment
-                                )
-                              }
-                              isAssessment={stage.isAssessment}
-                              onIsAssessmentChange={(enabled) =>
-                                setFieldValue(
-                                  `stages.${index}.isAssessment`,
-                                  enabled
-                                )
-                              }
-                              assessmentTitle={`${stage.name} Assessment`}
-                            />
+                            <div className="space-y-10" key={index}>
+                              <div className="space-y-5">
+                                <div className="flex items-start gap-3">
+                                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+                                    <ClipboardCheck className="size-5" />
+                                  </div>
+
+                                  <div>
+                                    <h2 className="text-xl font-bold capitalize">
+                                      Stage 0{index + 1}: {stage.category} Setup
+                                    </h2>
+                                    <p className="mt-1 max-w-md text-sm text-muted-foreground">
+                                      Verify design systems, tokens, and WCAG
+                                      accessibility skills
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <div className="grid grid-cols-[2fr_1fr] gap-2">
+                                    <Input
+                                      name={`stages.${index}.name`}
+                                      label="Stage Name"
+                                      LabelClassName="text-sm"
+                                      className="bg-gray-200"
+                                    />
+                                    <ColorInput
+                                      label="Accent"
+                                      className="bg-gray-200"
+                                      LabelClassName="text-sm"
+                                      name={`stages.${index}.accent`}
+                                    />
+                                  </div>
+                                  <Input
+                                    name={`stages.${index}.description`}
+                                    label="Description"
+                                    type="textarea"
+                                    rows={2}
+                                    LabelClassName="text-sm"
+                                    className="bg-gray-200"
+                                  />
+                                </div>
+                              </div>
+
+                              <AssessmentSetupField
+                                key={index}
+                                value={stage.assessment}
+                                onChange={(assessment) =>
+                                  setFieldValue(
+                                    `stages.${index}.assessment`,
+                                    assessment
+                                  )
+                                }
+                                isAssessment={stage.isAssessment}
+                                onIsAssessmentChange={(enabled) =>
+                                  setFieldValue(
+                                    `stages.${index}.isAssessment`,
+                                    enabled
+                                  )
+                                }
+                                assessmentTitle={`${stage.name} Assessment`}
+                              />
+                            </div>
                           );
                         }
                         return null;
                       })}
                     </div>
                     <div className="">
-                      <StageAutomationsField
-                        name="automations"
-                        stages={stageOptions}
-                        activeStage={activeStage}
-                      />{" "}
+                      {values.stages.map((stage, i) => {
+                        if (activeStage === stage.name) {
+                          return (
+                            <StageAutomationsField
+                              key={i}
+                              name={`stages.${i}.automations`}
+                              stages={stageOptions}
+                              activeStage={activeStage}
+                            />
+                          );
+                        }
+                        return null;
+                      })}
                     </div>
                   </div>
                   <div className="space-y-4">

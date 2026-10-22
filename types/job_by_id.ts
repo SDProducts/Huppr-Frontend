@@ -97,6 +97,9 @@ export interface ScreeningQuestion {
 export type RoleRequirement = {
   id: string;
   title: string;
+  body: string;
+  kind: string;
+  displayOrder: number;
   category: string;
   isMustHave: boolean;
   note: string;

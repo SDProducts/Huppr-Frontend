@@ -2,6 +2,7 @@
 import CreateJobStep1 from "@/app/dashboard/jobs/_components/CreateJobStep1";
 import CreateJobStep2 from "@/app/dashboard/jobs/_components/CreateJobStep2";
 import CreateJobStep3 from "@/app/dashboard/jobs/_components/CreateJobStep3";
+import CreateJobStep4 from "@/app/dashboard/jobs/_components/CreateJobStep4";
 import EditJobStep1 from "@/app/dashboard/jobs/_components/EditJobStep1";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -31,8 +32,15 @@ const JobStepFormsWrapper = () => {
       replace(`/dashboard/jobs/create-job?step=1`);
     }
   }
+  if (currentStep === 4) {
+    if (jobId) {
+      return <CreateJobStep4 />;
+    } else {
+      replace(`/dashboard/jobs/create-job?step=4`);
+    }
+  }
 
-  return <div>JobStepFormsWrapper</div>;
+  return <CreateJobStep1 />;
 };
 
 export default JobStepFormsWrapper;

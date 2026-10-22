@@ -22,7 +22,7 @@ export function SortableStageCard({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: stage.category });
+  } = useSortable({ id: stage.name });
 
   return (
     <div
@@ -39,7 +39,7 @@ export function SortableStageCard({
         <ChevronRight
           className={cn(
             "size-10 shrink-0",
-            activeStage === stage.category ? "text-primary" : "text-gray-300"
+            activeStage === stage.name ? "text-primary" : "text-gray-300"
           )}
           strokeWidth={4}
         />
@@ -49,12 +49,13 @@ export function SortableStageCard({
         onClick={onSelect}
         className={cn(
           "relative w-55 cursor-pointer space-y-4 rounded-lg p-4",
-          activeStage === stage.category
+          activeStage === stage.name
             ? "bg-primary/15 text-primary"
-            : "bg-primary/5"
+            : "bg-primary/5",
+          index === 0 && "ml-4"
         )}
       >
-        {activeStage === stage.category && (
+        {activeStage === stage.name && (
           <div className="absolute -top-2 right-4 rounded-full bg-primary px-3 py-0.5 text-xs text-white">
             Configuring
           </div>
@@ -63,7 +64,7 @@ export function SortableStageCard({
         <div className="flex items-center justify-between gap-2">
           <div className="text-sm font-semibold">
             {String(index + 1).padStart(2, "0")} .{" "}
-            {activeStage === stage.category ? "selected" : "stage"}
+            {activeStage === stage.name ? "selected" : "stage"}
           </div>
 
           <button
@@ -80,7 +81,9 @@ export function SortableStageCard({
 
         <div>
           <div className="font-bold">{stage.name}</div>
-          <div className="text-sm">{stage.description || "..."}</div>
+          <div className="text-xs line-clamp-1" title={stage.description}>
+            {stage.description || "..."}
+          </div>
         </div>
 
         <div className="flex items-center gap-1 text-xs">
