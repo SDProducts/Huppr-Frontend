@@ -150,3 +150,37 @@ export interface JobDetailResponse {
   reportingManagerId: string;
   educationRequirement: string;
 }
+
+export interface JobStatsByIdResponse {
+  jobId: string;
+  status: JobStatus;
+  totalPositions: number;
+  filledPositions: number;
+  openPositions: number;
+  totalApplications: number;
+  reviewed: number;
+  interviewed: number;
+  rejected: number;
+  offers: number;
+  applicationsBySource: [
+    {
+      source: ChannelType;
+      count: number;
+      percent: number;
+    }
+  ];
+  byStage: [];
+}
+
+export interface Applicants {
+  id: string;
+  fullName: string;
+  email: string;
+  source: string;
+  matchScore: 94;
+  status: string;
+  appliedAt: string;
+  lastActivityAt: string;
+  jobTitle: string;
+  stageName: string;
+}

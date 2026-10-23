@@ -1,7 +1,11 @@
 import api from "@/lib/axios.config";
 import { CreateJobPayload } from "@/types/create_job_payload";
 import { JobListResponse, JobsDashboardResponse } from "@/types/job";
-import { JobDetailResponse } from "@/types/job_by_id";
+import {
+  Applicants,
+  JobDetailResponse,
+  JobStatsByIdResponse,
+} from "@/types/job_by_id";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -87,7 +91,7 @@ export const usePublishJob = (jobId: string) => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (): Promise<JobDetailResponse> => {
-      const response = await api.patch(`/employer/jobs/${jobId}/publish`);
+      const response = await api.post(`/employer/jobs/${jobId}/publish`);
       return response.data;
     },
     onSuccess: (data) => {
@@ -174,6 +178,26 @@ export const useGetJobById = (jobId?: string) => {
     queryKey: ["job", jobId],
     queryFn: async () => {
       const response = await api.get(`/employer/jobs/${jobId}`);
+      return response.data;
+    },
+    enabled: !!jobId,
+  });
+};
+export const useGetJobStatsById = (jobId?: string) => {
+  return useQuery<JobStatsByIdResponse>({
+    queryKey: ["job-stats", jobId],
+    queryFn: async () => {
+      const response = await api.get(`/employer/jobs/${jobId}/stats`);
+      return response.data;
+    },
+    enabled: !!jobId,
+  });
+};
+export const useGetJobApplicants = (jobId?: string) => {
+  return useQuery<PaginatedResponse<Applicants>>({
+    queryKey: ["job-applicants", jobId],
+    queryFn: async () => {
+      const response = await api.get(`/employer/jobs/${jobId}/candidates`);
       return response.data;
     },
     enabled: !!jobId,

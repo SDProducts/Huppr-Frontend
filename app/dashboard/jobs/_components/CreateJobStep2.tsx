@@ -3,6 +3,7 @@
 import RoleRequirementsField from "@/components/form/RoleRequirementsField";
 import ScreeningQuestionsField from "@/components/form/ScreeningQuestionsField";
 import SkillsAssessmentField from "@/components/form/SkillAssessmentField";
+import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import { PieChartComponent } from "@/components/utils/charts/PieChart";
 import { useGetJobById, usePatchJob } from "@/hooks/employer/useJobs";
@@ -25,7 +26,7 @@ const CreateJobStep2 = () => {
   // );
   // const role = roleData;
   if (isgettingJob || !job) {
-    return <div className="">Loading...</div>;
+    return <PageLoader />;
   }
   const formInitialvalues = {
     qualifications: job.qualifications || [],
@@ -34,11 +35,21 @@ const CreateJobStep2 = () => {
   };
   const submit = (values: typeof formInitialvalues) => {
     const formattedValues: CreateJobPayload = {
-      ...values,
+      screeningQuestions: (values.screeningQuestions || []).map((question) => {
+        return {
+          prompt: question.prompt,
+          kind: question.kind,
+          threshold: question.threshold,
+          weight: question.weight,
+          isKnockout: question.isKnockout,
+          isRequired: question.isRequired,
+          expectedAnswer: question.expectedAnswer,
+        };
+      }),
       qualifications: (values.qualifications || []).map((qualification) => {
         return {
-          body: qualification.title,
-          kind: qualification.isMustHave ? "must_have" : "preferred",
+          body: qualification.body,
+          kind: qualification.kind,
         };
       }),
       skills: (values.skills || []).map((skill) => {

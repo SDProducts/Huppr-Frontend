@@ -42,6 +42,7 @@ import {
 import { SortableStageCard } from "@/app/dashboard/jobs/_components/SortableStageCard";
 import ColorInput from "@/components/form/ColorInput";
 import Input from "@/components/form/Input";
+import { PageLoader } from "@/components/global/PageLoader";
 import { JobItem } from "@/types/department_roles";
 import { arrayMove } from "@dnd-kit/sortable";
 
@@ -78,7 +79,7 @@ const CreateJobStep3 = () => {
   );
 
   if (isgettingJob || !jobData) {
-    return <div className="">Loading...</div>;
+    return <PageLoader />;
   }
   const job = jobData;
   const jobStages = job?.stages || [];
@@ -126,11 +127,11 @@ const CreateJobStep3 = () => {
             if (!over || active.id === over.id) return;
 
             const oldIndex = values.stages.findIndex(
-              (stage) => stage.category === active.id
+              (stage) => stage.name === active.id
             );
 
             const newIndex = values.stages.findIndex(
-              (stage) => stage.category === over.id
+              (stage) => stage.name === over.id
             );
 
             if (oldIndex === -1 || newIndex === -1) return;
@@ -178,7 +179,7 @@ const CreateJobStep3 = () => {
                         onDragEnd={handleDragEnd}
                       >
                         <SortableContext
-                          items={values.stages.map((stage) => stage.category)}
+                          items={values.stages.map((stage) => stage.name)}
                           strategy={horizontalListSortingStrategy}
                         >
                           {values.stages.map((stage, index) => (

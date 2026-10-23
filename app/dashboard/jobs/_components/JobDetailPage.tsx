@@ -12,14 +12,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TaskStatusPill } from "@/components/utils/Pills";
-import { useGetJobById } from "@/hooks/employer/useJobs";
+import { useGetJobById, useGetJobStatsById } from "@/hooks/employer/useJobs";
 import { cn, getDate, labelCase } from "@/lib/utils";
 import {
   BriefcaseBusiness,
   Building2,
   Calendar,
+  Calendar1,
   Edit,
   Eye,
+  FileText,
   LampDesk,
   LucideIcon,
   MapPin,
@@ -27,6 +29,7 @@ import {
   Pen,
   Trash2,
   Users,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -34,13 +37,16 @@ import { useParams } from "next/navigation";
 const JobDetailPage = () => {
   const { jobId } = useParams();
   const { data: job, isLoading } = useGetJobById(String(jobId));
+  const { data: jobStats, isLoading: isGettingStats } = useGetJobStatsById(
+    String(jobId)
+  );
 
   if (isLoading || !job) {
     return <PageLoader />;
   }
 
   return (
-    <div>
+    <div className="space-y-10">
       <div className="flex items-start justify-between">
         <div className="flex-1 truncate space-y-4">
           <div className="flex items-center gap-4">
@@ -162,6 +168,32 @@ const JobDetailPage = () => {
           </DropdownMenu>{" "}
         </div>
       </div>
+      <div className="grid grid-cols-4 gap-2">
+        <MetricCard
+          label="Total Applications"
+          value={jobStats?.totalApplications || 0}
+          icon={Users}
+          accent="bg-primary/5 text-primary"
+        />
+        <MetricCard
+          label="Reviewed"
+          value={jobStats?.reviewed || 0}
+          icon={FileText}
+          accent="bg-green-500/5 text-green-500"
+        />
+        <MetricCard
+          label="Interviewed"
+          value={jobStats?.interviewed || 0}
+          icon={Calendar1}
+          accent="bg-purple-600/5 text-purple-600"
+        />
+        <MetricCard
+          label="Rejected"
+          value={jobStats?.totalApplications || 0}
+          icon={XCircle}
+          accent="bg-red-500/5 text-red-500"
+        />
+      </div>
     </div>
   );
 };
@@ -177,6 +209,32 @@ function Tag(prop: TagProp) {
     <div className="flex items-center gap-1 text-xs">
       <prop.icon className="size-4" />
       <div className="max-w-40 truncate">{prop.name}</div>
+    </div>
+  );
+}
+
+interface StatsProp {
+  label: string;
+  value: string | number;
+  accent: string;
+  icon: LucideIcon;
+}
+
+function MetricCard(stats: StatsProp) {
+  return (
+    <div className="flex gap-2 p-5 bg-white rounded-xl hover:shadow">
+      <div
+        className={cn(
+          "size-10 flex justify-center items-center rounded-md",
+          stats.accent
+        )}
+      >
+        <stats.icon className="size-6" />
+      </div>
+      <div className="space-y-2">
+        <div className="text-gray-500">{stats.label}</div>
+        <div className="text-3xl font-extrabold">{stats.value}</div>
+      </div>
     </div>
   );
 }

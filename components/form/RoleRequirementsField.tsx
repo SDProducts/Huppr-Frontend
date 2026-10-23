@@ -26,10 +26,11 @@ export type RequirementCategory =
 
 export type RoleRequirement = {
   id: string;
-  title: string;
   category: RequirementCategory;
   isMustHave: boolean;
   note: string;
+  body: string;
+  kind: string;
 };
 
 type RoleRequirementsFieldProps = {
@@ -84,7 +85,8 @@ export default function RoleRequirementsField({
   const addRequirement = () => {
     const newRequirement: RoleRequirement = {
       id: `req-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      title: "",
+      body: "",
+      kind: "preferred",
       category: "Skills",
       isMustHave: false,
       note: CATEGORY_DETAILS.Skills,
@@ -128,7 +130,7 @@ export default function RoleRequirementsField({
         {({ remove }) => (
           <div className="space-y-3">
             {requirements.map((requirement, index) => {
-              const isMustHave = requirement.isMustHave;
+              const isMustHave = requirement.kind === "must_have";
 
               return (
                 <div
@@ -142,19 +144,19 @@ export default function RoleRequirementsField({
 
                     <div className="min-w-0 flex-1 space-y-0">
                       <Input
-                        value={requirement.title}
+                        value={requirement.body}
                         // disabled={!isMustHave}
                         onChange={(event) =>
                           setFieldValue(
-                            `${name}[${index}].title`,
+                            `${name}[${index}].body`,
                             event.target.value
                           )
                         }
                         onBlur={() =>
-                          setFieldTouched(`${name}[${index}].title`, true)
+                          setFieldTouched(`${name}[${index}].body`, true)
                         }
                         placeholder="Enter a role requirement..."
-                        aria-label={`Requirement ${index + 1} title`}
+                        aria-label={`Requirement ${index + 1} body`}
                         className="h-auto min-h-7 border-transparent bg-transparent px-0 py-0 text-sm font-semibold text-slate-900 shadow-none focus-visible:border-transparent focus-visible:ring-0"
                       />
 
@@ -237,7 +239,10 @@ export default function RoleRequirementsField({
                       <Switch
                         checked={isMustHave}
                         onCheckedChange={(checked) =>
-                          setFieldValue(`${name}[${index}].isMustHave`, checked)
+                          setFieldValue(
+                            `${name}[${index}].kind`,
+                            checked ? "must_have" : "preferred"
+                          )
                         }
                         aria-label={`Must have requirement ${index + 1}`}
                       />

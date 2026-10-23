@@ -324,7 +324,8 @@ interface Option {
   value: string;
 }
 interface SwitchOption {
-  label: string;
+  label?: string;
+  labelDisplay: React.ReactNode;
   isEnabled: boolean;
   description?: string;
 }

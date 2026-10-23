@@ -1,7 +1,7 @@
 "use client";
 
 import { Switch } from "@/components/ui/switch";
-import { cn, labelCase } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { ErrorMessage, useField, useFormikContext } from "formik";
 import { Check, Info } from "lucide-react";
 import React from "react";
@@ -9,6 +9,7 @@ import React from "react";
 interface SwitchFieldProps {
   name: string;
   label?: string | React.ReactNode;
+  option: SwitchOption[];
   type?: "multiple" | "single";
   labelPosition?: "left" | "right";
   className?: string;
@@ -27,6 +28,7 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
   name,
   label,
   type = "single",
+  option,
   labelPosition = "right",
   className,
   disabled = false,
@@ -119,24 +121,26 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
   if (type === "multiple") {
     return (
       <div className={cn("w-full space-y-3", className)}>
-        <div className="flex items-center justify-between gap-3">
-          {label && (
-            <div className={cn("text-sm font-medium", labelClassName)}>
-              {label}
-            </div>
-          )}
+        {label && (
+          <div className="flex items-center justify-between gap-3">
+            {label && (
+              <div className={cn("text-sm font-medium", labelClassName)}>
+                {label}
+              </div>
+            )}
 
-          {items.length > 1 && (
-            <button
-              type="button"
-              disabled={disabled}
-              onClick={() => handleSelectAll(!isAllSelected)}
-              className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
-            >
-              {isAllSelected ? "Deselect all" : "Select all"}
-            </button>
-          )}
-        </div>
+            {items.length > 1 && (
+              <button
+                type="button"
+                disabled={disabled}
+                onClick={() => handleSelectAll(!isAllSelected)}
+                className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
+              >
+                {isAllSelected ? "Deselect all" : "Select all"}
+              </button>
+            )}
+          </div>
+        )}
 
         <div className={cn("space-y-2", orientationStyle)}>
           {items.map((item, index) => {
@@ -146,6 +150,7 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
             const labelValue = Object.entries(item).find(
               ([key, value]) => key !== "isEnabled" && value != null
             )?.[1];
+            const optionItem = option.find((opt) => opt.label === item.channel);
 
             const atMaximum =
               maxSelections !== undefined &&
@@ -167,15 +172,17 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
                   (disabled || atMaximum || atMinimum) && "opacity-60"
                 )}
               >
-                <p className="min-w-0 flex-1 font-medium">
+                {/* <p className="min-w-0 flex-1 font-medium">
                   {labelCase(String(labelValue ?? ""))}
-                </p>
+                </p> */}
+                <div className="flex-1">{optionItem?.labelDisplay}</div>
 
                 <Switch
                   checked={isEnabled}
                   onCheckedChange={(checked) =>
                     handleMultipleChange(index, checked)
                   }
+                  className={cn("cursor-pointer")}
                   disabled={disabled || atMaximum || atMinimum}
                   aria-label={String(labelValue ?? "")}
                 />

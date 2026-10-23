@@ -9,6 +9,7 @@ import {
   usePublishJob,
 } from "@/hooks/employer/useJobs";
 import { cn, getCurrency, GRID_COLS, labelCase } from "@/lib/utils";
+import { ChannelType } from "@/types/job_by_id";
 import { Form, Formik } from "formik";
 import {
   ArrowLeft,
@@ -16,14 +17,37 @@ import {
   Bot,
   BriefcaseBusiness,
   CheckCircle2,
+  Globe2,
   Network,
   Pen,
   RefreshCcw,
   Rocket,
   Share2,
   SlidersHorizontal,
+  Users,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+
+const CHANNEL_DETAILS: Record<ChannelType, string> = {
+  careers_page: "Huppr.com/jobs/5717",
+  global_syndication: "Google for Jobs & LinkedIn Limited",
+  internal_mobility: "Allow employee referrals ($1,500 bonus)",
+  premium_boost: "3x applications on LinkedIn & Indeed",
+};
+function getChannelIcon(channel: ChannelType) {
+  switch (channel) {
+    case "careers_page":
+      return <BriefcaseBusiness className="size-5" />;
+    case "global_syndication":
+      return <Globe2 className="size-5" />;
+    case "internal_mobility":
+      return <Users className="size-5" />;
+    case "premium_boost":
+      return <Rocket className="size-5" />;
+    default:
+      return <Share2 className="size-5" />;
+  }
+}
 
 export default function CreateJobStep4() {
   const searchParams = useSearchParams();
@@ -57,10 +81,21 @@ export default function CreateJobStep4() {
       },
     });
   }
-  //   const options = jobData.channels.map((item) => ({
-  //     label: item.channel,
-  //     isEnabled: item.isEnabled,
-  //   }));
+  const options = jobData.channels.map((item) => ({
+    label: item.channel,
+    isEnabled: item.isEnabled,
+    labelDisplay: (
+      <div className="flex items-center gap-2 w-full">
+        <div className="size-8 flex justify-center items-center bg-primary/10 text-primary rounded-md">
+          {getChannelIcon(item.channel)}
+        </div>
+        <div className="flex-1">
+          <div className="font-bold">{labelCase(item.channel)}</div>
+          <div className="text-xs">{CHANNEL_DETAILS[item.channel]}</div>
+        </div>
+      </div>
+    ),
+  }));
   const initialValues = {
     channels: jobData.channels,
   };
@@ -375,7 +410,7 @@ export default function CreateJobStep4() {
                   </div>
                 </div>
                 <div className="">
-                  <div className="bg-white p-6 rounded-xl">
+                  <div className="bg-white p-6 rounded-xl space-y-6">
                     <div className="flex gap-2">
                       <div className="size-8 flex justify-center items-center bg-primary/5 rounded-md">
                         <Share2 className="size-4" />
@@ -395,7 +430,7 @@ export default function CreateJobStep4() {
                         name="channels"
                         type="multiple"
                         optionClassName="bg-primary/5"
-                        // options={options}
+                        option={options}
                       />
                     </div>
                   </div>
