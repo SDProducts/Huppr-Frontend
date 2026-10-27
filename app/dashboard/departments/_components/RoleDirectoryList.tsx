@@ -109,7 +109,7 @@ const RoleDirectoryList = () => {
                 onClick={() => {
                   modal.open({
                     content: <CreateRoleStep1 roleID={item.id} />,
-                    size: "sm:w-3xl",
+                    size: "sm:w-5xl",
                     bgColor: "bg-[#F7F9FC]",
                   });
                 }}

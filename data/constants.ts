@@ -9,6 +9,7 @@ import {
   FileText,
   GraduationCap,
   HelpCircle,
+  Layers,
   LayoutTemplate,
   Rocket,
   Settings,
@@ -55,6 +56,11 @@ class Navigation {
       label: "Overview",
       icon: LayoutTemplate,
       path: "/dashboard",
+    },
+    {
+      label: "Departments",
+      icon: Layers,
+      path: "/dashboard/departments",
     },
     {
       label: "Jobs",

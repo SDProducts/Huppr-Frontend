@@ -89,13 +89,13 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
         onSuccess(data) {
           modal.open({
             content: <CreateRoleStep2 roleID={data.id} />,
-            size: "sm:w-[80%] md:w-4xl",
+            size: "sm:w-[80%] md:w-5xl",
             bgColor: "bg-[#F7F9FC]",
             goBack: () => {
               clearQuery(["roles"]);
               modal.open({
                 content: <CreateRoleStep1 roleID={data.id} />,
-                size: "sm:w-3xl",
+                size: "sm:w-5xl",
                 bgColor: "bg-[#F7F9FC]",
               });
             },
@@ -107,12 +107,12 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
         onSuccess(data) {
           modal.open({
             content: <CreateRoleStep2 roleID={data.id} />,
-            size: "sm:w-[80%] md:w-4xl",
+            size: "sm:w-[80%] md:w-5xl",
             bgColor: "bg-[#F7F9FC]",
             goBack: () => {
               modal.open({
                 content: <CreateRoleStep1 />,
-                size: "sm:w-3xl",
+                size: "sm:w-5xl",
                 bgColor: "bg-[#F7F9FC]",
               });
             },

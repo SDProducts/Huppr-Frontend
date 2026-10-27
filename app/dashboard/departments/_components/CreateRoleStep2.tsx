@@ -40,7 +40,7 @@ const CreateRoleStep2: React.FC<Prop> = ({ roleID }) => {
   const initialValues: CreateRolePayload = {
     // expectedRevision: 0,
     requirements: {
-      responsibilities: roleData?.requirements?.responsibilities || [""],
+      responsibilities: roleData?.requirements?.responsibilities || [],
       minYears: roleData?.requirements?.minYears || 1,
       maxYears: roleData?.requirements?.maxYears || 10,
       languages: roleData?.requirements?.languages || [],

@@ -15,6 +15,7 @@ interface SelectProps {
   placeholder?: string;
   className?: string;
   labelClassName?: string;
+  optionsClassName?: string;
   disabled?: boolean;
   icon?: React.ReactNode;
   theme?: string;
@@ -27,6 +28,7 @@ const SearchableSelect: React.FC<SelectProps> = ({
   placeholder = "Select an option",
   className = "",
   labelClassName = "",
+  optionsClassName = "",
   disabled = false,
   icon,
   label,
@@ -163,7 +165,7 @@ const SearchableSelect: React.FC<SelectProps> = ({
               theme === "dark"
                 ? "bg-gray-900 border-gray-700"
                 : "bg-white border-gray-200"
-            }`}
+            } ${optionsClassName}`}
           >
             <div
               className={`flex items-center gap-2 px-3 border-b ${

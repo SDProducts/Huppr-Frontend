@@ -157,7 +157,7 @@ const CreateJobStep1 = () => {
   function handleNewRole() {
     modal.open({
       content: <CreateRoleStep1 />,
-      size: "sm:w-3xl",
+      size: "sm:w-5xl",
       bgColor: "bg-[#F7F9FC]",
     });
   }

@@ -42,7 +42,7 @@ const RoleDetail = () => {
   function handleEditRole() {
     modal.open({
       content: <CreateRoleStep1 roleID={role?.id} />,
-      size: "sm:w-3xl",
+      size: "sm:w-5xl",
       bgColor: "bg-[#F7F9FC]",
     });
   }
