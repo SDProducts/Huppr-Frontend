@@ -410,6 +410,7 @@ export const useEditProject = (projectId: string) => {
 };
 interface ProjectFilterParams {
   teamId?: string;
+  departmentId?: string;
 }
 export const useGetProjects = (params?: ProjectFilterParams) => {
   return useQuery<ProjectListResponse>({
@@ -418,6 +419,9 @@ export const useGetProjects = (params?: ProjectFilterParams) => {
       const searchparams = new URLSearchParams();
       if (params?.teamId) {
         searchparams.append("teamId", params.teamId);
+      }
+      if (params?.departmentId) {
+        searchparams.append("departmentId", params.departmentId);
       }
       const response = await api.get(
         `/organization/projects?${searchparams.toString()}`

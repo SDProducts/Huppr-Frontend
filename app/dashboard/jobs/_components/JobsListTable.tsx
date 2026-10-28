@@ -1,4 +1,5 @@
 import ActivityEmptyState from "@/components/EmptyState";
+import { MobileTableRow, TableRowSkeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import {
   DropdownMenu,
@@ -75,41 +76,7 @@ const JobsListTable: React.FC<Props> = ({ listLenght }) => {
       </div>
 
       <div className="p-0">
-        {/* DESKTOP TABLE */}
-        {jobs.length < 1 ? (
-          <div className="p-2">
-            <ActivityEmptyState title="No job found" />
-          </div>
-        ) : (
-          <div className="hidden overflow-x-auto md:block">
-            <table className="w-full min-w-[850px]">
-              <thead>
-                <tr className="border-b border-slate-100">
-                  <TableHead>JOB TITLE</TableHead>
-                  <TableHead>DEPARTMENT</TableHead>
-                  <TableHead>LOCATION</TableHead>
-                  <TableHead>APPLICANTS</TableHead>
-                  <TableHead>STATUS</TableHead>
-                  <TableHead>POSTED ON</TableHead>
-                  <th className="w-12 px-4" />
-                </tr>
-              </thead>
-
-              <tbody>
-                {jobs.map((job) => (
-                  <JobRow key={job.id} job={job} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {/* MOBILE */}
-        <div className="divide-y divide-slate-100 md:hidden">
-          {jobs.map((job) => (
-            <MobileJobRow key={job.id} job={job} />
-          ))}
-        </div>
+        <RenderTable jobs={jobs} isLoading={isLoading} />
       </div>
     </div>
   );
@@ -412,5 +379,77 @@ function StatusBadge({ status }: { status: JobStatus }) {
     >
       {status}
     </span>
+  );
+}
+interface TableProps {
+  isLoading: boolean;
+  jobs: JobListItem[];
+}
+function RenderTable(tableProps: TableProps) {
+  // if (tableProps.isLoading) {
+  //   return (
+  //     <div className="">
+  //       <div className="hidden md:block">
+  //       </div>
+  //       <div className="block sm:hidden">
+  //         <div className="">Loading...</div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+  if (tableProps.jobs.length < 1) {
+    return <ActivityEmptyState title="No job found" />;
+  }
+  return (
+    <div className="">
+      <div className="hidden overflow-x-auto md:block">
+        <table className="w-full min-w-[850px]">
+          <thead>
+            <tr className="border-b border-slate-100">
+              <TableHead>JOB TITLE</TableHead>
+              <TableHead>DEPARTMENT</TableHead>
+              <TableHead>LOCATION</TableHead>
+              <TableHead>APPLICANTS</TableHead>
+              <TableHead>STATUS</TableHead>
+              <TableHead>POSTED ON</TableHead>
+              <th className="w-12 px-4" />
+            </tr>
+          </thead>
+
+          <tbody>
+            {tableProps.isLoading ? (
+              <>
+                <TableRowSkeleton />
+                <TableRowSkeleton />
+                <TableRowSkeleton />
+              </>
+            ) : (
+              <>
+                {tableProps.jobs.map((job) => (
+                  <JobRow key={job.id} job={job} />
+                ))}
+              </>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* MOBILE */}
+      <div className="divide-y divide-slate-100 md:hidden">
+        {tableProps.isLoading ? (
+          <>
+            <MobileTableRow />
+            <MobileTableRow />
+            <MobileTableRow />
+          </>
+        ) : (
+          <>
+            {tableProps.jobs.map((job) => (
+              <MobileJobRow key={job.id} job={job} />
+            ))}
+          </>
+        )}
+      </div>
+    </div>
   );
 }

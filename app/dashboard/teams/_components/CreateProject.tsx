@@ -67,22 +67,23 @@ const CreateProject: React.FC<Prop> = ({ departmentId, team }) => {
     });
   };
   return (
-    <div className="min-h-[400px] sm:px-4 divide-y divide-gray-200">
-      <div className="pb-4 flex items-center gap-1.5">
+    <div className="min-h-[400px] p-2">
+      <div className="flex items-center gap-1.5 px-6 pb-6">
         <FolderPlus strokeWidth={2.5} className="size-8" />
         <h2 className="text-2xl font-bold">Create New Project</h2>
       </div>
       <Formik initialValues={formValues} onSubmit={submit}>
         {({}) => {
           return (
-            <Form className="pt-10">
-              <div className="space-y-7">
+            <Form className="">
+              <div className="space-y-7 bg-white p-6 rounded-2xl">
                 <div className="grid sm:grid-cols-2 gap-4 sm:gap-2 ">
                   <Input
                     label="Project Name"
                     name="name"
                     LabelClassName="text-sm line-clamp-1"
                     placeholder="e.g. Customer support training"
+                    className="bg-gray-100"
                   />
 
                   {isLoading || !departments ? (
@@ -93,6 +94,7 @@ const CreateProject: React.FC<Prop> = ({ departmentId, team }) => {
                       name="departmentId"
                       options={departments!}
                       placeholder="Select industry"
+                      className="bg-gray-100"
                       labelClassName="text-sm"
                       disabled={!!departmentId}
                     />
@@ -103,6 +105,7 @@ const CreateProject: React.FC<Prop> = ({ departmentId, team }) => {
                     label="Team"
                     name="teamId"
                     options={teams}
+                    className="bg-gray-100"
                     placeholder="Select Team"
                     labelClassName="text-sm"
                   />
@@ -111,6 +114,7 @@ const CreateProject: React.FC<Prop> = ({ departmentId, team }) => {
                     name="priority"
                     options={PRIORITY_LEVELS}
                     orientation="horizontal"
+                    // className="bg-gray-100"
                     optionClassName="rounded-full! text-xs!"
                   />
                 </div>
@@ -118,17 +122,20 @@ const CreateProject: React.FC<Prop> = ({ departmentId, team }) => {
                   <DateInput
                     name="startDate"
                     label="Start Date"
+                    className="bg-gray-100"
                     labelClassName="text-sm"
                   />
                   <DateInput
                     name="endDate"
                     label="End Date"
+                    className="bg-gray-100"
                     labelClassName="text-sm"
                   />
                 </div>
                 <Input
                   type="textarea"
                   name="description"
+                  className="bg-gray-100"
                   label="Project Description"
                   // rows={2}
                 />
@@ -143,11 +150,12 @@ const CreateProject: React.FC<Prop> = ({ departmentId, team }) => {
                       { label: "Assign to myself", value: myId || "" },
                     ]}
                     placeholder="Select manager"
+                    className="bg-gray-100"
                     labelClassName="text-sm"
                   />
                 )}
               </div>
-              <div className="pt-20 flex justify-end gap-4">
+              <div className="pt-10 flex justify-end gap-4">
                 <Button
                   onClick={modal.close}
                   label="Cancel"

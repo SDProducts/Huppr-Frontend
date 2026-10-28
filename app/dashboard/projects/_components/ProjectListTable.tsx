@@ -1,6 +1,7 @@
 "use client";
 import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
+import { SelectInputSkeleton, TableRowSkeleton } from "@/components/skeletons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -11,35 +12,46 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { TaskStatusPill } from "@/components/utils/Pills";
 import { TableHead } from "@/components/utils/Table";
-import { useGetProjects } from "@/hooks/employer/useDepartment";
+import {
+  useGetDepartments,
+  useGetProjects,
+} from "@/hooks/employer/useDepartment";
 import { cn, getInitials, labelCase } from "@/lib/utils";
 import { ProjectItem } from "@/types/get_projects";
 import { Form, Formik } from "formik";
-import { Edit, Eye, MoreHorizontal, Search, Trash2 } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Pen, Search, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function ProjectListTable() {
-  const { data: projectData } = useGetProjects();
+  const initialValues = {
+    status: "",
+    departmentId: "",
+    sort: "due_date_desc",
+    search: "",
+  };
+  const [filterParams, setfilterParams] = useState(initialValues);
+  const { data: projectData, isLoading: isGettingProjects } =
+    useGetProjects(filterParams);
+  const { data: departmentRes, isLoading: isGettingDepartments } =
+    useGetDepartments();
+  const departments = departmentRes?.items || [];
   const PROJECT_STATUS = ["", "active", "overdue", "completed", "on_hold"];
   const SORT_OPTIONS = [
     { label: "Due date (Ealiest)", value: "due_date_desc" },
     { label: "Due date (Latest)", value: "due_date_asc" },
     { label: "Name ", value: "name" },
   ];
-  const initialValues = {
-    status: "",
-    department: "",
-    sort: "due_date_desc",
-    search: "",
-  };
-  const [filterParams, setfilterParams] = useState(initialValues);
+  const DEPARTMENT_OPTIONS = departments.map((dept) => ({
+    label: dept.name,
+    value: dept.id,
+  }));
   function handleFilter(params: typeof filterParams) {
     console.log("form Params:", params);
   }
   const projects = projectData?.items || [];
   return (
-    <div className="bg-white p-6 rounded-xl space-y-6">
+    <div className="space-y-2">
       <Formik
         initialValues={filterParams}
         enableReinitialize
@@ -47,13 +59,13 @@ export default function ProjectListTable() {
       >
         {({ values, setFieldValue }) => {
           return (
-            <Form className="space-y-2">
-              <div className="flex justify-between items-center">
+            <Form className="space-y-2 p-2 sm:p-6 bg-white rounded-xl">
+              <div className="flex flex-col md:flex-row gap-4 justify-between md:items-center">
                 <div className="grid grid-cols-5 gap-1 bg-gray-200 p-1 rounded-md">
                   {PROJECT_STATUS.map((item, i) => (
                     <div
                       className={cn(
-                        "rounded-sm h-10 cursor-pointer hover:bg-white/70 px-2 flex text-sm justify-center items-center capitalize",
+                        "rounded-sm h-7 sm:h-9 cursor-pointer hover:bg-white/70 sm:px-2 flex text-[9px] sm:text-sm justify-center items-center capitalize",
                         values.status === item
                           ? "bg-white font-bold"
                           : "bg-transparent"
@@ -65,14 +77,18 @@ export default function ProjectListTable() {
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center gap-4">
-                  <SearchableSelect
-                    name="department"
-                    options={[]}
-                    placeholder="All departments"
-                    className="bg-gray-200 h-11"
-                  />
-                  <div className="flex items-center gap-2 px-4 h-11 bg-gray-200 rounded-md">
+                <div className="flex items-center gap-2 sm:gap-4">
+                  {isGettingDepartments ? (
+                    <SelectInputSkeleton />
+                  ) : (
+                    <SearchableSelect
+                      name="departmentId"
+                      options={DEPARTMENT_OPTIONS}
+                      placeholder="All departments"
+                      className="bg-gray-200 h-11"
+                    />
+                  )}
+                  <div className="hidden sm:flex items-center gap-2 px-4 h-11 bg-gray-200 rounded-md">
                     <div className="">Sort:</div>
                     <SearchableSelect
                       name="sort"
@@ -83,7 +99,7 @@ export default function ProjectListTable() {
                   </div>
                 </div>
               </div>
-              <div className="w-2/3">
+              <div className="w-full">
                 <Input
                   icon={<Search className="size-4" />}
                   name="search"
@@ -96,10 +112,10 @@ export default function ProjectListTable() {
         }}
       </Formik>
 
-      <div className="">
-        <table className="w-full min-w-[850px]">
-          <thead>
-            <tr className="border-b border-slate-100 uppercase">
+      <div className="bg-white rounded-xl">
+        <table className="w-full min-w-[850px] hidden md:block">
+          <thead className="font-bold">
+            <tr className="border-b border-slate-100 uppercase bg-[#f8fafc]">
               <TableHead>project NAME</TableHead>
               <TableHead>DEPARTMENT</TableHead>
               <TableHead>Project lead</TableHead>
@@ -110,12 +126,26 @@ export default function ProjectListTable() {
             </tr>
           </thead>
 
-          <tbody>
-            {projects.map((project) => (
-              <TableRow key={project.id} project={project} />
-            ))}
+          <tbody className="">
+            {isGettingProjects ? (
+              <>
+                <TableRowSkeleton />
+                <TableRowSkeleton />
+                <TableRowSkeleton />
+                <TableRowSkeleton />
+              </>
+            ) : (
+              <>
+                {projects.map((project) => (
+                  <TableRow key={project.id} project={project} />
+                ))}
+              </>
+            )}
           </tbody>
         </table>
+        <div className="block md:hidden">
+          <MobileProjectTable projects={projects} />
+        </div>
       </div>
     </div>
   );
@@ -233,5 +263,90 @@ function TableRow({ project }: { project: ProjectItem }) {
         </DropdownMenu>{" "}
       </td>
     </tr>
+  );
+}
+
+function MobileProjectTable({ projects }: { projects: ProjectItem[] }) {
+  return (
+    <div className="divide-y divide-gray-200">
+      {projects.map((project, i) => (
+        <div className="p-5" key={i}>
+          <div className="flex items-start justify-between gap-4">
+            <Link
+              href={`/dashboard/projects/${project.id}`}
+              className="flex gap-2 flex-1"
+            >
+              <div
+                className={cn(
+                  "flex h-10 w-10 bg-blue-100 text-primary shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                )}
+              >
+                {getInitials(project.name)}
+              </div>
+
+              <div className="flex-1">
+                <p className="text-sm font-bold">{project.name}</p>
+
+                <p className="mt-1 text-xs text-slate-500">
+                  Department • {project.department.name}
+                </p>
+                <div className="mt-1 flex items-center justify-between">
+                  <p className="text-xs text-slate-500">
+                    Team • {project.team.name || ""}
+                  </p>
+                </div>
+              </div>
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={
+                  "p-2 rounded-lg cursor-pointer text-slate-500 hover:bg-gray-200"
+                }
+              >
+                <div className="">
+                  <MoreHorizontal className="h-4 w-4" />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className={cn("min-w-50")}>
+                <DropdownMenuItem
+                  className={cn("hover:bg-primary-100! hover:text-primary!")}
+                >
+                  <Link
+                    href={`/dashboard/projects/${project.id}`}
+                    className="flex items-center gap-2 w-full"
+                  >
+                    <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
+                      <Eye className="size-3" />
+                    </div>
+                    <div className="flex-1">View</div>
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  className={cn(
+                    "hover:bg-red-100! text-red-500! hover:text-red-500! flex items-center gap-1"
+                  )}
+                >
+                  <div className="h-6 w-6 bg-red-100 flex justify-center items-center rounded-md">
+                    <Pen className="size-3" />
+                  </div>
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className={cn(
+                    "hover:bg-red-100! text-red-500! hover:text-red-500! flex items-center gap-1"
+                  )}
+                >
+                  <div className="h-6 w-6 bg-red-100 flex justify-center items-center rounded-md">
+                    <Trash2 className="size-3" />
+                  </div>
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>{" "}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

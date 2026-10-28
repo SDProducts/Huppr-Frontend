@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 export const SelectInputSkeleton = () => {
@@ -562,6 +563,75 @@ export function MetricsCardSkeleton({ number = 5 }: { number?: number }) {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+export function TableRowSkeleton() {
+  return (
+    <tr className="border-b border-slate-100 last:border-0">
+      {/* Project Name & Description */}
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-10 w-10 rounded-md shrink-0" />
+          <div className="space-y-1.5">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-3 w-48" />
+          </div>
+        </div>
+      </td>
+
+      {/* Department */}
+      <td className="px-6 py-4">
+        <Skeleton className="h-4 w-24" />
+      </td>
+
+      {/* Project Lead */}
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-6 w-6 rounded-full" />
+          <Skeleton className="h-4 w-28" />
+        </div>
+      </td>
+
+      {/* Team */}
+      <td className="px-6 py-4">
+        <Skeleton className="h-4 w-20" />
+      </td>
+
+      {/* Progress */}
+      <td className="px-6 py-4 min-w-40">
+        <div className="space-y-1.5">
+          <div className="flex justify-between">
+            <Skeleton className="h-2.5 w-8" />
+            <Skeleton className="h-2.5 w-6" />
+          </div>
+          <Skeleton className="h-2 w-full rounded-full" />
+        </div>
+      </td>
+
+      {/* Status */}
+      <td className="px-6 py-4">
+        <Skeleton className="h-6 w-20 rounded-full" />
+      </td>
+
+      {/* Actions */}
+      <td className="px-4 text-right">
+        <Skeleton className="h-8 w-8 rounded-lg ml-auto" />
+      </td>
+    </tr>
+  );
+}
+export function MobileTableRow() {
+  return (
+    <div className="p-4">
+      <div className="flex items-center gap-3">
+        <Skeleton className="h-10 w-10 rounded-md shrink-0" />
+        <div className="space-y-1.5">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-48" />
+        </div>
+      </div>
     </div>
   );
 }

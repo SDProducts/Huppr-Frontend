@@ -1,6 +1,9 @@
+"use client";
 import ProjectListTable from "@/app/dashboard/projects/_components/ProjectListTable";
+import CreateProject from "@/app/dashboard/teams/_components/CreateProject";
 import Button from "@/components/ui/CustomButton";
 import { Progress } from "@/components/ui/progress";
+import { useModal } from "@/context/modal.state";
 import {
   AlertTriangle,
   CheckCircle,
@@ -13,6 +16,14 @@ import {
 import React from "react";
 
 const ProjectPage = () => {
+  const modal = useModal();
+  function handleNewProject() {
+    modal.open({
+      content: <CreateProject />,
+      size: "sm:w-xl",
+      bgColor: "bg-slate-100",
+    });
+  }
   return (
     <div className="space-y-10">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-10">
@@ -30,6 +41,7 @@ const ProjectPage = () => {
             className="bg-white! text-primary! text-sm w-fit!"
           />
           <Button
+            onClick={handleNewProject}
             label="New Porject"
             icon={<Plus className="size-4" />}
             className="text-sm w-fit!"
@@ -37,7 +49,7 @@ const ProjectPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-2">
         <StatCard
           name="Total Projects"
           value={24}
@@ -165,12 +177,14 @@ function StatCard(stat: StatProp) {
       <div className="space-y-4">
         <div className="flex justify-between items-start">
           <div className="space-y-1 flex-1">
-            <div className="uppercase text-sm font-semibold text-gray-500">
+            <div className="uppercase text-xs sm:text-sm font-semibold text-gray-500">
               {stat.name}
             </div>
 
             <div className="flex gap-2 items-end">
-              <div className="font-extrabold text-5xl">{stat.value}</div>
+              <div className="font-extrabold text-3xl sm:text-5xl">
+                {stat.value}
+              </div>
               <div className="text-xs truncate">{stat.subtext}</div>
             </div>
           </div>

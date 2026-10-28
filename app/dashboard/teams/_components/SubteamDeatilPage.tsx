@@ -1,10 +1,9 @@
 "use client";
 
-import CreateProject from "@/app/dashboard/departments/[department]/teams/_components/CreateProject";
 import ProjectListTable from "@/app/dashboard/departments/[department]/teams/_components/ProjectListTable";
 import SubteamMetricCard from "@/app/dashboard/departments/[department]/teams/_components/SubteamMetricCard";
 import TeamMemberListTable from "@/app/dashboard/departments/[department]/teams/_components/TeamMemberListTable";
-import CreateSubTeam from "@/app/dashboard/departments/_components/CreateSubTeam";
+import CreateProject from "@/app/dashboard/teams/_components/CreateProject";
 import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import { Progress } from "@/components/ui/progress";
@@ -22,6 +21,7 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const SubteamDetailPage = () => {
   const modal = useModal();
@@ -32,7 +32,7 @@ const SubteamDetailPage = () => {
     { label: "Team Members", id: "members" },
     { label: "Active Projects", id: "projects" },
   ];
-  const [activeTab, setactiveTab] = useState("members");
+  const [activeTab, setactiveTab] = useState("projects");
   if (isLoading || !data) {
     return <PageLoader />;
   }
@@ -59,6 +59,7 @@ const SubteamDetailPage = () => {
                   />
                 ),
                 size: "sm:w-xl",
+                bgColor: "bg-slate-100",
               });
             }}
             icon={<FolderPlus size={16} />}
@@ -70,10 +71,10 @@ const SubteamDetailPage = () => {
             label="Add Members"
             className="w-fit! px-5"
             onClick={() => {
-              modal.open({
-                content: <CreateSubTeam />,
-                size: "sm:w-xl",
-              });
+              toast.loading("Coming soon...");
+              setTimeout(() => {
+                toast.dismiss();
+              }, 3000);
             }}
           />
         </div>
