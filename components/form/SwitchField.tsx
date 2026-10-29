@@ -3,20 +3,20 @@
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { ErrorMessage, useField, useFormikContext } from "formik";
-import { Check, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import React from "react";
 
 interface SwitchFieldProps {
   name: string;
   label?: string | React.ReactNode;
-  option: SwitchOption[];
+  option?: SwitchOption[];
   type?: "multiple" | "single";
   labelPosition?: "left" | "right";
   className?: string;
   disabled?: boolean;
   maxSelections?: number;
   minSelections?: number;
-  labelKey?: string;
+  singleLabelDescription?: React.ReactNode | string;
   classNameKey?: string;
   orientationStyle?: string;
   optionClassName?: string;
@@ -34,7 +34,7 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
   disabled = false,
   maxSelections,
   minSelections,
-  labelKey = "label",
+  singleLabelDescription,
   orientationStyle,
   optionClassName,
   labelClassName,
@@ -150,7 +150,9 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
             const labelValue = Object.entries(item).find(
               ([key, value]) => key !== "isEnabled" && value != null
             )?.[1];
-            const optionItem = option.find((opt) => opt.label === item.channel);
+            const optionItem = option?.find(
+              (opt) => opt.label === item.channel
+            );
 
             const atMaximum =
               maxSelections !== undefined &&
@@ -205,41 +207,26 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
 
   return (
     <div className={cn("w-full", className)}>
+      <div className={cn("text-sm font-medium mb-2", labelClassName)}>
+        {label}
+      </div>
       <label
         className={cn(
-          "flex items-center gap-3",
+          "flex items-center gap-3 border border-slate-100 p-2 hover:bg-slate-100 focus:bg-slate-100 rounded-sm",
           labelPosition === "left" && "flex-row-reverse justify-between",
           disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer",
           labelClassName
         )}
       >
-        <span
-          className={cn(
-            "relative flex shrink-0 items-center justify-center rounded-md border transition-colors",
-            size === "xs" && "h-4 w-4",
-            size === "sm" && "h-4 w-4",
-            size === "md" && "h-5 w-5",
-            size === "lg" && "h-6 w-6",
-            isChecked
-              ? "border-primary bg-primary text-primary-foreground"
-              : "border-input bg-background"
-          )}
-        >
-          {isChecked && (
-            <Check className={cn(size === "lg" ? "h-4 w-4" : "h-3.5 w-3.5")} />
-          )}
-
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={(event) => helpers.setValue(event.target.checked)}
-            disabled={disabled}
-            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-            aria-label={typeof label === "string" ? label : name}
-          />
-        </span>
-
-        {label && <span className="text-sm font-medium">{label}</span>}
+        {singleLabelDescription && (
+          <div className="text-sm flex-1">{singleLabelDescription}</div>
+        )}
+        <Switch
+          checked={isChecked}
+          onCheckedChange={(checked) => helpers.setValue(checked)}
+          className={cn("cursor-pointer")}
+          aria-label={String(label ?? "")}
+        />
       </label>
 
       <ErrorMessage name={name}>

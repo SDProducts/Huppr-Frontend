@@ -6,8 +6,10 @@ import SearchableSelect from "@/components/form/SearchableSelect";
 import Button from "@/components/ui/CustomButton";
 import { Form, Formik } from "formik";
 import { ArrowRight, Bookmark } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function PolicyInfoForm() {
+  const router = useRouter();
   const initialValues = {
     name: "",
     type: "",
@@ -19,7 +21,14 @@ export default function PolicyInfoForm() {
     { label: "Draft", value: "draft" },
     { label: "Inactive", value: "inactive" },
   ];
-  function saveDraft(params: typeof initialValues) {}
+  const TYPE_OPTION = [
+    { label: "annual", value: "annual" },
+    { label: "sick", value: "sick" },
+    { label: "maternity", value: "maternity" },
+  ];
+  function saveDraft(params: typeof initialValues) {
+    router.replace(`/dashboard/leave/create-leave-policy?step=eligibility`);
+  }
   return (
     <div>
       <Formik
@@ -46,12 +55,13 @@ export default function PolicyInfoForm() {
                       <Button
                         label="Save Draft"
                         icon={<Bookmark className="size-4" />}
+                        type="submit"
                         className="bg-transparent! border text-primary! w-fit! text-sm"
                       />
                     </div>
                   </div>
                   <CreateLeavePolicyStep currentStep={1} />
-                  <div className="space-y-6">
+                  <div className="space-y-6 p-6 rounded-xl bg-white">
                     <div className="">
                       <h2 className="text-xl font-bold">Policy Information</h2>
                       <p>Define the basic details of the leave policy.</p>
@@ -61,14 +71,14 @@ export default function PolicyInfoForm() {
                         <Input
                           label="Policy Name"
                           name="name"
-                          className="bg-white"
+                          className="bg-gray-200"
                           LabelClassName="text-sm"
                         />
                         <SearchableSelect
                           name="type"
-                          options={[]}
+                          options={TYPE_OPTION}
                           label="Leave Type"
-                          className="bg-white"
+                          className="bg-gray-200"
                           labelClassName="text-sm"
                         />
                         <div className="col-span-2">
@@ -76,7 +86,7 @@ export default function PolicyInfoForm() {
                             label="Description"
                             name="description"
                             type="textarea"
-                            className="bg-white"
+                            className="bg-gray-200"
                             LabelClassName="text-sm"
                             rows={2}
                           />
@@ -87,7 +97,7 @@ export default function PolicyInfoForm() {
                         name="status"
                         options={STATUS_OPTION}
                         label="Policy Status"
-                        optionClassName="bg-white"
+                        optionClassName="bg-gray-100/10"
                       />
                     </div>
                   </div>
@@ -95,6 +105,7 @@ export default function PolicyInfoForm() {
                     <Button
                       label="Next: Eligibility"
                       className="w-fit!"
+                      type="submit"
                       rightIcon={<ArrowRight className="size-4" />}
                     />
                   </div>

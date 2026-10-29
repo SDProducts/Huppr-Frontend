@@ -13,15 +13,17 @@ type TabsSelectFieldProps = {
   label?: string;
   className?: string;
   labelClassName?: string;
+  optionClassName?: string;
   disabled?: boolean;
   options: Option[];
 };
 
 export default function TabsSelectField({
   name = "priority",
-  label = "Priority level",
+  label = "",
   className,
   labelClassName,
+  optionClassName,
   disabled = false,
   options,
 }: TabsSelectFieldProps) {
@@ -62,7 +64,8 @@ export default function TabsSelectField({
                 isSelected
                   ? "bg-white font-semibold text-primary"
                   : "text-gray-600 hover:bg-white/60",
-                disabled && "cursor-not-allowed opacity-50"
+                disabled && "cursor-not-allowed opacity-50",
+                optionClassName
               )}
             >
               {item.label}

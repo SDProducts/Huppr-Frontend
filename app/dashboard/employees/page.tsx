@@ -1,3 +1,9 @@
+import EmployeeOverview from "@/app/dashboard/employees/_components/EmployeeOverview";
+
 export default function page() {
-  return <div className=""></div>;
+  return (
+    <div className="">
+      <EmployeeOverview />
+    </div>
+  );
 }
