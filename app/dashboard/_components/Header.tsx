@@ -25,12 +25,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
 import { navigation } from "@/data/constants";
+import { useGetMyDetails } from "@/hooks/auth/useAuth";
 import { useGetDepartments, useGetTeams } from "@/hooks/employer/useDepartment";
 import { cn } from "@/lib/utils";
 import Cookies from "js-cookie";
 
 export function HeaderMenu() {
   const organisationId = Cookies.get("organisationId");
+  const { data: myData, isLoading: isGettingMyDetails } = useGetMyDetails();
   const { data, isLoading: isgettingDept } = useGetDepartments(
     organisationId ? { organisationId: organisationId } : {}
   );
@@ -51,7 +53,7 @@ export function HeaderMenu() {
           >
             <Building2 size={15} strokeWidth={2.2} className="text-[#2864e8]" />
 
-            <span>Sterling Tech</span>
+            <span>{myData?.organizationName}</span>
 
             <ChevronDown size={14} strokeWidth={2} className="text-[#20242a]" />
           </button>
@@ -329,7 +331,7 @@ export function HeaderMenu() {
                   strokeWidth={2.2}
                   className="text-primary"
                 />
-                <span>RichTec Professional</span>
+                <span>{myData?.organizationName}</span>
               </div>
             </NavigationMenuTrigger>
 

@@ -590,14 +590,19 @@ interface ActivityTimelineResponse {
   items: ActivityItem[];
   nextCursor: string;
 }
-
+interface OrganisationOBJ {
+  id: string;
+  name: string;
+}
 interface MyDetailsResponse {
   id: string;
   email: string;
   roles: string[];
+  organisations: OrganisationOBJ[];
   onboardingComplete: boolean;
   onboardingStatus: string;
   organizationId: string;
+  organizationName: string;
   onboardingCompletedAt: string;
 }
 

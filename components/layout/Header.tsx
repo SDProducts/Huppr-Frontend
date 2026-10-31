@@ -108,16 +108,16 @@ export default function Header() {
                 <NavigationMenuItem className={cn("cursor-pointer!")}>
                   <NavigationMenuTrigger
                     className={cn(
-                      "cursor-pointer border border-primary/10 h-10 rounded-2xl focus:bg-primary/10 font-semibold"
+                      "cursor-pointer border border-primary/10 h-10 rounded-md focus:bg-primary/10 font-semibold"
                     )}
                   >
-                    <Avatar className={cn("mr-1.5")}>
+                    <Avatar className={cn("mr-1.5")} size="sm">
                       <AvatarImage src={userData?.id} alt={userData?.id} />
-                      <AvatarFallback>
-                        {getInitials(userData?.email || "")}
+                      <AvatarFallback className={cn("text-[9px]!")}>
+                        {getInitials(userData?.organizationName || "")}
                       </AvatarFallback>
                     </Avatar>
-                    <span>{userData?.email}</span>
+                    <span>{userData?.organizationName}</span>
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className={cn("min-h-50 min-w-65")}>
                     <div className="p-4 divide-y divide-gray-100 text-sm">

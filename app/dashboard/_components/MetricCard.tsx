@@ -73,27 +73,27 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        "flex min-h-[194px] w-full flex-col rounded-[24px] border border-slate-200 bg-white p-5",
+        "flex min-h-[194px] w-full flex-col rounded-2xl border border-slate-200 bg-white p-5",
         className
       )}
     >
       {/* Icon */}
       <div
         className={cn(
-          "flex size-9 items-center justify-center rounded-xl",
+          "flex size-16 items-center justify-center rounded-xl",
           styles.icon
         )}
       >
-        <Icon className={cn("size-[18px]", styles.iconColor)} strokeWidth={2} />
+        <Icon className={cn("size-10", styles.iconColor)} strokeWidth={2} />
       </div>
 
       {/* Value */}
-      <div className="mt-5">
-        <p className="text-[22px] font-bold leading-none tracking-tight text-slate-900">
+      <div className="mt-3">
+        <p className="text-4xl font-extrabold leading-none tracking-tight text-slate-900">
           {value}
         </p>
 
-        <p className="mt-3 text-[13px] leading-5 text-slate-500">{label}</p>
+        <p className="mt-1 leading-5 text-slate-500">{label}</p>
       </div>
 
       {/* Bottom information */}
