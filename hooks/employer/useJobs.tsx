@@ -1,5 +1,8 @@
 import api from "@/lib/axios.config";
-import { CreateJobPayload } from "@/types/create_job_payload";
+import {
+  CreateJobPayload,
+  CreatePipelineStagePayload,
+} from "@/types/create_job_payload";
 import { JobListResponse, JobsDashboardResponse } from "@/types/job";
 import {
   Applicants,
@@ -201,5 +204,51 @@ export const useGetJobApplicants = (jobId?: string) => {
       return response.data;
     },
     enabled: !!jobId,
+  });
+};
+
+export const useCreatePipelineStage = (jobId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: CreatePipelineStagePayload) => {
+      const response = await api.post(
+        `/employer/jobs/${jobId}/stages`,
+        payload
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["job"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["jobs"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["jobs-pipeline"],
+      });
+      toast.success("Created new pipeline stage");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
   });
 };

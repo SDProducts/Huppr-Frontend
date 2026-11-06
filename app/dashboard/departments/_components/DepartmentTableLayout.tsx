@@ -60,13 +60,28 @@ function TableRow({ department }: { department: DR_DepartmentItem }) {
     <tr className="border-b border-slate-100 last:border-0">
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
-          <div
+          <Avatar
+            size="lg"
+            className={cn(
+              "rounded-md after:rounded-md! bg-primary-100 text-primary! font-bold"
+            )}
+          >
+            <AvatarImage
+              src={department.icon.url}
+              alt={department.name}
+              className={cn("rounded-md p-1")}
+            />
+            <AvatarFallback className={cn("rounded-md text-primary")}>
+              {getInitials(department.name)}
+            </AvatarFallback>
+          </Avatar>
+          {/* <div
             className={cn(
               "flex h-10 w-10 bg-blue-100 text-primary shrink-0 items-center justify-center rounded-md text-xs font-bold"
             )}
           >
             {getInitials(department.name)}
-          </div>
+          </div> */}
 
           <Link
             href={`/dashboard/departments/${department.id}`}

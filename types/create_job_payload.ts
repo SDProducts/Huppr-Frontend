@@ -130,3 +130,11 @@ export interface CreateJobPayload {
   hiringTeam?: HiringTeamMember[];
   expectedRevision?: number;
 }
+
+export interface CreatePipelineStagePayload {
+  name: string;
+  category: string;
+  description: string;
+  accent: string;
+  isAssessment: boolean;
+}

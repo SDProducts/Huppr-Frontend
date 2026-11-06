@@ -16,6 +16,7 @@ import {
   LineChart,
   MoreVertical,
   Plus,
+  Trash2,
   UserPlus2,
   Users2,
 } from "lucide-react";
@@ -39,10 +40,13 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 
+import CreatePipelineStage from "@/app/dashboard/jobs/_components/CreatePipelineStage";
 import { SortableStageCard } from "@/app/dashboard/jobs/_components/SortableStageCard";
 import ColorInput from "@/components/form/ColorInput";
 import Input from "@/components/form/Input";
+import ConfirmDelete from "@/components/global/ConfirmDelete";
 import { PageLoader } from "@/components/global/PageLoader";
+import { useModal } from "@/context/modal.state";
 import { JobItem } from "@/types/department_roles";
 import { arrayMove } from "@dnd-kit/sortable";
 
@@ -65,6 +69,7 @@ const CreateJobStep3 = () => {
   const searchParams = useSearchParams();
   const urlParams = new URLSearchParams();
   const router = useRouter();
+  const modal = useModal();
   const jobId = searchParams.get("jobId");
   const { data: jobData, isLoading: isgettingJob } = useGetJobById(jobId || "");
   const { mutate: patchJob, isPending: patchingJob } = usePatchJob(jobId || "");
@@ -117,9 +122,25 @@ const CreateJobStep3 = () => {
     }
     router.replace(`/dashboard/jobs/create-job?${urlParams.toString()}`);
   }
+  function handleStageDelete(params: string) {
+    modal.open({
+      content: (
+        <ConfirmDelete
+          api_path={`employer/jobs/${job.id}/stages/${params}`}
+          queries={["jobs", "job", "job-stages"]}
+          action="Pipeline Stage"
+        />
+      ),
+    });
+    setactiveStage("Screening");
+  }
   return (
     <div>
-      <Formik initialValues={formInitialvalues} onSubmit={submit}>
+      <Formik
+        initialValues={formInitialvalues}
+        enableReinitialize
+        onSubmit={submit}
+      >
         {({ isValid, values, setFieldValue }) => {
           const handleDragEnd = (event: DragEndEvent) => {
             const { active, over } = event;
@@ -143,10 +164,13 @@ const CreateJobStep3 = () => {
           };
 
           const handleAddStage = () => {
-            const newStage = createPipelineStage(values.stages.length);
-
-            setFieldValue("stages", [...values.stages, newStage]);
-            setactiveStage(newStage.name);
+            // const newStage = createPipelineStage(values.stages.length);
+            // setFieldValue("stages", [...values.stages, newStage]);
+            // setactiveStage(newStage.name);
+            modal.open({
+              content: <CreatePipelineStage jobId={job.id} />,
+              size: "sm:w-3xl",
+            });
           };
 
           return (
@@ -202,22 +226,36 @@ const CreateJobStep3 = () => {
                     <div className="bg-white rounded-2xl p-6">
                       {values.stages.map((stage, index) => {
                         if (activeStage === stage.name) {
+                          const actualStage = jobStages.find(
+                            (item) => item.name === stage.name
+                          );
                           return (
                             <div className="space-y-10" key={index}>
                               <div className="space-y-5">
-                                <div className="flex items-start gap-3">
-                                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                                    <ClipboardCheck className="size-5" />
-                                  </div>
+                                <div className="flex justify-between">
+                                  <div className="flex items-start gap-3 flex-1">
+                                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+                                      <ClipboardCheck className="size-5" />
+                                    </div>
 
-                                  <div>
-                                    <h2 className="text-xl font-bold capitalize">
-                                      Stage 0{index + 1}: {stage.category} Setup
-                                    </h2>
-                                    <p className="mt-1 max-w-md text-sm text-muted-foreground">
-                                      Verify design systems, tokens, and WCAG
-                                      accessibility skills
-                                    </p>
+                                    <div>
+                                      <h2 className="text-xl font-bold capitalize">
+                                        Stage 0{index + 1}: {stage.category}{" "}
+                                        Setup
+                                      </h2>
+                                      <p className="mt-1 max-w-md text-sm text-muted-foreground">
+                                        Verify design systems, tokens, and WCAG
+                                        accessibility skills
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div
+                                    onClick={() =>
+                                      handleStageDelete(actualStage?.id || "")
+                                    }
+                                    className="size-8 cursor-pointer rounded-md flex justify-center items-center bg-red-500/5 hover:bg-red-500/15 text-red-500"
+                                  >
+                                    <Trash2 className="size-5" />
                                   </div>
                                 </div>
                                 <div className="space-y-2">
