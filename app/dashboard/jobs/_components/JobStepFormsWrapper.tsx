@@ -1,0 +1,46 @@
+"use client";
+import CreateJobStep1 from "@/app/dashboard/jobs/_components/CreateJobStep1";
+import CreateJobStep2 from "@/app/dashboard/jobs/_components/CreateJobStep2";
+import CreateJobStep3 from "@/app/dashboard/jobs/_components/CreateJobStep3";
+import CreateJobStep4 from "@/app/dashboard/jobs/_components/CreateJobStep4";
+import EditJobStep1 from "@/app/dashboard/jobs/_components/EditJobStep1";
+import { useRouter, useSearchParams } from "next/navigation";
+
+const JobStepFormsWrapper = () => {
+  const params = useSearchParams();
+  const { replace } = useRouter();
+  const currentStep = Number(params.get("step"));
+  const jobId = params.get("jobId");
+  if (currentStep === 1) {
+    if (jobId) {
+      return <EditJobStep1 />;
+    } else {
+      return <CreateJobStep1 />;
+    }
+  }
+  if (currentStep === 2) {
+    if (jobId) {
+      return <CreateJobStep2 />;
+    } else {
+      replace(`/dashboard/jobs/create-job?step=1`);
+    }
+  }
+  if (currentStep === 3) {
+    if (jobId) {
+      return <CreateJobStep3 />;
+    } else {
+      replace(`/dashboard/jobs/create-job?step=1`);
+    }
+  }
+  if (currentStep === 4) {
+    if (jobId) {
+      return <CreateJobStep4 />;
+    } else {
+      replace(`/dashboard/jobs/create-job?step=4`);
+    }
+  }
+
+  return <CreateJobStep1 />;
+};
+
+export default JobStepFormsWrapper;

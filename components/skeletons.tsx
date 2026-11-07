@@ -1,0 +1,637 @@
+"use client";
+
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+
+export const SelectInputSkeleton = () => {
+  return (
+    <div className="space-y-1.5">
+      <div className="h-4 w-1/3 bg-gray-300 rounded-sm animate-pulse"></div>
+      <div className="h-12.5 w-full rounded-lg bg-gray-300 animate-pulse"></div>
+    </div>
+  );
+};
+
+export const DepartmentsSelectSkeleton = () => {
+  return (
+    <div className="space-y-8 animate-pulse">
+      {/* Header Skeleton */}
+      <div className="space-y-2">
+        <div className="h-9 w-64 bg-gray-300 rounded-md" />
+        <div className="h-4 w-full max-w-md bg-gray-200 rounded-md" />
+      </div>
+
+      {/* Grid Cards Skeleton */}
+      <div className="grid grid-cols-4 gap-2">
+        {Array.from({ length: 11 }).map((_, i) => (
+          <div
+            key={i}
+            className="border rounded-md bg-gray-200 border-gray-300 flex flex-col overflow-hidden"
+          >
+            {/* Icon Area */}
+            <div className="h-28 w-full flex justify-center items-center">
+              <div className="h-12 w-12 rounded-full bg-gray-300" />
+            </div>
+            {/* Footer Label Area */}
+            <div className="bg-white p-2 flex justify-center">
+              <div className="h-4 w-20 bg-gray-200 rounded" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer Controls Skeleton */}
+      <div className="flex justify-between items-center text-sm py-4 border-t border-gray-300">
+        <div className="h-10 w-24 bg-gray-300 rounded-full" />
+        <div className="h-10 w-28 bg-gray-300 rounded-full" />
+      </div>
+    </div>
+  );
+};
+export const CompanyFormSkeleton = () => {
+  return (
+    <div className="space-y-8 animate-pulse">
+      {/* Header Skeleton */}
+      <div className="space-y-2">
+        <div className="h-9 w-64 bg-gray-300 rounded-md" />
+        <div className="h-4 w-full max-w-md bg-gray-200 rounded-md" />
+      </div>
+
+      {/* Grid Cards Skeleton */}
+
+      <div className="grid gap-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="border rounded-md bg-gray-200 border-gray-300 h-15"
+          />
+        ))}
+      </div>
+
+      {/* Footer Controls Skeleton */}
+      <div className="flex justify-between items-center text-sm py-4 border-t border-gray-300">
+        <div className="h-10 w-24 bg-gray-300 rounded-full" />
+        <div className="h-10 w-28 bg-gray-300 rounded-full" />
+      </div>
+    </div>
+  );
+};
+
+export const WorkspaceSettingsSkeleton = () => {
+  return (
+    <div className="space-y-8 animate-pulse">
+      {/* Header Skeleton */}
+      <div className="space-y-2">
+        <div className="h-8 w-64 bg-gray-200 rounded-md" />
+        <div className="h-4 w-full max-w-md bg-gray-200 rounded-md" />
+      </div>
+
+      {/* Form Fields Layout Skeleton */}
+      <div className="space-y-10">
+        <div className="grid sm:grid-cols-2 gap-4">
+          {/* Row 1: Country Code & Locale */}
+          <div className="space-y-2">
+            <div className="h-4 w-24 bg-gray-200 rounded" />
+            <div className="h-10 w-full bg-gray-200 rounded-md" />
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 w-16 bg-gray-200 rounded" />
+            <div className="h-10 w-full bg-gray-200 rounded-md" />
+          </div>
+
+          {/* Row 2: Time Zone (Full Span) */}
+          <div className="sm:col-span-2 space-y-2">
+            <div className="h-4 w-20 bg-gray-200 rounded" />
+            <div className="h-10 w-full bg-gray-200 rounded-md" />
+          </div>
+
+          {/* Row 3: Week Starts On & Date Format */}
+          <div className="space-y-2">
+            <div className="h-4 w-28 bg-gray-200 rounded" />
+            <div className="h-10 w-full bg-gray-200 rounded-md" />
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 w-36 bg-gray-200 rounded" />
+            <div className="h-10 w-full bg-gray-200 rounded-md" />
+          </div>
+        </div>
+
+        {/* Footer Buttons Skeleton */}
+        <div className="flex justify-between items-center py-4 border-t border-gray-300">
+          <div className="h-10 w-24 bg-gray-200 rounded-full" />
+          <div className="h-10 w-32 bg-gray-200 rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface ActivityTimelineSkeletonProps {
+  count?: number;
+  liveUpdates?: boolean;
+  className?: string;
+}
+
+export function ActivityTimelineSkeleton({
+  count = 5,
+  liveUpdates = true,
+  className,
+}: ActivityTimelineSkeletonProps) {
+  return (
+    <section className={cn("w-full", className)}>
+      {/* Header */}
+      <div className="mb-8 flex items-center justify-between">
+        <div className="h-8 w-56 animate-pulse rounded-md bg-[#e8ebef]" />
+
+        {liveUpdates && (
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#e8ebef]" />
+            <div className="h-4 w-36 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+        )}
+      </div>
+
+      {/* Activities */}
+      <div className="space-y-4">
+        {Array.from({ length: count }).map((_, i) => (
+          <ActivityCardSkeleton key={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ActivityCardSkeleton() {
+  return (
+    <article className="rounded-[18px] border border-[#dfe3e8] bg-white px-8 py-8">
+      <div className="flex gap-8">
+        {/* Icon */}
+        <div className="h-16 w-16 shrink-0 animate-pulse rounded-full bg-[#e8ebef]" />
+
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          {/* Title row */}
+          <div className="flex items-start justify-between gap-6">
+            <div className="h-5 w-2/3 animate-pulse rounded bg-[#e8ebef]" />
+            <div className="h-4 w-16 shrink-0 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+
+          {/* Description — two lines */}
+          <div className="mt-3 space-y-2">
+            <div className="h-4 w-full animate-pulse rounded bg-[#e8ebef]" />
+            <div className="h-4 w-5/6 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+
+          {/* Actions (optional, matches the commented block) */}
+          {/* <div className="mt-5 flex items-center gap-7">
+            <div className="h-[48px] w-32 animate-pulse rounded-[10px] bg-[#e8ebef]" />
+            <div className="h-5 w-20 animate-pulse rounded bg-[#e8ebef]" />
+          </div> */}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+interface RolesListSkeletonProps {
+  count?: number;
+  className?: string;
+}
+
+export function RolesListSkeleton({
+  count = 4,
+  className,
+}: RolesListSkeletonProps) {
+  return (
+    <div className={cn("space-y-2", className)}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-2 rounded-lg bg-white p-4"
+        >
+          <div className="grid flex-1 grid-cols-[3fr_1fr_1fr_2fr] items-center">
+            {/* Name + meta */}
+            <div className="flex items-center gap-2">
+              <div className="h-10 w-10 shrink-0 animate-pulse rounded-md bg-[#e8ebef]" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-40 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+            </div>
+
+            {/* Positions */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="h-4 w-16 animate-pulse rounded bg-[#e8ebef]" />
+              <div className="h-4 w-8 animate-pulse rounded bg-[#e8ebef]" />
+            </div>
+
+            {/* Status badge */}
+            <div className="flex justify-center">
+              <div className="h-6 w-20 animate-pulse rounded-2xl bg-[#e8ebef]" />
+            </div>
+
+            {/* Avatar group */}
+            <div className="flex items-center">
+              <div className="flex -space-x-2">
+                {Array.from({ length: 3 }).map((_, j) => (
+                  <div
+                    key={j}
+                    className="h-9 w-9 animate-pulse rounded-full border-2 border-white bg-[#e8ebef]"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Dropdown trigger placeholder */}
+          <div className="h-[18px] w-[18px] shrink-0 animate-pulse rounded bg-[#e8ebef]" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+interface TeamsGridSkeletonProps {
+  count?: number;
+  className?: string;
+}
+
+export function TeamsGridSkeleton({
+  count = 6,
+  className,
+}: TeamsGridSkeletonProps) {
+  return (
+    <div className={className}>
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: count }).map((_, i) => (
+          <div
+            key={i}
+            className="space-y-4 rounded-md border border-gray-200 bg-white p-4"
+          >
+            {/* Header: icon + name + description */}
+            <div className="flex items-start gap-2">
+              <div className="h-10 w-10 shrink-0 animate-pulse rounded-md bg-[#e8ebef]" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-28 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-full animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-3/4 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+            </div>
+
+            {/* Capacity block */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <div className="h-3 w-24 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-10 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+              {/* Progress bar */}
+              <div className="h-2 w-full animate-pulse rounded-full bg-[#e8ebef]" />
+            </div>
+
+            {/* Separator */}
+            <div className="h-px w-full bg-gray-200" />
+
+            {/* Footer: avatar group + button */}
+            <div className="flex items-center justify-between">
+              {/* Avatar group */}
+              <div className="flex -space-x-4">
+                {Array.from({ length: 4 }).map((_, j) => (
+                  <div
+                    key={j}
+                    className="h-9 w-9 animate-pulse rounded-full border-2 border-white bg-[#e8ebef]"
+                  />
+                ))}
+              </div>
+
+              {/* Button placeholder */}
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-10 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-4 w-4 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface CreateRoleStep2SkeletonProps {
+  className?: string;
+}
+
+export function CreateRoleStep2Skeleton({
+  className,
+}: CreateRoleStep2SkeletonProps) {
+  return (
+    <div className={cn("min-h-[400px] space-y-10 px-4", className)}>
+      {/* Header */}
+      <div className="space-y-2">
+        <div className="h-7 w-56 animate-pulse rounded bg-[#e8ebef]" />
+        <div className="h-4 w-full max-w-2xl animate-pulse rounded bg-[#e8ebef]" />
+      </div>
+
+      {/* Stepper */}
+      <div className="flex items-start">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="relative flex flex-1 flex-col items-center">
+            {i > 0 && (
+              <span className="absolute left-[-50%] right-[50%] top-5 h-px bg-[#e6e9ee]" />
+            )}
+            <div
+              className={cn(
+                "relative z-10 h-10 w-10 animate-pulse rounded-full",
+                i === 0 ? "bg-[#c7d2e5]" : "bg-[#e8ebef]"
+              )}
+            />
+            <div className="mt-3 h-4 w-16 animate-pulse rounded bg-[#e8ebef]" />
+          </div>
+        ))}
+      </div>
+
+      <div className="space-y-7">
+        <div className="grid grid-cols-1 gap-2 lg:grid-cols-[2fr_1fr]">
+          {/* LEFT COLUMN */}
+          <div className="space-y-4">
+            {/* Responsibilities block */}
+            <div className="space-y-5 rounded-lg border border-gray-200 bg-white p-4">
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <div className="h-5 w-40 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-3 w-56 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="h-7 w-24 animate-pulse rounded-lg bg-[#e8ebef]" />
+              </div>
+
+              <div className="space-y-2">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-stretch gap-1">
+                    <div className="h-8 w-8 shrink-0 animate-pulse rounded-sm bg-[#e8ebef]" />
+                    <div className="h-9 flex-1 animate-pulse rounded-sm bg-[#e8ebef]" />
+                    <div className="h-9 w-9 shrink-0 animate-pulse rounded-sm bg-[#e8ebef]" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Skills + Qualifications */}
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {/* Skills */}
+              <div className="flex flex-col justify-between space-y-4 rounded-md bg-white p-4">
+                <div className="space-y-2">
+                  <div className="h-5 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-3 w-40 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-7 w-20 animate-pulse rounded-full bg-[#e8ebef]"
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Qualifications */}
+              <div className="space-y-4 rounded-md bg-white p-4">
+                <div className="space-y-2">
+                  <div className="h-5 w-36 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-3 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <div className="h-3 w-24 animate-pulse rounded bg-[#e8ebef]" />
+                    <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="h-3 w-20 animate-pulse rounded bg-[#e8ebef]" />
+                    <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Other requirements */}
+            <div className="space-y-3 rounded-md bg-white p-4">
+              <div className="space-y-2">
+                <div className="h-5 w-40 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-3 w-64 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+              <div className="h-16 w-full animate-pulse rounded bg-[#e8ebef]" />
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="space-y-4">
+            {/* Experience */}
+            <div className="space-y-6 rounded-md bg-white p-4">
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 animate-pulse rounded bg-[#e8ebef]" />
+                <div className="h-5 w-28 animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+              <div className="flex items-end gap-2">
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-3 w-14 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="mb-5 h-0.5 w-10 bg-gray-300" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-3 w-14 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+              </div>
+            </div>
+
+            {/* Certifications + Languages */}
+            <div className="space-y-4 rounded-md bg-white p-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-5 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-5 w-32 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="h-9 w-full animate-pulse rounded bg-[#e8ebef]" />
+              </div>
+
+              <div className="my-6 h-px w-full bg-gray-200" />
+
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-5 animate-pulse rounded bg-[#e8ebef]" />
+                  <div className="h-5 w-20 animate-pulse rounded bg-[#e8ebef]" />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from({ length: 2 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-7 w-20 animate-pulse rounded-full bg-[#e8ebef]"
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* AI Suggestion card */}
+            <div className="mt-7 space-y-2 rounded-md bg-primary-100 p-4">
+              <div className="flex items-start gap-2">
+                <div className="h-5 w-5 animate-pulse rounded bg-[#c7d2e5]" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-28 animate-pulse rounded bg-[#c7d2e5]" />
+                  <div className="h-3 w-full animate-pulse rounded bg-[#c7d2e5]" />
+                  <div className="h-3 w-4/5 animate-pulse rounded bg-[#c7d2e5]" />
+                  <div className="h-4 w-32 animate-pulse rounded bg-[#c7d2e5]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between pb-5 pt-12">
+          <div className="h-10 w-24 animate-pulse rounded-lg bg-[#e8ebef]" />
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-32 animate-pulse rounded-lg bg-[#e8ebef]" />
+            <div className="h-10 w-28 animate-pulse rounded-lg bg-[#e8ebef]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function ProjectListTableSkeleton() {
+  return (
+    <div className="space-y-0 py-2">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          className="grid grid-cols-[1fr_1fr_2fr_1fr_1fr] py-2 gap-2 animate-pulse"
+          key={i}
+        >
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+          <div className="h-10 bg-gray-200 rounded-sm"></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function CreateRoleStep5Skeleton() {
+  return (
+    <div className="">
+      <div className="bg-white p-8 rounded-lg">
+        <div className="grid grid-cols-[2fr_1fr] gap-4">
+          <div className="">
+            <div className="w-2/3 h-10 rounded-sm bg-gray-400" />
+            <div className="w-1/3 h-10 rounded-sm bg-gray-400" />
+            <div className="grid grid-cols-4 gap-2">
+              <div className="h-10 rounded-sm bg-gray-400" />
+              <div className="h-10 rounded-sm bg-gray-400" />
+              <div className="h-10 rounded-sm bg-gray-400" />
+              <div className="h-10 rounded-sm bg-gray-400" />
+            </div>
+          </div>
+          <div className=""></div>
+        </div>
+      </div>
+      <div className="grid grid-cols-[2fr_1fr] gap-4"></div>
+    </div>
+  );
+}
+
+export function MetricsCardSkeleton({ number = 5 }: { number?: number }) {
+  return (
+    <div className={cn("grid", `grid-cols-${number} gap-2`)}>
+      {Array.from({ length: number }).map((_, i) => (
+        <div
+          key={i}
+          className="rounded-lg border border-slate-200 bg-white shadow-none"
+        >
+          <div className="p-4 space-y-2">
+            <div
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 animate-pulse"
+              )}
+            />
+
+            <div className="h-3 bg-gray-200 animate-pulse" />
+
+            <div className="h-6 w-2/3 bg-gray-200 animate-pulse" />
+
+            <div className="h-3 bg-gray-200 animate-pulse" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function TableRowSkeleton() {
+  return (
+    <tr className="border-b border-slate-100 last:border-0">
+      {/* Project Name & Description */}
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-10 w-10 rounded-md shrink-0" />
+          <div className="space-y-1.5">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-3 w-48" />
+          </div>
+        </div>
+      </td>
+
+      {/* Department */}
+      <td className="px-6 py-4">
+        <Skeleton className="h-4 w-24" />
+      </td>
+
+      {/* Project Lead */}
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-6 w-6 rounded-full" />
+          <Skeleton className="h-4 w-28" />
+        </div>
+      </td>
+
+      {/* Team */}
+      <td className="px-6 py-4">
+        <Skeleton className="h-4 w-20" />
+      </td>
+
+      {/* Progress */}
+      <td className="px-6 py-4 min-w-40">
+        <div className="space-y-1.5">
+          <div className="flex justify-between">
+            <Skeleton className="h-2.5 w-8" />
+            <Skeleton className="h-2.5 w-6" />
+          </div>
+          <Skeleton className="h-2 w-full rounded-full" />
+        </div>
+      </td>
+
+      {/* Status */}
+      <td className="px-6 py-4">
+        <Skeleton className="h-6 w-20 rounded-full" />
+      </td>
+
+      {/* Actions */}
+      <td className="px-4 text-right">
+        <Skeleton className="h-8 w-8 rounded-lg ml-auto" />
+      </td>
+    </tr>
+  );
+}
+export function MobileTableRow() {
+  return (
+    <div className="p-4">
+      <div className="flex items-center gap-3">
+        <Skeleton className="h-10 w-10 rounded-md shrink-0" />
+        <div className="space-y-1.5">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-48" />
+        </div>
+      </div>
+    </div>
+  );
+}
