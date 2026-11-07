@@ -782,3 +782,79 @@ interface Permissions {
 interface ReferencePermissionsResponse {
   items: Permissions[];
 }
+
+interface LeavePolicy {
+  id: string;
+  name: string;
+  leaveType: "annual" | "sick" | "maternity";
+  description: string;
+  status: "draft" | "active" | "inactive";
+  effectiveFrom: string;
+  eligibilityMatch: "all" | "or";
+  departmentIds: string[];
+  roleIds: string[];
+  employmentTypes: string[];
+  genderEligibility: "all" | string;
+  allowanceType: "fixed" | string;
+  daysPerYear: number;
+  proRateNewHires: boolean;
+  accrualMethod: "upfront" | string;
+  accrualFrequency: "monthly" | string;
+  maxCarryover: number;
+  carryoverExpiry: string;
+  minDuration: number;
+  maxConsecutiveDays: number;
+  advanceNoticeDays: number;
+  requireDocumentation: boolean;
+  documentationThresholdDays: number;
+  blackoutPeriods: BlackoutPeriodFOrNewLeavePolicyPayload[];
+  approvalWorkflow: "default" | string;
+  approvalChain: ApprovalChainForNewLeavePolicyPayload[];
+  allowNegativeBalance: boolean;
+  autoDeductPayroll: boolean;
+  assignment: AssignmentForNewLeavePolicyPayload[];
+}
+interface AddNewLeavePolicyPayload {
+  name?: string;
+  leaveType?: "annual" | "sick" | "maternity";
+  description?: string;
+  status?: "draft" | "active" | "inactive";
+  effectiveFrom?: string;
+  eligibilityMatch?: "all" | "or";
+  departmentIds?: string[];
+  roleIds?: string[];
+  employmentTypes?: string[];
+  genderEligibility?: "all" | string;
+  allowanceType?: "fixed" | string;
+  daysPerYear?: number;
+  proRateNewHires?: boolean;
+  accrualMethod?: "upfront" | string;
+  accrualFrequency?: "monthly" | string;
+  maxCarryover?: number;
+  carryoverExpiry?: string;
+  minDuration?: number;
+  maxConsecutiveDays?: number;
+  advanceNoticeDays?: number;
+  requireDocumentation?: boolean;
+  documentationThresholdDays?: number;
+  blackoutPeriods?: BlackoutPeriodFOrNewLeavePolicyPayload[];
+  approvalWorkflow?: "default" | string;
+  approvalChain?: ApprovalChainForNewLeavePolicyPayload[];
+  allowNegativeBalance?: boolean;
+  autoDeductPayroll?: boolean;
+  assignment?: AssignmentForNewLeavePolicyPayload[];
+}
+interface BlackoutPeriodFOrNewLeavePolicyPayload {
+  name: string;
+  startsOn: string;
+  endsOn: string;
+}
+interface ApprovalChainForNewLeavePolicyPayload {
+  level: number;
+  approverRole: string;
+  action: "approval_required" | string;
+}
+interface AssignmentForNewLeavePolicyPayload {
+  kind: "department" | string;
+  id: string;
+}

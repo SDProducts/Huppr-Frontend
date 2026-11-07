@@ -4,16 +4,18 @@ import Input from "@/components/form/Input";
 import RadioGroup from "@/components/form/RadioGroup";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import Button from "@/components/ui/CustomButton";
+import { useCreateNewLeavePolicy } from "@/hooks/employer/useLeave";
 import { Form, Formik } from "formik";
 import { ArrowRight, Bookmark } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function PolicyInfoForm() {
   const router = useRouter();
-  const initialValues = {
+  const { mutate: savePolicy, isPending } = useCreateNewLeavePolicy();
+  const initialValues: AddNewLeavePolicyPayload = {
     name: "",
-    type: "",
-    status: "active",
+    leaveType: "annual",
+    status: "draft",
     description: "",
   };
   const STATUS_OPTION = [
@@ -22,12 +24,18 @@ export default function PolicyInfoForm() {
     { label: "Inactive", value: "inactive" },
   ];
   const TYPE_OPTION = [
-    { label: "annual", value: "annual" },
-    { label: "sick", value: "sick" },
-    { label: "maternity", value: "maternity" },
+    { label: "Annual Leave", value: "annual" },
+    { label: "Sick Leave", value: "sick" },
+    { label: "Maternity Leave", value: "maternity" },
   ];
   function saveDraft(params: typeof initialValues) {
-    router.replace(`/dashboard/leave/create-leave-policy?step=eligibility`);
+    savePolicy(params, {
+      onSuccess(data) {
+        router.replace(
+          `/dashboard/leave/create-leave-policy?step=eligibility&policyId=${data.id}`
+        );
+      },
+    });
   }
   return (
     <div>
@@ -71,11 +79,12 @@ export default function PolicyInfoForm() {
                         <Input
                           label="Policy Name"
                           name="name"
+                          placeholder="Policy name"
                           className="bg-gray-200"
                           LabelClassName="text-sm"
                         />
                         <SearchableSelect
-                          name="type"
+                          name="leaveType"
                           options={TYPE_OPTION}
                           label="Leave Type"
                           className="bg-gray-200"
@@ -86,6 +95,7 @@ export default function PolicyInfoForm() {
                             label="Description"
                             name="description"
                             type="textarea"
+                            placeholder="type in the details about this policy."
                             className="bg-gray-200"
                             LabelClassName="text-sm"
                             rows={2}
@@ -106,6 +116,8 @@ export default function PolicyInfoForm() {
                       label="Next: Eligibility"
                       className="w-fit!"
                       type="submit"
+                      disabled={isPending}
+                      isLoading={isPending}
                       rightIcon={<ArrowRight className="size-4" />}
                     />
                   </div>

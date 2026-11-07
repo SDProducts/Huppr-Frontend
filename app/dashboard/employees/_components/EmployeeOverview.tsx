@@ -5,6 +5,7 @@ import EmployeeTable, {
   Employee,
 } from "@/app/dashboard/employees/_components/EmployeeListTable";
 import Button from "@/components/ui/CustomButton";
+import { useModal } from "@/context/modal.state";
 import { Building2, LogOut, Plus, Upload, UserPlus, Users } from "lucide-react";
 const employees: Employee[] = [
   {
@@ -31,6 +32,10 @@ const employees: Employee[] = [
 ];
 
 export default function EmployeeOverview() {
+  const modal = useModal();
+  function handleAddNewEmployee() {
+    modal.open({ content: <></> });
+  }
   return (
     <div className="space-y-10">
       <div className="space-y-6">
@@ -50,6 +55,7 @@ export default function EmployeeOverview() {
               label="Add New Employee"
               icon={<Plus className="size-4" />}
               className="w-fit!"
+              onClick={handleAddNewEmployee}
             />
             <Button
               label="Bulk Upload"

@@ -7,20 +7,32 @@ import TabsSelectField from "@/components/form/TabSelectInput";
 import { SelectInputSkeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import { useGetDepartments, useGetRoles } from "@/hooks/employer/useDepartment";
+import {
+  useGetSingleLeavePolicy,
+  usePatchLeavePolicy,
+} from "@/hooks/employer/useLeave";
 import { Form, Formik } from "formik";
 import { ArrowRight, Bookmark } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function EligibilityForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const policyId = searchParams.get("policyId");
+  const { data: policy, isLoading: isGetttingPolicy } = useGetSingleLeavePolicy(
+    policyId || ""
+  );
   const { data: deptResponse, isLoading: isGettingDept } = useGetDepartments();
   const { data: rolesResponse, isLoading: isGettingRoles } = useGetRoles();
+  const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
+    policyId || ""
+  );
   const initialValues = {
-    departmentIds: "",
-    roleIds: "",
-    employemt_type: ["full_time"],
-    gender: "all",
-    match: "match_all",
+    departmentIds: policy?.departmentIds || [],
+    roleIds: policy?.roleIds || [],
+    employmentTypes: policy?.employmentTypes || ["full_time"],
+    genderEligibility: policy?.genderEligibility || "all",
+    eligibilityMatch: policy?.eligibilityMatch || "all",
   };
   const departments = deptResponse?.items || [];
   const roles = rolesResponse?.items || [];
@@ -33,8 +45,8 @@ export default function EligibilityForm() {
     value: role.id,
   }));
   const MATCH_OPTION = [
-    { label: "Match All (AND)", value: "match_all" },
-    { label: "Match Any (OR)", value: "match_any" },
+    { label: "Match All (AND)", value: "all" },
+    { label: "Match Any (OR)", value: "any" },
   ];
   const TYPE_OPTION = [
     { label: "Full-time", value: "full_time" },
@@ -48,7 +60,13 @@ export default function EligibilityForm() {
     { label: "Female", value: "female" },
   ];
   function saveDraft(params: typeof initialValues) {
-    router.replace(`/dashboard/leave/create-leave-policy?step=entitlement`);
+    patchPolicy(params, {
+      onSuccess(data) {
+        router.replace(
+          `/dashboard/leave/create-leave-policy?step=entitlement&policyId=${data.id}`
+        );
+      },
+    });
   }
   return (
     <div>
@@ -92,7 +110,7 @@ export default function EligibilityForm() {
                         </p>
                       </div>
                       <TabsSelectField
-                        name="match"
+                        name="eligibilityMatch"
                         options={MATCH_OPTION}
                         optionClassName="text-xs! px-3"
                       />
@@ -114,14 +132,14 @@ export default function EligibilityForm() {
                       ) : (
                         <MultiSearchableSelect
                           label="Roles"
-                          name="rolesIds"
+                          name="roleIds"
                           options={ROLES_OPTION}
                           className="bg-white"
                           labelClassName="mb-2 font-semibold text-sm"
                         />
                       )}
                       <Checkbox
-                        name="employemt_type"
+                        name="employmentTypes"
                         label="Employement Type"
                         options={TYPE_OPTION}
                         type="multiple"
@@ -130,7 +148,7 @@ export default function EligibilityForm() {
                         optionClassName="bg-gray-100/20"
                       />
                       <RadioGroup
-                        name="gender"
+                        name="genderEligibility"
                         label="Gender Eligibility"
                         options={GENDER_OPTION}
                         orientation="horizontal"
@@ -141,7 +159,9 @@ export default function EligibilityForm() {
                   <div className="flex justify-end border-t border-gray-200 py-5">
                     <Button
                       type="submit"
-                      label="Next: Eligibility"
+                      isLoading={isPending}
+                      disabled={isPending}
+                      label="Next: Entitlement"
                       className="w-fit!"
                       rightIcon={<ArrowRight className="size-4" />}
                     />

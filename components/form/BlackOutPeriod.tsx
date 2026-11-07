@@ -5,12 +5,12 @@ import { useField, useFormikContext } from "formik";
 import { CalendarX, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-export interface BlackoutPeriod {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-}
+// export interface BlackoutPeriod {
+//   id: string;
+//   name: string;
+//   startDate: string;
+//   endDate: string;
+// }
 
 interface BlackoutPeriodsFieldProps {
   name: string;
@@ -35,7 +35,8 @@ export default function BlackoutPeriodsField({
   className,
   disabled = false,
 }: BlackoutPeriodsFieldProps) {
-  const [field, meta] = useField<BlackoutPeriod[]>(name);
+  const [field, meta] =
+    useField<BlackoutPeriodFOrNewLeavePolicyPayload[]>(name);
   const { setFieldValue, setFieldTouched } = useFormikContext();
 
   const periods = Array.isArray(field.value) ? field.value : [];
@@ -65,11 +66,11 @@ export default function BlackoutPeriodsField({
       return;
     }
 
-    const newPeriod: BlackoutPeriod = {
-      id: crypto.randomUUID(),
-      name: periodName.trim(),
-      startDate,
-      endDate,
+    const newPeriod: BlackoutPeriodFOrNewLeavePolicyPayload = {
+      // id: crypto.randomUUID(),
+      name: periodName,
+      startsOn: startDate,
+      endsOn: endDate,
     };
 
     await setFieldValue(name, [...periods, newPeriod]);
@@ -78,10 +79,10 @@ export default function BlackoutPeriodsField({
     resetForm();
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (periodName: string) => {
     setFieldValue(
       name,
-      periods.filter((period) => period.id !== id)
+      periods.filter((period) => period.name !== periodName)
     );
     setFieldTouched(name, true, false);
   };
@@ -119,23 +120,23 @@ export default function BlackoutPeriodsField({
 
       {/* Existing periods */}
       <div className="mt-5 space-y-3">
-        {periods.map((period) => (
+        {periods.map((period, i) => (
           <div
-            key={period.id}
+            key={i}
             className="flex items-center justify-between gap-4 rounded-lg bg-slate-50 p-3"
           >
             <div className="min-w-0">
               <h3 className="font-semibold text-slate-900">{period.name}</h3>
 
               <p className="text-sm text-slate-600">
-                {formatDate(period.startDate)} - {formatDate(period.endDate)}
+                {formatDate(period.startsOn)} - {formatDate(period.endsOn)}
               </p>
             </div>
 
             <button
               type="button"
               disabled={disabled}
-              onClick={() => handleDelete(period.id)}
+              onClick={() => handleDelete(period.name)}
               aria-label={`Delete ${period.name}`}
               className="shrink-0 rounded-md p-1 text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
             >
@@ -182,7 +183,7 @@ export default function BlackoutPeriodsField({
               </label>
 
               <input
-                id={`${name}-start-date`}
+                id={`${name}-startsOn`}
                 type="date"
                 value={startDate}
                 onChange={(event) => setStartDate(event.target.value)}
@@ -193,14 +194,14 @@ export default function BlackoutPeriodsField({
 
             <div className="space-y-1.5">
               <label
-                htmlFor={`${name}-end-date`}
+                htmlFor={`${name}-endsOn`}
                 className="text-sm font-medium text-slate-700"
               >
                 End date
               </label>
 
               <input
-                id={`${name}-end-date`}
+                id={`${name}-endsOn`}
                 type="date"
                 min={startDate || undefined}
                 value={endDate}

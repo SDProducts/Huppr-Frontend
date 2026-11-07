@@ -5,6 +5,10 @@ import SearchableSelect from "@/components/form/SearchableSelect";
 import SwitchField from "@/components/form/SwitchField";
 import TabsSelectField from "@/components/form/TabSelectInput";
 import Button from "@/components/ui/CustomButton";
+import {
+  useGetSingleLeavePolicy,
+  usePatchLeavePolicy,
+} from "@/hooks/employer/useLeave";
 import { Form, Formik } from "formik";
 import {
   ArrowRight,
@@ -12,20 +16,30 @@ import {
   SlidersHorizontal,
   TimerReset,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function EntitlementForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const policyId = searchParams.get("policyId");
+  const { data: policy, isLoading: isGetttingPolicy } = useGetSingleLeavePolicy(
+    policyId || ""
+  );
+  const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
+    policyId || ""
+  );
 
   const initialValues = {
-    allowance_type: "fixed_days",
-    accrual_method: "scheduled",
-    frequency: "monthly",
-    expiry: "mar",
-    pro_rating: true,
+    allowanceType: policy?.allowanceType || "fixed",
+    accrualMethod: policy?.accrualMethod || "scheduled",
+    daysPerYear: policy?.daysPerYear || 30,
+    maxCarryover: policy?.maxCarryover || 20,
+    accrualFrequency: policy?.accrualFrequency || "monthly",
+    carryoverExpiry: policy?.carryoverExpiry || "mar",
+    proRateNewHires: policy?.proRateNewHires || true,
   };
   const ALLOWANCE_TYPES = [
-    { label: "Fixed Days", value: "fixed_days" },
+    { label: "Fixed Days", value: "fixed" },
     { label: "Unlimited", value: "unlimited" },
   ];
   const ACCRUAL_METHODS = [
@@ -43,7 +57,19 @@ export default function EntitlementForm() {
     { label: "December (Q4 End)", value: "dec" },
   ];
   function saveDraft(params: typeof initialValues) {
-    router.replace(`/dashboard/leave/create-leave-policy?step=request_rules`);
+    const { maxCarryover, daysPerYear, ...rest } = params;
+    const payload: AddNewLeavePolicyPayload = {
+      maxCarryover: Number(maxCarryover),
+      daysPerYear: Number(daysPerYear),
+      ...rest,
+    };
+    patchPolicy(payload, {
+      onSuccess(data) {
+        router.replace(
+          `/dashboard/leave/create-leave-policy?step=request_rules&policyId=${data.id}`
+        );
+      },
+    });
   }
   return (
     <div>
@@ -102,19 +128,19 @@ export default function EntitlementForm() {
                         </div>
                         <div className="grid grid-cols-2 gap-x-2 gap-y-4">
                           <TabsSelectField
-                            name="allowance_type"
+                            name="allowanceType"
                             label="Allowance Type"
                             options={ALLOWANCE_TYPES}
                           />
                           <Input
                             label="Days per year"
-                            name="days_per_year"
+                            name="daysPerYear"
                             rightIcon={<div>days</div>}
                             LabelClassName="text-sm mb-1"
                             className="h-11 bg-gray-200"
                           />
                           <SwitchField
-                            name="pro_rating"
+                            name="proRateNewHires"
                             singleLabelDescription="Enable automatic pro- rating based on join date"
                             label="Pro-rating for New Hires"
                           />
@@ -132,25 +158,25 @@ export default function EntitlementForm() {
                         </div>
                         <div className="grid grid-cols-2 gap-x-2 gap-y-4">
                           <TabsSelectField
-                            name="accrual_method"
+                            name="accrualMethod"
                             label="Accrual Method"
                             options={ACCRUAL_METHODS}
                           />
                           <Input
                             label="Max Carryover to Next Year"
-                            name="days_per_year"
+                            name="maxCarryover"
                             rightIcon={<div>days</div>}
                             LabelClassName="text-sm mb-1"
                             className="h-11 bg-gray-200"
                           />
                           <SearchableSelect
-                            name="frequency"
+                            name="accrualFrequency"
                             label="Accrual Frequency"
                             options={FREQUENCY_OPTION}
                             labelClassName="text-sm"
                           />
                           <SearchableSelect
-                            name="expiry"
+                            name="carryoverExpiry"
                             label="Carryover Expiry"
                             options={EXPIRY_OPTION}
                             labelClassName="text-sm"
@@ -162,8 +188,10 @@ export default function EntitlementForm() {
                   <div className="flex justify-end border-t border-gray-200 py-5">
                     <Button
                       type="submit"
-                      label="Next: Eligibility"
+                      label="Next: Request Rules"
                       className="w-fit!"
+                      disabled={isPending}
+                      isLoading={isPending}
                       rightIcon={<ArrowRight className="size-4" />}
                     />
                   </div>

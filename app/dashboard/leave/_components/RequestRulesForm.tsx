@@ -2,9 +2,12 @@
 import { CreateLeavePolicyStep } from "@/app/dashboard/departments/_components/Steps&Progress";
 import BlackoutPeriodsField from "@/components/form/BlackOutPeriod";
 import Input from "@/components/form/Input";
-import SearchableSelect from "@/components/form/SearchableSelect";
 import SwitchField from "@/components/form/SwitchField";
 import Button from "@/components/ui/CustomButton";
+import {
+  useGetSingleLeavePolicy,
+  usePatchLeavePolicy,
+} from "@/hooks/employer/useLeave";
 import { Form, Formik } from "formik";
 import {
   ArrowRight,
@@ -12,38 +15,55 @@ import {
   CalendarClock,
   SlidersHorizontal,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RequestRulesForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const policyId = searchParams.get("policyId");
+  const { data: policy, isLoading: isGetttingPolicy } = useGetSingleLeavePolicy(
+    policyId || ""
+  );
+  const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
+    policyId || ""
+  );
 
   const initialValues = {
-    maxConsecutiveDays: 14,
-    accrual_method: "scheduled",
-    minDuration: "monthly",
-    expiry: "mar",
-    pro_rating: true,
+    maxConsecutiveDays: policy?.maxConsecutiveDays || 14,
+    advanceNoticeDays: policy?.advanceNoticeDays || 14,
+    documentationThresholdDays: policy?.documentationThresholdDays || 14,
+    minDuration: policy?.minDuration || 20,
+    blackoutPeriods: policy?.blackoutPeriods || [],
+    requireDocumentation: policy?.requireDocumentation || true,
   };
-  const ALLOWANCE_TYPES = [
-    { label: "Fixed Days", value: "fixed_days" },
-    { label: "Unlimited", value: "unlimited" },
-  ];
-  const ACCRUAL_METHODS = [
-    { label: "Upfront", value: "upfront" },
-    { label: "Scheduled", value: "scheduled" },
-  ];
-  const FREQUENCY_OPTION = [
-    { label: "Weekly", value: "weekly" },
-    { label: "Monthly", value: "monthly" },
-    { label: "Yearly", value: "tearly" },
-  ];
-  const EXPIRY_OPTION = [
-    { label: "March (Q1 End)", value: "mar" },
-    { label: "August (Q2 End)", value: "aug" },
-    { label: "December (Q4 End)", value: "dec" },
-  ];
   function saveDraft(params: typeof initialValues) {
-    router.replace(`/dashboard/leave/create-leave-policy?step=request_rules`);
+    const {
+      maxConsecutiveDays,
+      minDuration,
+      advanceNoticeDays,
+      documentationThresholdDays,
+      ...rest
+    } = params;
+    // const formattedBlackoutPeriods: BlackoutPeriodFOrNewLeavePolicyPayload[] =
+    //   blackoutPeriods.map((item) => ({
+    //     name: item.name,
+    //     startsOn: item.startsOn,
+    //     endsOn: item.endsOn,
+    //   }));
+    const payload: AddNewLeavePolicyPayload = {
+      maxConsecutiveDays: Number(maxConsecutiveDays),
+      minDuration: Number(minDuration),
+      advanceNoticeDays: Number(advanceNoticeDays),
+      documentationThresholdDays: Number(documentationThresholdDays),
+      ...rest,
+    };
+    patchPolicy(payload, {
+      onSuccess(data) {
+        router.replace(
+          `/dashboard/leave/create-leave-policy?step=approval_config&policyId=${data.id}`
+        );
+      },
+    });
   }
   return (
     <div>
@@ -100,12 +120,13 @@ export default function RequestRulesForm() {
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-x-2 gap-y-4">
-                          <SearchableSelect
+                          <Input
                             name="minDuration"
+                            type="number"
                             label="Minimum Duration"
-                            options={FREQUENCY_OPTION}
-                            labelClassName="text-sm mb-1"
-                            className="bg-gray-200"
+                            rightIcon={<div>days</div>}
+                            LabelClassName="text-sm mb-1"
+                            className="bg-gray-200 h-12"
                           />
                           <Input
                             label="Maximum Consecutive Days"
@@ -132,21 +153,21 @@ export default function RequestRulesForm() {
                         <div className="grid grid-cols-2 gap-x-2 gap-y-4">
                           <Input
                             label="Advance Notice Required (Days)"
-                            name="days_per_year"
+                            name="advanceNoticeDays"
                             rightIcon={<div>days</div>}
                             LabelClassName="text-sm mb-1"
                             className="h-11 bg-gray-200"
                           />
                           <Input
                             label="Threshold (Days)"
-                            name="days_per_year"
+                            name="documentationThresholdDays"
                             rightIcon={<div>days</div>}
                             LabelClassName="text-sm mb-1"
                             className="h-11 bg-gray-200"
                           />
                           <div className="col-span-2">
                             <SwitchField
-                              name="pro_rating"
+                              name="requireDocumentation"
                               singleLabelDescription={
                                 <div>
                                   <div className="font-semibold">
@@ -162,14 +183,16 @@ export default function RequestRulesForm() {
                           </div>
                         </div>
                       </div>
-                      <BlackoutPeriodsField name="blackOutPeriod" />
+                      <BlackoutPeriodsField name="blackoutPeriods" />
                     </div>
                   </div>
                   <div className="flex justify-end border-t border-gray-200 py-5">
                     <Button
                       type="submit"
-                      label="Next: Eligibility"
+                      label="Next: Approval & Assignment"
                       className="w-fit!"
+                      isLoading={isPending}
+                      disabled={isPending}
                       rightIcon={<ArrowRight className="size-4" />}
                     />
                   </div>

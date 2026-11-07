@@ -1,5 +1,7 @@
 "use client";
 
+import LeavePolicyListTable from "@/app/dashboard/leave/_components/LeavePolicyListTable";
+import { TableRowSkeleton } from "@/components/skeletons";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
@@ -304,60 +306,7 @@ export default function LeaveOverviewPage() {
                 ))}
               </div>
             </div>
-
-            <div className="flex min-h-[490px] items-center justify-center p-6 sm:p-10">
-              <div className="flex max-w-md flex-col items-center text-center">
-                <div className="relative mb-7">
-                  <FolderOpen className="h-16 w-16 text-blue-200" />
-                  <span className="absolute -left-4 top-5 text-blue-200">
-                    ✦
-                  </span>
-                  <span className="absolute -right-3 -top-2 text-blue-200">
-                    ✧
-                  </span>
-                </div>
-
-                <h2 className="text-xl font-bold">
-                  {activeTab === "Leave Policies"
-                    ? "No leave policies yet"
-                    : activeTab === "Leave Requests"
-                    ? "No leave requests yet"
-                    : activeTab === "Balances Overview"
-                    ? "No leave balances yet"
-                    : "No calendar entries yet"}
-                </h2>
-
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {activeTab === "Leave Policies"
-                    ? "Create your first leave policy to define entitlements and start managing leave."
-                    : activeTab === "Leave Requests"
-                    ? "Employee leave requests will appear here when submitted."
-                    : activeTab === "Balances Overview"
-                    ? "Employee leave balances will appear here once policies are assigned."
-                    : "Your team's leave schedules and public holidays will appear here."}
-                </p>
-
-                <button
-                  // onClick={() =>
-                  //   navigate(
-                  //     activeTab === "Leave Policies"
-                  //       ? "Create Leave Policy"
-                  //       : activeTab
-                  //   )
-                  // }
-                  className="mt-7 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-                >
-                  <Plus className="h-4 w-4" />
-                  {activeTab === "Leave Policies"
-                    ? "Create Leave Policy"
-                    : activeTab === "Leave Requests"
-                    ? "View Leave Requests"
-                    : activeTab === "Balances Overview"
-                    ? "Manage Balances"
-                    : "Open Calendar"}
-                </button>
-              </div>
-            </div>
+            {renderActiveTabContent(activeTab)}
           </section>
 
           {/* Sidebar */}
@@ -468,5 +417,75 @@ function StatCard(stat: StatProp) {
         </span>
       </div>
     </div>
+  );
+}
+
+interface Props {
+  selectedTab: string;
+}
+export function EmptyState({ selectedTab }: Props) {
+  return (
+    <div className="flex min-h-[490px] items-center justify-center p-6 sm:p-10">
+      <div className="flex max-w-md flex-col items-center text-center">
+        <div className="relative mb-7">
+          <FolderOpen className="h-16 w-16 text-blue-200" />
+          <span className="absolute -left-4 top-5 text-blue-200">✦</span>
+          <span className="absolute -right-3 -top-2 text-blue-200">✧</span>
+        </div>
+
+        <h2 className="text-xl font-bold">
+          {selectedTab === "Leave Policies"
+            ? "No leave policies yet"
+            : selectedTab === "Leave Requests"
+            ? "No leave requests yet"
+            : selectedTab === "Balances Overview"
+            ? "No leave balances yet"
+            : "No calendar entries yet"}
+        </h2>
+
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          {selectedTab === "Leave Policies"
+            ? "Create your first leave policy to define entitlements and start managing leave."
+            : selectedTab === "Leave Requests"
+            ? "Employee leave requests will appear here when submitted."
+            : selectedTab === "Balances Overview"
+            ? "Employee leave balances will appear here once policies are assigned."
+            : "Your team's leave schedules and public holidays will appear here."}
+        </p>
+
+        <button
+          // onClick={() =>
+          //   navigate(
+          //     selectedTab === "Leave Policies"
+          //       ? "Create Leave Policy"
+          //       : selectedTab
+          //   )
+          // }
+          className="mt-7 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+        >
+          <Plus className="h-4 w-4" />
+          {selectedTab === "Leave Policies"
+            ? "Create Leave Policy"
+            : selectedTab === "Leave Requests"
+            ? "View Leave Requests"
+            : selectedTab === "Balances Overview"
+            ? "Manage Balances"
+            : "Open Calendar"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function renderActiveTabContent(activeTab: string) {
+  if (activeTab === "Leave Policies") {
+    return <LeavePolicyListTable />;
+  }
+  return (
+    <>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <TableRowSkeleton key={i} />
+      ))}
+    </>
   );
 }

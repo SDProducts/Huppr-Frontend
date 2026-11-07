@@ -1,4 +1,5 @@
 "use client";
+import ApprovalConfiguration from "@/app/dashboard/leave/_components/ApprovalConfiguration";
 import EligibilityForm from "@/app/dashboard/leave/_components/EligibilityForm";
 import EntitlementForm from "@/app/dashboard/leave/_components/EntitlementForm";
 import PolicyInfoForm from "@/app/dashboard/leave/_components/PolicyInfoForm";
@@ -8,14 +9,18 @@ import { useSearchParams } from "next/navigation";
 export default function CreateLeavePolicy() {
   const stepParams = useSearchParams();
   const step = stepParams.get("step");
+  const policyId = stepParams.get("policyId");
   if (step === "eligibility") {
-    return <EligibilityForm />;
+    return policyId ? <EligibilityForm /> : <PolicyInfoForm />;
   }
   if (step === "entitlement") {
-    return <EntitlementForm />;
+    return policyId ? <EntitlementForm /> : <PolicyInfoForm />;
   }
   if (step === "request_rules") {
-    return <RequestRulesForm />;
+    return policyId ? <RequestRulesForm /> : <PolicyInfoForm />;
+  }
+  if (step === "approval_config") {
+    return policyId ? <ApprovalConfiguration /> : <PolicyInfoForm />;
   }
   return (
     <div>
