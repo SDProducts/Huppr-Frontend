@@ -19,6 +19,7 @@ import {
   ClipboardCheck,
   Megaphone,
   MessageSquare,
+  UserCircle,
   Users,
 } from "lucide-react";
 
@@ -28,6 +29,7 @@ const PageWrapper = () => {
   if (!dashboardData) {
     return <PageLoader text="Loading your dashboard..." />;
   }
+  const summary = dashboardData.summary;
   const activities = dashboardData.todaysActivity.items;
   const departments = dashboardData.departmentOverview.items;
   const metrics = [
@@ -116,9 +118,46 @@ const PageWrapper = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {metrics.map((metric) => (
-          <MetricCard key={metric.label} {...metric} />
-        ))}
+        <MetricCard
+          icon={Users}
+          label="Total Headcount"
+          value={summary.headcount}
+        />
+        <MetricCard
+          icon={CalendarDays}
+          value={summary.pendingLeaveRequests}
+          label={"Leave Requests"}
+          meta={"Awaiting approval"}
+          variant={"purple" as const}
+        />
+        <MetricCard
+          icon={MessageSquare}
+          value={summary.interviewsToday}
+          label="Interviews"
+          meta="Today"
+          variant={"green" as const}
+        />
+        <MetricCard
+          icon={Megaphone}
+          value={summary.startersToday}
+          label="Starts Today"
+          meta="New starter"
+          variant={"teal" as const}
+        />
+        <MetricCard
+          icon={UserCircle}
+          value={summary.openRoles}
+          label="Open Roles"
+          meta="Open positions"
+          variant={"red" as const}
+        />
+        <MetricCard
+          icon={ClipboardCheck}
+          value={summary.reviewsDueThisWeek}
+          label="Reviews Due"
+          meta="This week"
+          variant={"yellow" as const}
+        />
       </div>
       <div className="grid sm:grid-cols-3 mt-4 gap-6">
         <div className="sm:col-span-2 space-y-2">

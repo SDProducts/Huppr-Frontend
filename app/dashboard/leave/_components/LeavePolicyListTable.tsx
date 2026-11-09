@@ -123,7 +123,7 @@ export default function LeavePolicyListTable() {
                       <DropdownMenuSubContent className={cn("min-w-50")}>
                         <DropdownMenuItem className={cn("hover:bg-gray-100")}>
                           <Link
-                            href={`/dashboard/leave/create-leave-policy?step=eligibility&policyId=${policy.id}`}
+                            href={`/dashboard/leave/create-leave-policy?step=policy_info&policyId=${policy.id}`}
                             className="flex items-center gap-2 w-full text-sm text-gray-600"
                           >
                             <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
@@ -156,7 +156,7 @@ export default function LeavePolicyListTable() {
                         </DropdownMenuItem>
                         <DropdownMenuItem className={cn("hover:bg-gray-100")}>
                           <Link
-                            href={`/dashboard/jobs/create-job?step=approval_config&policyId=${policy.id}`}
+                            href={`/dashboard/leave/create-leave-policy?step=approval_config&policyId=${policy.id}`}
                             className="flex items-center gap-2 w-full text-sm text-gray-600"
                           >
                             <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">

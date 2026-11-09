@@ -31,7 +31,9 @@ const taskStatusStyles: Record<string, string> = {
   completed: "bg-green-100 text-green-700 border-green-200",
   done: "bg-green-100 text-green-700 border-green-200",
   on_hold: "bg-yellow-100 text-yellow-800 border-yellow-300 font-semibold",
-  canceled: "bg-red-100 text-red-800 border-red-300 font-semibold",
+  draft: "bg-amber-100 text-amber-800 border-amber-300 font-semibold",
+  active: "bg-green-100 text-green-800 border-green-300 font-semibold",
+  inactive: "bg-purple-100 text-purple-800 border-purple-300 font-semibold",
 };
 
 // Helper component for Priority Pill

@@ -439,6 +439,16 @@ interface NetworkSummary {
   headcount: number;
   openRoles: number;
   onLeaveToday: number;
+  subteams: number;
+  startersToday: number;
+  headcountChange: number;
+  interviewsToday: number;
+  pendingApprovals: number;
+  expiringDocuments: number;
+  previousHeadcount: number;
+  reviewsDueThisWeek: number;
+  pendingLeaveRequests: number;
+  headcountGrowthPercent: number;
 }
 
 interface TodaysActivity {

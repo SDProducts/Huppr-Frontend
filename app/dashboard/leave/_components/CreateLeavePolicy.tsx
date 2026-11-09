@@ -3,6 +3,7 @@ import ApprovalConfiguration from "@/app/dashboard/leave/_components/ApprovalCon
 import EligibilityForm from "@/app/dashboard/leave/_components/EligibilityForm";
 import EntitlementForm from "@/app/dashboard/leave/_components/EntitlementForm";
 import PolicyInfoForm from "@/app/dashboard/leave/_components/PolicyInfoForm";
+import PreviewLeavePolicy from "@/app/dashboard/leave/_components/PreviewLeavePolicy";
 import RequestRulesForm from "@/app/dashboard/leave/_components/RequestRulesForm";
 import { useSearchParams } from "next/navigation";
 
@@ -21,6 +22,9 @@ export default function CreateLeavePolicy() {
   }
   if (step === "approval_config") {
     return policyId ? <ApprovalConfiguration /> : <PolicyInfoForm />;
+  }
+  if (step === "preview_leave_policy") {
+    return policyId ? <PreviewLeavePolicy /> : <PolicyInfoForm />;
   }
   return (
     <div>

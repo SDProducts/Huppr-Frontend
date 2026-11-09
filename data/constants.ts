@@ -199,3 +199,18 @@ class InitialValues {
   };
 }
 export const initialvalues = new InitialValues();
+
+export const months = [
+  { label: "January", value: "january", numberOfDays: 31 },
+  { label: "February", value: "february", numberOfDays: 28 }, // 29 during leap years
+  { label: "March", value: "march", numberOfDays: 31 },
+  { label: "April", value: "april", numberOfDays: 30 },
+  { label: "May", value: "may", numberOfDays: 31 },
+  { label: "June", value: "june", numberOfDays: 30 },
+  { label: "July", value: "july", numberOfDays: 31 },
+  { label: "August", value: "august", numberOfDays: 31 },
+  { label: "September", value: "september", numberOfDays: 30 },
+  { label: "October", value: "october", numberOfDays: 31 },
+  { label: "November", value: "november", numberOfDays: 30 },
+  { label: "December", value: "december", numberOfDays: 31 },
+];

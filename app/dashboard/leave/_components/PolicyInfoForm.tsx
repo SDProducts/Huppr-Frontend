@@ -4,19 +4,32 @@ import Input from "@/components/form/Input";
 import RadioGroup from "@/components/form/RadioGroup";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import Button from "@/components/ui/CustomButton";
-import { useCreateNewLeavePolicy } from "@/hooks/employer/useLeave";
+import {
+  useCreateNewLeavePolicy,
+  useGetSingleLeavePolicy,
+  usePatchLeavePolicy,
+} from "@/hooks/employer/useLeave";
 import { Form, Formik } from "formik";
 import { ArrowRight, Bookmark } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function PolicyInfoForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const policyId = searchParams.get("policyId");
+  const { data: policy, isLoading: isGetttingPolicy } = useGetSingleLeavePolicy(
+    policyId || ""
+  );
+
   const { mutate: savePolicy, isPending } = useCreateNewLeavePolicy();
+  const { mutate: patchPolicy, isPending: isPatching } = usePatchLeavePolicy(
+    policyId || ""
+  );
   const initialValues: AddNewLeavePolicyPayload = {
-    name: "",
-    leaveType: "annual",
-    status: "draft",
-    description: "",
+    name: policy?.name || "",
+    leaveType: policy?.leaveType || "annual",
+    status: policy?.status || "draft",
+    description: policy?.description || "",
   };
   const STATUS_OPTION = [
     { label: "Active", value: "active" },
@@ -29,13 +42,23 @@ export default function PolicyInfoForm() {
     { label: "Maternity Leave", value: "maternity" },
   ];
   function saveDraft(params: typeof initialValues) {
-    savePolicy(params, {
-      onSuccess(data) {
-        router.replace(
-          `/dashboard/leave/create-leave-policy?step=eligibility&policyId=${data.id}`
-        );
-      },
-    });
+    if (policyId) {
+      patchPolicy(params, {
+        onSuccess(data) {
+          router.replace(
+            `/dashboard/leave/create-leave-policy?step=eligibility&policyId=${data.id}`
+          );
+        },
+      });
+    } else {
+      savePolicy(params, {
+        onSuccess(data) {
+          router.replace(
+            `/dashboard/leave/create-leave-policy?step=eligibility&policyId=${data.id}`
+          );
+        },
+      });
+    }
   }
   return (
     <div>

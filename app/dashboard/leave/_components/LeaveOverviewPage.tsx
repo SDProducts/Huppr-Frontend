@@ -2,7 +2,15 @@
 
 import LeavePolicyListTable from "@/app/dashboard/leave/_components/LeavePolicyListTable";
 import { TableRowSkeleton } from "@/components/skeletons";
+import Button from "@/components/ui/CustomButton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+
 import {
   ArrowRight,
   BarChart3,
@@ -16,6 +24,7 @@ import {
   FolderOpen,
   Globe2,
   LucideIcon,
+  MoreVertical,
   PieChart,
   Plus,
   RefreshCw,
@@ -25,6 +34,7 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -72,8 +82,8 @@ const setupSteps = [
     action: "set-leave-organisation",
     description: "Define your leave year, accrual settings and general rules.",
     icon: Building2,
-    completed: true,
-    status: "Completed",
+    completed: false,
+    status: "Set Up",
   },
   {
     title: "Create Leave Policies",
@@ -179,18 +189,52 @@ export default function LeaveOverviewPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <button className="cursor-pointer inline-flex items-center gap-2 rounded-lg border bg-background px-4 py-2.5 text-sm font-semibold transition hover:bg-muted">
-              <BarChart3 className="h-4 w-4" />
-              Leave Reports
-              <ChevronRight className="h-4 w-4" />
-            </button>
-
-            <button className="cursor-pointer inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
-              <Settings className="h-4 w-4" />
-              Leave Settings
-              <ChevronRight className="h-4 w-4" />
-            </button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => handleAction("create-leave-policy")}
+              label="Create New Policy"
+              icon={<Plus className="size-4" />}
+            />
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={
+                  "py-2 px-4 rounded-lg cursor-pointer bg-slate-200 hover:bg-slate-300"
+                }
+              >
+                <div className="flex items-center gap-2">
+                  More
+                  <MoreVertical className="size-4" />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className={cn("min-w-50")}>
+                <DropdownMenuItem
+                  className={cn("hover:bg-primary-100! hover:text-primary!")}
+                >
+                  <Link
+                    href={`/dashboard/leave/policies}`}
+                    className="flex items-center gap-2 w-full"
+                  >
+                    <div className="size-6 bg-primary-100 flex justify-center items-center rounded-sm">
+                      <BarChart3 className="size-3" />
+                    </div>
+                    <div className="flex-1">Leave Reports</div>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className={cn("hover:bg-primary-100! hover:text-primary!")}
+                >
+                  <Link
+                    href={`/dashboard/leave/policies}`}
+                    className="flex items-center gap-2 w-full"
+                  >
+                    <div className="size-6 bg-primary-100 flex justify-center items-center rounded-sm">
+                      <Settings className="size-3" />
+                    </div>
+                    <div className="flex-1">Leave Settings</div>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>{" "}
           </div>
         </header>
 

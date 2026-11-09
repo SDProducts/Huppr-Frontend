@@ -1,5 +1,7 @@
 "use client";
 import { CreateLeavePolicyStep } from "@/app/dashboard/departments/_components/Steps&Progress";
+import ApprovalChainField from "@/app/dashboard/leave/_components/ApprovalChainField";
+import SwitchField from "@/components/form/SwitchField";
 // import BlackoutPeriodsField from "@/components/form/BlackOutPeriod";
 // import Input from "@/components/form/Input";
 // import SwitchField from "@/components/form/SwitchField";
@@ -15,6 +17,7 @@ import {
   Bookmark,
   //   CalendarClock,
   Layers,
+  Scale,
   Settings,
   SlidersHorizontal,
 } from "lucide-react";
@@ -33,12 +36,9 @@ export default function ApprovalConfiguration() {
 
   const initialValues = {
     approvalWorkflow: "default",
-    maxConsecutiveDays: policy?.maxConsecutiveDays || 14,
-    advanceNoticeDays: policy?.advanceNoticeDays || 14,
-    documentationThresholdDays: policy?.documentationThresholdDays || 14,
-    minDuration: policy?.minDuration || 20,
-    blackoutPeriods: policy?.blackoutPeriods || [],
-    requireDocumentation: policy?.requireDocumentation || true,
+    approvalChain: policy?.approvalChain || [],
+    autoDeductPayroll: policy?.autoDeductPayroll || true,
+    allowNegativeBalance: policy?.allowNegativeBalance || false,
   };
   const WORKFLOW_OPTIONS = [
     {
@@ -56,24 +56,10 @@ export default function ApprovalConfiguration() {
     },
   ];
   function saveDraft(params: typeof initialValues) {
-    const {
-      maxConsecutiveDays,
-      minDuration,
-      advanceNoticeDays,
-      documentationThresholdDays,
-      ...rest
-    } = params;
-    const payload: AddNewLeavePolicyPayload = {
-      maxConsecutiveDays: Number(maxConsecutiveDays),
-      minDuration: Number(minDuration),
-      advanceNoticeDays: Number(advanceNoticeDays),
-      documentationThresholdDays: Number(documentationThresholdDays),
-      ...rest,
-    };
-    patchPolicy(payload, {
+    patchPolicy(params, {
       onSuccess(data) {
         router.replace(
-          `/dashboard/leave/create-leave-policy?step=request_rules&policyId=${data.id}`
+          `/dashboard/leave/create-leave-policy?step=preview_leave_policy&policyId=${data.id}`
         );
       },
     });
@@ -159,62 +145,63 @@ export default function ApprovalConfiguration() {
                             </div>
                           ))}
                         </div>
+                        {values.approvalWorkflow === "custom" && (
+                          <ApprovalChainField name="approvalChain" />
+                        )}
                       </div>
-                      {/* <div className="bg-white p-6 rounded-xl space-y-8">
+
+                      <div className="bg-white p-6 rounded-xl space-y-8">
                         <div className="flex items-center gap-2">
                           <div className="size-10 bg-primary/5 flex rounded-md justify-center items-center">
-                            <CalendarClock
+                            <Scale
                               className="size-6 text-primary"
                               strokeWidth={2.5}
                             />
                           </div>
                           <div className="text-2xl font-bold">
-                            Notice & Documentation{" "}
+                            Balance Behavior{" "}
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-x-2 gap-y-4">
-                          <Input
-                            label="Advance Notice Required (Days)"
-                            name="advanceNoticeDays"
-                            rightIcon={<div>days</div>}
-                            LabelClassName="text-sm mb-1"
-                            className="h-11 bg-gray-200"
-                          />
-                          <Input
-                            label="Threshold (Days)"
-                            name="documentationThresholdDays"
-                            rightIcon={<div>days</div>}
-                            LabelClassName="text-sm mb-1"
-                            className="h-11 bg-gray-200"
-                          />
-                          <div className="col-span-2">
-                            <SwitchField
-                              name="requireDocumentation"
-                              singleLabelDescription={
-                                <div>
-                                  <div className="font-semibold">
-                                    Require Documentation
-                                  </div>
-                                  <p className="text-xs">
-                                    E.g., Medical certificate for long sick
-                                    leave.
-                                  </p>
+                        <div className="grid">
+                          <SwitchField
+                            name="allowNegativeBalance"
+                            singleLabelDescription={
+                              <div className="space-y-1">
+                                <div className="font-semibold">
+                                  Allow Negative Balance{" "}
                                 </div>
-                              }
-                            />
-                          </div>
+                                <p className="text-xs">
+                                  Employees can request leave even if they have
+                                  zero balance.{" "}
+                                </p>
+                              </div>
+                            }
+                          />
+                          <SwitchField
+                            name="autoDeductPayroll"
+                            singleLabelDescription={
+                              <div className="space-y-1">
+                                <div className="font-semibold">
+                                  Auto-deduct from payroll{" "}
+                                </div>
+                                <p className="text-xs">
+                                  Unpaid leaves will automatically sync with the
+                                  next payroll run.{" "}
+                                </p>
+                              </div>
+                            }
+                          />
                         </div>
                       </div>
-                      <BlackoutPeriodsField name="blackoutPeriods" /> */}
                     </div>
                   </div>
                   <div className="flex justify-end border-t border-gray-200 py-5">
                     <Button
                       type="submit"
-                      label="Next: Approval & Assignment"
+                      label="Next: Preview Policy"
                       className="w-fit!"
                       isLoading={isPending}
-                      disabled={isPending}
+                      disabled={isPending || isGetttingPolicy}
                       rightIcon={<ArrowRight className="size-4" />}
                     />
                   </div>
