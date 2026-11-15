@@ -1,5 +1,6 @@
 "use client";
 import { CreateLeavePolicyStep } from "@/app/dashboard/departments/_components/Steps&Progress";
+import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import { Separator } from "@/components/ui/separator";
 import { TaskStatusPill } from "@/components/utils/Pills";
@@ -21,6 +22,10 @@ export default function PreviewLeavePolicy() {
   const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
     policyId || ""
   );
+  if (isGetttingPolicy) {
+    return <PageLoader text="Getting Policy" />;
+  }
+
   function editPolicy(params: string) {
     if (params) {
       router.replace(

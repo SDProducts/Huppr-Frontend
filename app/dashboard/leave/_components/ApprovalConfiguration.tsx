@@ -2,6 +2,7 @@
 import { CreateLeavePolicyStep } from "@/app/dashboard/departments/_components/Steps&Progress";
 import ApprovalChainField from "@/app/dashboard/leave/_components/ApprovalChainField";
 import SwitchField from "@/components/form/SwitchField";
+import { PageLoader } from "@/components/global/PageLoader";
 // import BlackoutPeriodsField from "@/components/form/BlackOutPeriod";
 // import Input from "@/components/form/Input";
 // import SwitchField from "@/components/form/SwitchField";
@@ -22,6 +23,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function ApprovalConfiguration() {
   const router = useRouter();
@@ -33,6 +35,9 @@ export default function ApprovalConfiguration() {
   const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
     policyId || ""
   );
+  if (isGetttingPolicy) {
+    return <PageLoader text="Getting Policy" />;
+  }
 
   const initialValues = {
     approvalWorkflow: "default",
@@ -56,11 +61,13 @@ export default function ApprovalConfiguration() {
     },
   ];
   function saveDraft(params: typeof initialValues) {
+    toast.loading("Saving policy...", { id: "loading" });
     patchPolicy(params, {
       onSuccess(data) {
         router.replace(
           `/dashboard/leave/create-leave-policy?step=preview_leave_policy&policyId=${data.id}`
         );
+        toast.dismiss("loading");
       },
     });
   }

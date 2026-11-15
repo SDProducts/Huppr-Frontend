@@ -18,8 +18,9 @@ import {
 import { useGetEmployees } from "@/hooks/hr/useHr";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
-import { Save } from "lucide-react";
+import { FolderPen, Save } from "lucide-react";
 import React from "react";
+import toast from "react-hot-toast";
 interface Prop {
   projectId: string;
 }
@@ -76,28 +77,34 @@ const EditProject: React.FC<Prop> = ({ projectId }) => {
     resourceManagerId: projectResponse.resourceManagerId,
   };
   const submit = (values: typeof formValues) => {
+    toast.loading("Saving changes...", { id: "loading" });
     editProject(values, {
       onSuccess() {
         modal.close();
+        toast.dismiss("loading");
       },
     });
   };
   return (
-    <div className="min-h-[400px] sm:px-4 divide-y divide-gray-200">
-      <div className="pb-4">
-        <h2 className="text-2xl font-bold">Edit Role</h2>
+    <div className="min-h-[400px] sm:p-4 space-y-5">
+      <div className="flex gap-2 items-center">
+        <div className="size-8 flex justify-center items-center border rounded-md border-gray-400">
+          <FolderPen className="size-5" />
+        </div>
+        <h2 className="text-2xl font-bold">Edit Project</h2>
       </div>
       <Formik initialValues={formValues} onSubmit={submit}>
         {({}) => {
           return (
-            <Form className="pt-10">
-              <div className="space-y-7">
+            <Form className="">
+              <div className="space-y-7 bg-white rounded-2xl p-6">
                 <div className="grid sm:grid-cols-2 gap-4 sm:gap-2 ">
                   <Input
                     label="Project Name"
                     name="name"
                     LabelClassName="text-sm line-clamp-1"
                     placeholder="e.g. Customer support"
+                    className="bg-gray-200"
                   />
 
                   {isLoading || !departments ? (
@@ -109,6 +116,7 @@ const EditProject: React.FC<Prop> = ({ projectId }) => {
                       options={departments!}
                       placeholder="Select industry"
                       labelClassName="text-sm"
+                      className="bg-gray-200"
                     />
                   )}
                 </div>
@@ -119,13 +127,14 @@ const EditProject: React.FC<Prop> = ({ projectId }) => {
                     options={teams}
                     placeholder="Select Team"
                     labelClassName="text-sm"
+                    className="bg-gray-200"
                   />
                   <RadioGroup
                     label="Priority level"
                     name="priority"
                     options={PRIORITY_LEVELS}
                     orientation="horizontal"
-                    optionClassName="rounded-full! text-xs!"
+                    optionClassName="rounded-sm! text-xs!"
                   />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4 sm:gap-2">
@@ -133,17 +142,20 @@ const EditProject: React.FC<Prop> = ({ projectId }) => {
                     name="startDate"
                     label="Start Date"
                     labelClassName="text-sm"
+                    className="bg-gray-200"
                   />
                   <DateInput
                     name="endDate"
                     label="End Date"
                     labelClassName="text-sm"
+                    className="bg-gray-200"
                   />
                 </div>
                 <Input
                   type="textarea"
                   name="description"
                   label="Project Description"
+                  className="bg-gray-200"
                   //   rows={2}
                 />
                 <div className="grid sm:grid-cols-2 gap-4 sm:gap-2">
@@ -159,6 +171,7 @@ const EditProject: React.FC<Prop> = ({ projectId }) => {
                       ]}
                       placeholder="Select manager"
                       labelClassName="text-sm"
+                      className="bg-gray-200"
                     />
                   )}
                   <SearchableSelect
@@ -167,6 +180,7 @@ const EditProject: React.FC<Prop> = ({ projectId }) => {
                     options={STATUS_OPTION}
                     placeholder="Select status"
                     labelClassName="text-sm"
+                    className="bg-gray-200"
                   />
                 </div>
               </div>

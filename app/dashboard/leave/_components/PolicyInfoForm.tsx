@@ -3,6 +3,7 @@ import { CreateLeavePolicyStep } from "@/app/dashboard/departments/_components/S
 import Input from "@/components/form/Input";
 import RadioGroup from "@/components/form/RadioGroup";
 import SearchableSelect from "@/components/form/SearchableSelect";
+import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import {
   useCreateNewLeavePolicy,
@@ -12,6 +13,7 @@ import {
 import { Form, Formik } from "formik";
 import { ArrowRight, Bookmark } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function PolicyInfoForm() {
   const router = useRouter();
@@ -25,6 +27,9 @@ export default function PolicyInfoForm() {
   const { mutate: patchPolicy, isPending: isPatching } = usePatchLeavePolicy(
     policyId || ""
   );
+  if (isGetttingPolicy) {
+    return <PageLoader text="Getting Policy" />;
+  }
   const initialValues: AddNewLeavePolicyPayload = {
     name: policy?.name || "",
     leaveType: policy?.leaveType || "annual",
@@ -42,12 +47,14 @@ export default function PolicyInfoForm() {
     { label: "Maternity Leave", value: "maternity" },
   ];
   function saveDraft(params: typeof initialValues) {
+    toast.loading("Saving policy...", { id: "loading" });
     if (policyId) {
       patchPolicy(params, {
         onSuccess(data) {
           router.replace(
             `/dashboard/leave/create-leave-policy?step=eligibility&policyId=${data.id}`
           );
+          toast.dismiss("loading");
         },
       });
     } else {
@@ -56,6 +63,7 @@ export default function PolicyInfoForm() {
           router.replace(
             `/dashboard/leave/create-leave-policy?step=eligibility&policyId=${data.id}`
           );
+          toast.dismiss("loading");
         },
       });
     }
@@ -140,7 +148,7 @@ export default function PolicyInfoForm() {
                       className="w-fit!"
                       type="submit"
                       disabled={isPending}
-                      isLoading={isPending}
+                      isLoading={isPending || isPatching}
                       rightIcon={<ArrowRight className="size-4" />}
                     />
                   </div>

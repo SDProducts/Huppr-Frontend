@@ -1,6 +1,6 @@
 "use client";
-import EditProject from "@/app/dashboard/departments/[department]/teams/_components/EditProject";
 import CreateTask from "@/app/dashboard/projects/_components/CreateTask";
+import EditProject from "@/app/dashboard/projects/_components/EditProject";
 import ProjectMetricCard from "@/app/dashboard/projects/_components/ProjectMetricCard";
 import ProjectTimeline from "@/app/dashboard/projects/_components/ProjectTimeline";
 import RecentTaskListTable from "@/app/dashboard/projects/_components/RecentTaskListTable";
@@ -73,7 +73,7 @@ const ProjectDetailPage = () => {
                 modal.open({
                   content: <EditProject projectId={data.id} />,
                   size: "sm:w-2xl",
-                  bgColor: "",
+                  bgColor: "bg-slate-100",
                 });
               }}
               icon={<PenLine size={16} />}

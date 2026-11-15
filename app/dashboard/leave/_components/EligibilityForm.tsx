@@ -4,6 +4,7 @@ import Checkbox from "@/components/form/Checkbox";
 import MultiSearchableSelect from "@/components/form/MultiSearchableSelect";
 import RadioGroup from "@/components/form/RadioGroup";
 import TabsSelectField from "@/components/form/TabSelectInput";
+import { PageLoader } from "@/components/global/PageLoader";
 import { SelectInputSkeleton } from "@/components/skeletons";
 import Button from "@/components/ui/CustomButton";
 import { useGetDepartments, useGetRoles } from "@/hooks/employer/useDepartment";
@@ -14,6 +15,7 @@ import {
 import { Form, Formik } from "formik";
 import { ArrowRight, Bookmark } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function EligibilityForm() {
   const router = useRouter();
@@ -27,6 +29,9 @@ export default function EligibilityForm() {
   const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
     policyId || ""
   );
+  if (isGetttingPolicy) {
+    return <PageLoader text="Getting Policy" />;
+  }
   const initialValues = {
     departmentIds: policy?.departmentIds || [],
     roleIds: policy?.roleIds || [],
@@ -60,11 +65,13 @@ export default function EligibilityForm() {
     { label: "Female", value: "female" },
   ];
   function saveDraft(params: typeof initialValues) {
+    toast.loading("Saving policy...", { id: "loading" });
     patchPolicy(params, {
       onSuccess(data) {
         router.replace(
           `/dashboard/leave/create-leave-policy?step=entitlement&policyId=${data.id}`
         );
+        toast.dismiss("loading");
       },
     });
   }

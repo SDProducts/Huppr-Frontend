@@ -17,6 +17,7 @@ import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import { ArrowRight, FolderPlus } from "lucide-react";
 import React from "react";
+import toast from "react-hot-toast";
 interface Prop {
   departmentId?: string;
   team?: EntityReference;
@@ -60,6 +61,7 @@ const CreateProject: React.FC<Prop> = ({ departmentId, team }) => {
     teamId: team?.id || teamId,
   };
   const submit = (values: typeof formValues) => {
+    toast.loading("Saving...");
     createProject(values, {
       onSuccess() {
         modal.close();

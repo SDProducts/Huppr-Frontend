@@ -116,7 +116,7 @@ const DepartmentsPage = () => {
     { icon: LayoutGrid, type: "grid" },
     { icon: List, type: "list" },
   ];
-  const [layout, setlayout] = useState("grid");
+  const [layout, setlayout] = useState("list");
   if (isLoading || !departmentResponse) {
     return <PageLoader />;
   }

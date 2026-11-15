@@ -24,104 +24,12 @@ import { JobsMetricSummary, PipelineStageMetric } from "@/types/job";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-/* -------------------------------------------------------------------------- */
-/* TYPES                                                                      */
-/* -------------------------------------------------------------------------- */
-
-type JobStatus = "Open" | "On Hold" | "Closed" | "Draft";
-
-type Job = {
-  id: string;
-  initials: string;
-  title: string;
-  department: string;
-  location: string;
-  workType: string;
-  applicants: number;
-  newApplicants: number;
-  status: JobStatus;
-  postedOn: string;
-  initialsClass: string;
-};
-
 type Activity = {
   type: "offer" | "interview" | "application";
   title: string;
   description: string;
   time: string;
 };
-
-/* -------------------------------------------------------------------------- */
-/* DATA                                                                       */
-/* -------------------------------------------------------------------------- */
-
-const jobs: Job[] = [
-  {
-    id: "JOB-0012",
-    initials: "SD",
-    title: "Senior Product Designer",
-    department: "Product",
-    location: "New York, USA",
-    workType: "Hybrid",
-    applicants: 32,
-    newApplicants: 5,
-    status: "Open",
-    postedOn: "20 May, 2024",
-    initialsClass: "bg-blue-50 text-blue-600",
-  },
-  {
-    id: "JOB-0011",
-    initials: "FE",
-    title: "Frontend Developer",
-    department: "Engineering",
-    location: "Bengaluru, India",
-    workType: "Remote",
-    applicants: 48,
-    newApplicants: 8,
-    status: "Open",
-    postedOn: "18 May, 2024",
-    initialsClass: "bg-blue-50 text-blue-600",
-  },
-  {
-    id: "JOB-0010",
-    initials: "MA",
-    title: "Marketing Manager",
-    department: "Marketing",
-    location: "London, UK",
-    workType: "On-site",
-    applicants: 15,
-    newApplicants: 2,
-    status: "Open",
-    postedOn: "15 May, 2024",
-    initialsClass: "bg-green-50 text-green-600",
-  },
-  {
-    id: "JOB-0009",
-    initials: "DS",
-    title: "Data Scientist",
-    department: "Data",
-    location: "New York, USA",
-    workType: "Hybrid",
-    applicants: 26,
-    newApplicants: 3,
-    status: "Open",
-    postedOn: "12 May, 2024",
-    initialsClass: "bg-blue-50 text-blue-600",
-  },
-  {
-    id: "JOB-0008",
-    initials: "AC",
-    title: "Accountant",
-    department: "Finance",
-    location: "Bengaluru, India",
-    workType: "On-site",
-    applicants: 10,
-    newApplicants: 1,
-    status: "On Hold",
-    postedOn: "10 May, 2024",
-    initialsClass: "bg-orange-50 text-orange-600",
-  },
-];
 
 const activities: Activity[] = [
   {

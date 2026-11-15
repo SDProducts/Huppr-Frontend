@@ -3,6 +3,7 @@ import { CreateLeavePolicyStep } from "@/app/dashboard/departments/_components/S
 import BlackoutPeriodsField from "@/components/form/BlackOutPeriod";
 import Input from "@/components/form/Input";
 import SwitchField from "@/components/form/SwitchField";
+import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import {
   useGetSingleLeavePolicy,
@@ -16,6 +17,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function RequestRulesForm() {
   const router = useRouter();
@@ -27,6 +29,9 @@ export default function RequestRulesForm() {
   const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
     policyId || ""
   );
+  if (isGetttingPolicy) {
+    return <PageLoader text="Getting Policy" />;
+  }
 
   const initialValues = {
     maxConsecutiveDays: policy?.maxConsecutiveDays || 14,
@@ -37,6 +42,7 @@ export default function RequestRulesForm() {
     requireDocumentation: policy?.requireDocumentation || true,
   };
   function saveDraft(params: typeof initialValues) {
+    toast.loading("Saving policy", { id: "loading" });
     const {
       maxConsecutiveDays,
       minDuration,
@@ -62,6 +68,7 @@ export default function RequestRulesForm() {
         router.replace(
           `/dashboard/leave/create-leave-policy?step=approval_config&policyId=${data.id}`
         );
+        toast.dismiss("loading");
       },
     });
   }

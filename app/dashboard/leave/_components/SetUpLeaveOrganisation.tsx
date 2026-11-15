@@ -8,8 +8,8 @@ import SwitchField from "@/components/form/SwitchField";
 import Button from "@/components/ui/CustomButton";
 import { months } from "@/data/constants";
 import {
+  useCreateNewLeavePolicy,
   useGetSingleLeavePolicy,
-  usePatchLeavePolicy,
 } from "@/hooks/employer/useLeave";
 import { Form, Formik } from "formik";
 import {
@@ -20,6 +20,7 @@ import {
   ShieldCogCorner,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function SetUpLeaveOrganisation() {
   const router = useRouter();
@@ -28,9 +29,7 @@ export default function SetUpLeaveOrganisation() {
   const { data: policy, isLoading: isGetttingPolicy } = useGetSingleLeavePolicy(
     policyId || ""
   );
-  const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
-    policyId || ""
-  );
+  const { mutate, isPending } = useCreateNewLeavePolicy();
   const MONTHS_OPTION = months.map((month) => ({
     label: month.label,
     value: month.value,
@@ -58,13 +57,10 @@ export default function SetUpLeaveOrganisation() {
     allowNegativeBalance: policy?.allowNegativeBalance || false,
   };
   function saveDraft(params: typeof initialValues) {
-    patchPolicy(params, {
-      onSuccess(data) {
-        router.replace(
-          `/dashboard/leave/create-leave-policy?step=preview_leave_policy&policyId=${data.id}`
-        );
-      },
-    });
+    toast.loading("Integrating...");
+    setTimeout(() => {
+      toast.dismiss();
+    }, 3000);
   }
 
   return (

@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 import { MetricCard } from "@/app/dashboard/_components/MetricCard";
+import AddNewEmployee from "@/app/dashboard/employees/_components/AddNewEmployee";
 import EmployeeTable, {
   Employee,
 } from "@/app/dashboard/employees/_components/EmployeeListTable";
@@ -34,7 +35,11 @@ const employees: Employee[] = [
 export default function EmployeeOverview() {
   const modal = useModal();
   function handleAddNewEmployee() {
-    modal.open({ content: <></> });
+    modal.open({
+      content: <AddNewEmployee />,
+      bgColor: "bg-slate-50",
+      size: "sm:w-2xl",
+    });
   }
   return (
     <div className="space-y-10">

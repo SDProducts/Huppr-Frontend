@@ -4,6 +4,7 @@ import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import SwitchField from "@/components/form/SwitchField";
 import TabsSelectField from "@/components/form/TabSelectInput";
+import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
 import {
   useGetSingleLeavePolicy,
@@ -17,6 +18,7 @@ import {
   TimerReset,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function EntitlementForm() {
   const router = useRouter();
@@ -28,6 +30,9 @@ export default function EntitlementForm() {
   const { mutate: patchPolicy, isPending } = usePatchLeavePolicy(
     policyId || ""
   );
+  if (isGetttingPolicy) {
+    return <PageLoader text="Getting Policy" />;
+  }
 
   const initialValues = {
     allowanceType: policy?.allowanceType || "fixed",
@@ -57,6 +62,7 @@ export default function EntitlementForm() {
     { label: "December (Q4 End)", value: "dec" },
   ];
   function saveDraft(params: typeof initialValues) {
+    toast.loading("Saving policy...", { id: "loading" });
     const { maxCarryover, daysPerYear, ...rest } = params;
     const payload: AddNewLeavePolicyPayload = {
       maxCarryover: Number(maxCarryover),
@@ -68,6 +74,7 @@ export default function EntitlementForm() {
         router.replace(
           `/dashboard/leave/create-leave-policy?step=request_rules&policyId=${data.id}`
         );
+        toast.dismiss("loading");
       },
     });
   }
