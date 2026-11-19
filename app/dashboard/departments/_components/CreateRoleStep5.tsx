@@ -71,13 +71,6 @@ export default function RolePreview({ roleId, className }: RolePreviewProps) {
   return (
     <div className={cn("space-y-10 px-4", className)}>
       <div className="space-y-4">
-        <div className="">
-          <h2 className="text-2xl font-bold">Review & Create</h2>
-          <p className="text-sm w-2/3">
-            Please review the summarized details of the new role below. You can
-            go back to edit any section or save this as a draft.{" "}
-          </p>
-        </div>
         <Stepper currentStep={5} />
       </div>
       <div className="space-y-4">

@@ -1,14 +1,18 @@
-import { Placeholder } from "@/components/EmptyState";
+import StageAutomationsField from "@/app/dashboard/jobs/_components/StageAutomationField";
 import ColorInput from "@/components/form/ColorInput";
 import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/context/modal.state";
-import { useCreatePipelineStage } from "@/hooks/employer/useJobs";
+import {
+  useCreatePipelineStage,
+  useGetAutomations,
+} from "@/hooks/employer/useJobs";
 import { cn } from "@/lib/utils";
+import { CreatePipelineStagePayload } from "@/types/create_job_payload";
 import { Form, Formik } from "formik";
-import { Bot, BotOff, Check, Loader2, SlidersHorizontal } from "lucide-react";
+import { Bot, Check, Loader2, SlidersHorizontal } from "lucide-react";
 interface Props {
   jobId: string;
 }
@@ -16,7 +20,10 @@ export default function CreatePipelineStage({ jobId }: Props) {
   const modal = useModal();
   const { mutate: createPipelineStage, isPending } =
     useCreatePipelineStage(jobId);
-  const initialValues = {
+  const { data: automationData, isLoading: isgettingAutomations } =
+    useGetAutomations();
+  const automations = automationData?.items || [];
+  const initialValues: CreatePipelineStagePayload = {
     name: "",
     description: "",
     accent: "",
@@ -26,7 +33,11 @@ export default function CreatePipelineStage({ jobId }: Props) {
     automations: [],
   };
   function handleSubmit(params: typeof initialValues) {
-    createPipelineStage(params);
+    createPipelineStage(params, {
+      onSuccess() {
+        modal.close();
+      },
+    });
   }
   const CATEGORY_OPTIONS = [
     { label: "Screening", value: "screening" },
@@ -52,7 +63,10 @@ export default function CreatePipelineStage({ jobId }: Props) {
         validateOnMount
         onSubmit={handleSubmit}
       >
-        {() => {
+        {({ values }) => {
+          const activeRules = values.automations.filter(
+            (item) => item.isEnabled
+          );
           return (
             <Form className="space-y-10">
               <div className="">
@@ -95,8 +109,13 @@ export default function CreatePipelineStage({ jobId }: Props) {
                       <Bot className="size-4" />
                     </div>
                     <div className="">
-                      <div className="font-bold">
-                        Stage Automations (Vita AI & Workflow)
+                      <div className="flex items-center gap-4">
+                        <div className="font-bold">
+                          Stage Automations (Vita AI & Workflow)
+                        </div>
+                        <span className="rounded-full border border-purple-200 bg-purple-50 px-2.5 py-0.5 text-[11px] font-medium text-purple-700">
+                          {activeRules.length} Active rules
+                        </span>
                       </div>
                       <p className="text-xs">
                         Automatically trigger notifications, calendar bookings,
@@ -105,10 +124,9 @@ export default function CreatePipelineStage({ jobId }: Props) {
                       </p>
                     </div>
                   </div>
-                  <Placeholder
-                    title="No Automations"
-                    icon={BotOff}
-                    description="No automations set yet."
+                  <StageAutomationsField
+                    catalog={automations || []}
+                    name="automations"
                   />
                 </div>
               </div>

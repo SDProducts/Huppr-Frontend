@@ -68,7 +68,12 @@ export default function JobsPage() {
         <JobsHeader />
 
         {/* TOP CONTENT */}
-        <div className="mt-7 grid gap-7 xl:grid-cols-[minmax(0,1fr)_315px]">
+        <div
+          className={cn(
+            "mt-7 grid gap-7"
+            // "xl:grid-cols-[minmax(0,1fr)_315px]"
+          )}
+        >
           <div className="min-w-0">
             {isGettingMetrics || !metrics ? (
               <div className="">
@@ -101,7 +106,7 @@ export default function JobsPage() {
           </div>
 
           {/* RIGHT SIDEBAR */}
-          <aside className="space-y-6">
+          <aside className="hidden space-y-6">
             <ApplicationsSourceCard />
             <InterviewsCard />
             <RecentActivityCard />

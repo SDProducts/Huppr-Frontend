@@ -56,6 +56,27 @@ export const getDate = (date: string) => {
   return fullDate;
 };
 
+export function getActivityDate(date: string) {
+  const value = new Date(date);
+  const now = new Date();
+
+  const diff = Math.floor(
+    (now.getTime() - value.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  if (diff <= 0) return "Today";
+  if (diff === 1) return "1 day ago";
+  if (diff < 7) return `${diff} days ago`;
+  if (diff < 14) return "1 week ago";
+  if (diff < 30) return `${Math.floor(diff / 7)} weeks ago`;
+
+  return value.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export const labelCase = (s?: string) =>
   s ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "—";
 

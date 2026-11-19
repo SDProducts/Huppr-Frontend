@@ -1,4 +1,4 @@
-import { labelCase } from "@/lib/utils";
+import { cn, labelCase } from "@/lib/utils";
 
 const pillStyles: Record<string, string> = {
   low: "bg-blue-100 text-blue-700 border-blue-200",
@@ -30,6 +30,8 @@ const taskStatusStyles: Record<string, string> = {
   in_progress: "bg-purple-100 text-purple-700 border-purple-200",
   completed: "bg-green-100 text-green-700 border-green-200",
   done: "bg-green-100 text-green-700 border-green-200",
+  enabled: "bg-green-100 text-green-700 border-green-200",
+  disabled: "bg-purple-100 text-purple-700 border-purple-200",
   on_hold: "bg-yellow-100 text-yellow-800 border-yellow-300 font-semibold",
   draft: "bg-amber-100 text-amber-800 border-amber-300 font-semibold",
   active: "bg-green-100 text-green-800 border-green-300 font-semibold",
@@ -37,7 +39,13 @@ const taskStatusStyles: Record<string, string> = {
 };
 
 // Helper component for Priority Pill
-export const TaskStatusPill = ({ status }: { status: string }) => {
+export const TaskStatusPill = ({
+  status,
+  className,
+}: {
+  status: string;
+  className?: string;
+}) => {
   const normalizedstatus = status?.toLowerCase() || "";
   const styles =
     taskStatusStyles[normalizedstatus] ||
@@ -45,7 +53,11 @@ export const TaskStatusPill = ({ status }: { status: string }) => {
 
   return (
     <span
-      className={`inline-flex text-nowrap items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize fit-content ${styles}`}
+      className={cn(
+        "inline-flex text-nowrap items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize fit-content",
+        styles,
+        className
+      )}
     >
       {labelCase(status)}
     </span>

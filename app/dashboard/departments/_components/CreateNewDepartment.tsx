@@ -32,13 +32,7 @@ const CreateNewDepartment = () => {
     });
   };
   return (
-    <div className="sm:px-4 space-y-4">
-      <div className="">
-        <div className="text-2xl font-bold">Create New Department</div>
-        <div className="text-sm">
-          Input department name, description and select prefered icon.
-        </div>
-      </div>
+    <div className="sm:px-4">
       <Formik initialValues={initialValues} onSubmit={submit}>
         {({ values, setFieldValue }) => {
           return (

@@ -162,7 +162,7 @@ export default function SetUpLeaveOrganisation() {
                         </div>
                         <div className="grid">
                           <SwitchField
-                            name="allowNegativeBalance"
+                            name="proRate"
                             singleLabelDescription={
                               <div className="space-y-1">
                                 <div className="font-semibold">
@@ -175,7 +175,7 @@ export default function SetUpLeaveOrganisation() {
                             }
                           />
                           <SwitchField
-                            name="autoDeductPayroll"
+                            name="accrueOnHours"
                             singleLabelDescription={
                               <div className="space-y-1">
                                 <div className="font-semibold">

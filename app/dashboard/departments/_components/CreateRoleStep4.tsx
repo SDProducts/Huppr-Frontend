@@ -93,12 +93,32 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
             content: <RolePreview roleId={roleId} />,
             size: "sm:w-3xl",
             bgColor: "bg-gray-100",
+            header: (
+              <div className="">
+                <h2 className="text-2xl font-bold">Review & Create</h2>
+                <p className="text-sm w-2/3">
+                  Please review the summarized details of the new role below.
+                  You can go back to edit any section or save this as a draft.{" "}
+                </p>
+              </div>
+            ),
             goBack() {
               clearQuery(["roles"]);
               modal.open({
                 content: <CreateRoleStep4 roleId={data.id} />,
                 size: "sm:w-2xl",
                 bgColor: "bg-gray-100",
+                header: (
+                  <div className="">
+                    <h2 className="text-2xl font-bold">
+                      Organization & Access
+                    </h2>
+                    <p className="text-sm">
+                      Define reporting lines and system permissions for this
+                      role.{" "}
+                    </p>
+                  </div>
+                ),
               });
             },
           });
@@ -109,12 +129,6 @@ const CreateRoleStep4: React.FC<Prop> = ({ roleId }) => {
 
   return (
     <div className="px-4 space-y-10">
-      <div className="">
-        <h2 className="text-2xl font-bold">Organization & Access</h2>
-        <p className="text-sm">
-          Define reporting lines and system permissions for this role.{" "}
-        </p>
-      </div>
       <Stepper currentStep={4} />
       <Formik initialValues={initialValues} onSubmit={submit}>
         {({ values }) => {

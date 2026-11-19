@@ -1,5 +1,9 @@
 "use client";
 
+import AddNewCandidate from "@/app/dashboard/jobs/_components/AddNewCandidate";
+import CandidatePipeline from "@/app/dashboard/jobs/_components/CandidatePipeline";
+import CandidatesTableList from "@/app/dashboard/jobs/_components/CandidatesTableList";
+import JobDetail from "@/app/dashboard/jobs/_components/JobDetail";
 import { PageLoader } from "@/components/global/PageLoader";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TaskStatusPill } from "@/components/utils/Pills";
+import { useModal } from "@/context/modal.state";
 import { useGetJobById, useGetJobStatsById } from "@/hooks/employer/useJobs";
 import { cn, getDate, labelCase } from "@/lib/utils";
 import {
@@ -19,30 +24,84 @@ import {
   Building2,
   Calendar,
   Calendar1,
-  Edit,
-  Eye,
   FileText,
   LampDesk,
   LucideIcon,
   MapPin,
   MoreVertical,
   Pen,
+  Plus,
   Trash2,
   Users,
+  Waypoints,
   XCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const JobDetailPage = () => {
+  type Tabs =
+    | "job details"
+    | "canditates"
+    | "pipeline"
+    | "analytics"
+    | "activity";
+  const TABS: Tabs[] = [
+    "job details",
+    "canditates",
+    "pipeline",
+    "analytics",
+    "activity",
+  ];
+  const [activeTab, setactiveTab] = useState<Tabs>("job details");
+  const modal = useModal();
   const { jobId } = useParams();
   const { data: job, isLoading } = useGetJobById(String(jobId));
   const { data: jobStats, isLoading: isGettingStats } = useGetJobStatsById(
     String(jobId)
   );
 
+  function handleAddNewCandidate() {
+    modal.open({
+      content: <AddNewCandidate />,
+      size: "md:w-xl",
+      bgColor: "bg-slate-100",
+      headerColor: "bg-primary-heading",
+      header: (
+        <div className="">
+          <h2 className="text-2xl font-bold text-white">Add New Candidate</h2>
+          <p className="text-sm text-white">
+            Add new candidates, select recruitment stage and professional info.{" "}
+          </p>
+        </div>
+      ),
+    });
+  }
+
   if (isLoading || !job) {
-    return <PageLoader />;
+    return <PageLoader text="Getting Job Details..." />;
+  }
+  function renderTabContent() {
+    if (activeTab === "job details") {
+      if (job) {
+        return <JobDetail jobData={job} />;
+      }
+      return <PageLoader text="Getting Job Details..." />;
+    }
+    if (activeTab === "canditates") {
+      return <CandidatesTableList />;
+    }
+    if (activeTab === "pipeline") {
+      return <CandidatePipeline />;
+    }
+    if (activeTab === "activity") {
+      return <div></div>;
+    }
+    if (activeTab === "analytics") {
+      return <div></div>;
+    }
+    return <PageLoader text="Getting Job Details..." />;
   }
 
   return (
@@ -71,13 +130,9 @@ const JobDetailPage = () => {
           </div>
         </div>
         <div className=" flex items-center gap-1.5">
-          <Button className={cn("py-5 bg-white text-primary!")}>
-            <Eye />
-            <span>View Role</span>
-          </Button>
-          <Button className={cn("py-5 ")}>
-            <Pen />
-            <span>Edit Pipeline</span>
+          <Button className={cn("py-5")} onClick={handleAddNewCandidate}>
+            <Plus />
+            <span>Add New Candidate</span>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger className={"p-0!"}>
@@ -87,24 +142,46 @@ const JobDetailPage = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className={cn("min-w-50")}>
               <DropdownMenuItem
+                onClick={handleAddNewCandidate}
                 className={cn("hover:bg-primary-100! hover:text-primary!")}
               >
-                <Link
-                  href={`/dashboard/jobs/${job.id}`}
-                  className="flex items-center gap-2 w-full"
-                >
-                  <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
-                    <Eye className="size-3" />
+                <div className="flex items-center gap-2 w-full">
+                  <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-sm">
+                    <Plus className="size-3" />
                   </div>
-                  <div className="flex-1">View</div>
-                </Link>
+                  <div className="flex-1">Add Candidate</div>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setactiveTab("canditates")}
+                className={cn("hover:bg-primary-100! hover:text-primary!")}
+              >
+                <div className="flex items-center gap-2 w-full">
+                  <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-sm">
+                    <Users className="size-3" />
+                  </div>
+                  <div className="flex-1">View candidates</div>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setactiveTab("canditates")}
+                className={cn("hover:bg-primary-100! hover:text-primary!")}
+              >
+                <div className="flex items-center gap-2 w-full">
+                  <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-sm">
+                    <Waypoints className="size-3" />
+                  </div>
+                  <div className="flex-1">View pipeline stages</div>
+                </div>
               </DropdownMenuItem>
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <div className="h-6 w-6 bg-accent flex justify-center items-center rounded-md">
-                    <Edit className="size-3" />
+                <DropdownMenuSubTrigger
+                  className={cn("focus:bg-primary-100! focus:text-primary! ")}
+                >
+                  <div className="size-6 bg-primary-100 flex justify-center items-center rounded-sm">
+                    <Pen className="size-3" />
                   </div>
-                  Edit
+                  Edit Job
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent className={cn("min-w-50")}>
                   <DropdownMenuItem className={cn("hover:bg-gray-100")}>
@@ -159,10 +236,12 @@ const JobDetailPage = () => {
                   "hover:bg-red-100! text-red-500! hover:text-red-500! flex items-center gap-1"
                 )}
               >
-                <div className="h-6 w-6 bg-red-100 flex justify-center items-center rounded-md">
-                  <Trash2 className="size-3" />
+                <div className="flex items-center gap-2 w-full">
+                  <div className="size-6 bg-red-100 flex justify-center items-center rounded-sm">
+                    <Trash2 className="size-3" />
+                  </div>
+                  Delete
                 </div>
-                Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>{" "}
@@ -193,6 +272,28 @@ const JobDetailPage = () => {
           icon={XCircle}
           accent="bg-red-500/5 text-red-500"
         />
+      </div>
+      <div className="space-y-5">
+        <div className="flex items-center gap-8 border-b border-gray-200">
+          {TABS.map((tab) => (
+            <div
+              onClick={() => setactiveTab(tab)}
+              className={cn(
+                "py-3 cursor-pointer border-b-2",
+                activeTab === tab
+                  ? "border-primary font-extrabold text-primary"
+                  : "border-transparent hover:border-gray-200 hover:text-gray-700 text-muted-foreground"
+              )}
+              key={tab}
+            >
+              <div className={cn("capitalize", activeTab === tab ? "" : "")}>
+                {tab}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="">{renderTabContent()}</div>
       </div>
     </div>
   );

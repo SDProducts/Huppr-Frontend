@@ -184,3 +184,38 @@ export interface Applicants {
   jobTitle: string;
   stageName: string;
 }
+
+export type AutomationConfigValue = string | number | boolean | string[] | null;
+
+export interface AutomationConfigField {
+  key: string;
+  name: string;
+  type: "string" | "integer" | "datetime" | "uuid_array";
+  description?: string;
+  required: boolean;
+  options?: string[];
+  default?: AutomationConfigValue;
+  minimum?: number;
+  maximum?: number;
+  maxLength?: number;
+}
+
+export interface AutomationCatalogItem {
+  id: string;
+  kind: string;
+  name: string;
+  description: string;
+  group: string;
+  trigger: string;
+  status: "ready" | "deferred" | "configuration_only";
+  executable: boolean;
+  configFields: AutomationConfigField[];
+  configExample: Record<string, AutomationConfigValue>;
+}
+
+export interface StageAutomation {
+  kind: string;
+  label: string;
+  isEnabled: boolean;
+  config: Record<string, AutomationConfigValue>;
+}

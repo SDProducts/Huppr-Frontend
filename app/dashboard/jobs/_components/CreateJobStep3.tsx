@@ -1,7 +1,6 @@
 "use client";
 import ActivityEmptyState from "@/components/EmptyState";
 import AssessmentSetupField from "@/components/form/AssessmentSetupField";
-import StageAutomationsField from "@/components/form/StageAutomationField";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Button from "@/components/ui/CustomButton";
 import { Progress } from "@/components/ui/progress";
@@ -42,6 +41,7 @@ import {
 
 import CreatePipelineStage from "@/app/dashboard/jobs/_components/CreatePipelineStage";
 import { SortableStageCard } from "@/app/dashboard/jobs/_components/SortableStageCard";
+import StageAutomationToggle from "@/app/dashboard/jobs/_components/StageAutomationToggle";
 import ColorInput from "@/components/form/ColorInput";
 import Input from "@/components/form/Input";
 import ConfirmDelete from "@/components/global/ConfirmDelete";
@@ -177,7 +177,7 @@ const CreateJobStep3 = () => {
             <Form className="space-y-10">
               <div className="space-y-10">
                 <div className="space-y-4">
-                  <div className="flex justify-between">
+                  <div className="flex flex-wrap gap-2 justify-between">
                     <div className="flex items-center gap-2">
                       <div className="h-3 w-3 rounded-full bg-primary" />
                       <h2 className="font-bold text-xl">
@@ -221,7 +221,7 @@ const CreateJobStep3 = () => {
                     <div className="w-10 h-full bg-linear-to-l from-white via-white to-transparent z-10 absolute right-0" />
                   </div>
                 </div>
-                <div className="grid grid-cols-[2fr_1fr] gap-4">
+                <div className="grid sm:grid-cols-[2fr_1fr] gap-4">
                   <div className="space-y-4 ">
                     <div className="bg-white rounded-2xl p-6">
                       {values.stages.map((stage, index) => {
@@ -259,7 +259,7 @@ const CreateJobStep3 = () => {
                                   </div>
                                 </div>
                                 <div className="space-y-2">
-                                  <div className="grid grid-cols-[2fr_1fr] gap-2">
+                                  <div className="grid sm:grid-cols-[2fr_1fr] gap-2">
                                     <Input
                                       name={`stages.${index}.name`}
                                       label="Stage Name"
@@ -312,7 +312,7 @@ const CreateJobStep3 = () => {
                       {values.stages.map((stage, i) => {
                         if (activeStage === stage.name) {
                           return (
-                            <StageAutomationsField
+                            <StageAutomationToggle
                               key={i}
                               name={`stages.${i}.automations`}
                               stages={stageOptions}

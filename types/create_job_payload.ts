@@ -133,8 +133,9 @@ export interface CreateJobPayload {
 
 export interface CreatePipelineStagePayload {
   name: string;
-  category: string;
   description: string;
   accent: string;
+  category: string;
   isAssessment: boolean;
+  automations: StageAutomation[];
 }

@@ -3,6 +3,7 @@ import ActivityEmptyState from "@/components/EmptyState";
 import SwitchField from "@/components/form/SwitchField";
 import { PageLoader } from "@/components/global/PageLoader";
 import Button from "@/components/ui/CustomButton";
+import { TaskStatusPill } from "@/components/utils/Pills";
 import {
   useGetJobById,
   usePatchJob,
@@ -69,8 +70,13 @@ export default function CreateJobStep4() {
         className="flex items-center gap-1"
         key={`${stage.id ?? stageIndex}-${automation.label ?? i}`}
       >
-        <Bot className="text-primary size-3" />
-        {automation.label}
+        <Bot className="text-primary size-4" />
+        <div className="flex-1 text-xs">{automation.label}</div>
+        <div className="">
+          <TaskStatusPill
+            status={automation.isEnabled ? "enabled" : "disabled"}
+          />
+        </div>
       </div>
     ))
   );
@@ -391,7 +397,7 @@ export default function CreateJobStep4() {
                         </div>
                         <ActivityEmptyState title="No team found" />
                       </div>
-                      <div className="bg-slate-100 p-4 rounded-lg space-y-2">
+                      <div className="bg-slate-100 p-4 rounded-lg space-y-5">
                         <div className="flex justify-between">
                           <div className="font-bold">Automations</div>
                           <div className="text-sm bg-primary text-white px-3 py-0.5 rounded-full">

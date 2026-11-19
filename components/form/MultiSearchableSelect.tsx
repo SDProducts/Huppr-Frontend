@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { ErrorMessage, useField } from "formik";
 import {
   AlertCircle,
@@ -98,6 +99,15 @@ const MultiSearchableSelect: React.FC<MultiSelectProps> = ({
     helpers.setValue([]);
     helpers.setTouched(true);
     setSearch("");
+  };
+  const selectAll = () => {
+    if (selectedValues.length === filteredOptions.length) {
+      helpers.setValue([]);
+    } else {
+      const filteredValues = filteredOptions.map((i) => i.value);
+      helpers.setValue(filteredValues);
+    }
+    helpers.setTouched(true);
   };
 
   useEffect(() => {
@@ -268,7 +278,7 @@ const MultiSearchableSelect: React.FC<MultiSelectProps> = ({
                 }`}
               />
 
-              {selectedOptions.length > 0 && (
+              {/* {selectedOptions.length > 0 && (
                 <button
                   type="button"
                   onClick={clearAll}
@@ -280,7 +290,21 @@ const MultiSearchableSelect: React.FC<MultiSelectProps> = ({
                 >
                   Clear
                 </button>
-              )}
+              )} */}
+              <Button
+                // type="button"
+                variant={"ghost"}
+                onClick={selectAll}
+                className={`text-xs shrink-0 p-4 ${
+                  theme === "dark"
+                    ? "text-gray-400 hover:text-gray-200"
+                    : "text-gray-500 hover:text-gray-800"
+                }`}
+              >
+                {selectedOptions.length >= filteredOptions.length
+                  ? "Deselect all"
+                  : "Select all"}
+              </Button>
             </div>
 
             <div className="max-h-60 overflow-y-auto p-1 space-y-1">

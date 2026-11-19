@@ -142,6 +142,16 @@ const DepartmentsPage = () => {
               content: <CreateNewDepartment />,
               size: "sm:w-2xl",
               bgColor: "bg-indigo-50",
+              header: (
+                <div className="">
+                  <div className="text-2xl font-bold">
+                    Create New Department
+                  </div>
+                  <div className="text-sm">
+                    Input department name, description and select prefered icon.
+                  </div>
+                </div>
+              ),
             });
           }}
         />

@@ -57,9 +57,18 @@ export default function EntitlementForm() {
     { label: "Yearly", value: "tearly" },
   ];
   const EXPIRY_OPTION = [
-    { label: "March (Q1 End)", value: "mar" },
-    { label: "August (Q2 End)", value: "aug" },
-    { label: "December (Q4 End)", value: "dec" },
+    { label: "January", value: "january" },
+    { label: "February", value: "february" },
+    { label: "March", value: "march" },
+    { label: "April", value: "april" },
+    { label: "May", value: "may" },
+    { label: "June", value: "june" },
+    { label: "July", value: "july" },
+    { label: "August", value: "august" },
+    { label: "September", value: "september" },
+    { label: "October", value: "october" },
+    { label: "November", value: "november" },
+    { label: "December", value: "december" },
   ];
   function saveDraft(params: typeof initialValues) {
     toast.loading("Saving policy...", { id: "loading" });

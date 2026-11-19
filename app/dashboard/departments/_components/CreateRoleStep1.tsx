@@ -91,12 +91,30 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
             content: <CreateRoleStep2 roleID={data.id} />,
             size: "sm:w-[80%] md:w-5xl",
             bgColor: "bg-[#F7F9FC]",
+            header: (
+              <div className="">
+                <h2 className="text-2xl font-bold">Role Requirements</h2>
+                <p className="text-sm">
+                  Specify the core competencies, technical skills, and
+                  background required for a candidate to be successful in this
+                  role.
+                </p>
+              </div>
+            ),
             goBack: () => {
               clearQuery(["roles"]);
               modal.open({
                 content: <CreateRoleStep1 roleID={data.id} />,
                 size: "sm:w-5xl",
                 bgColor: "bg-[#F7F9FC]",
+                header: (
+                  <div className="">
+                    <h2 className="text-2xl font-bold">Create Role</h2>
+                    <p className="text-sm">
+                      Define the foundation for this new position.
+                    </p>
+                  </div>
+                ),
               });
             },
           });
@@ -109,11 +127,29 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
             content: <CreateRoleStep2 roleID={data.id} />,
             size: "sm:w-[80%] md:w-5xl",
             bgColor: "bg-[#F7F9FC]",
+            header: (
+              <div className="">
+                <h2 className="text-2xl font-bold">Role Requirements</h2>
+                <p className="text-sm">
+                  Specify the core competencies, technical skills, and
+                  background required for a candidate to be successful in this
+                  role.
+                </p>
+              </div>
+            ),
             goBack: () => {
               modal.open({
                 content: <CreateRoleStep1 />,
                 size: "sm:w-5xl",
                 bgColor: "bg-[#F7F9FC]",
+                header: (
+                  <div className="">
+                    <h2 className="text-2xl font-bold">Create Role</h2>
+                    <p className="text-sm">
+                      Define the foundation for this new position.
+                    </p>
+                  </div>
+                ),
               });
             },
           });
@@ -123,10 +159,6 @@ const CreateRoleStep1: React.FC<Prop> = ({ roleID }) => {
   };
   return (
     <div className="min-h-[400px] sm:px-4 space-y-10">
-      <div className="">
-        <h2 className="text-2xl font-bold">Create Role</h2>
-        <p className="text-sm">Define the foundation for this new position.</p>
-      </div>
       <Stepper currentStep={1} />
       <Formik initialValues={initialValues} onSubmit={submit}>
         {({ values }) => {

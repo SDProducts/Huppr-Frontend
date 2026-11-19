@@ -80,6 +80,14 @@ const DepartmentDetailPage = () => {
                 content: <CreateRoleStep1 />,
                 size: "sm:w-5xl",
                 bgColor: "bg-[#F7F9FC]",
+                header: (
+                  <div className="">
+                    <h2 className="text-2xl font-bold">Create Role</h2>
+                    <p className="text-sm">
+                      Define the foundation for this new position.
+                    </p>
+                  </div>
+                ),
               });
             }}
             icon={<UserPlus size={16} />}
@@ -94,6 +102,17 @@ const DepartmentDetailPage = () => {
               modal.open({
                 content: <CreateSubTeam />,
                 size: "sm:w-xl",
+                headerColor: "bg-primary-heading",
+                header: (
+                  <div className="space-y-1 ">
+                    <h2 className="text-3xl font-bold text-white">
+                      Create New Sub-team
+                    </h2>
+                    <p className="text-sm text-secondary">
+                      Add a specialized unit within Engineering.
+                    </p>
+                  </div>
+                ),
               });
             }}
           />

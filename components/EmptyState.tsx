@@ -69,17 +69,17 @@ export function Placeholder({
       )}
     >
       {/* Icon */}
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#eef0f3]">
+      <div className="flex size-20 items-center justify-center rounded-full bg-[#eef0f3]">
         {Icon ? (
-          <Icon size={32} strokeWidth={1.8} className="text-[#697586]" />
+          <Icon strokeWidth={1.8} className="text-[#697586] size-10" />
         ) : (
-          <Inbox size={32} strokeWidth={1.8} className="text-[#697586]" />
+          <Inbox strokeWidth={1.8} className="text-[#697586] size-10" />
         )}
       </div>
 
       {/* Copy */}
-      <h3 className="mt-6 text-[20px] font-semibold text-[#171a1f]">{title}</h3>
-      <p className="mt-2 max-w-md text-[16px] leading-[1.6] text-[#596474]">
+      <h3 className="mt-6 text-xl font-semibold text-[#171a1f]">{title}</h3>
+      <p className="mt-1 max-w-md text-sm leading-[1.6] text-[#596474]">
         {description}
       </p>
 
@@ -88,7 +88,7 @@ export function Placeholder({
         <Button
           type="button"
           onClick={onAction}
-          className="mt-8 h-[48px] rounded-[10px] bg-[#2864e8] px-6 text-[17px] font-bold text-white shadow-none hover:bg-[#1749b5]"
+          className="mt-4 h-10 rounded-lg bg-primary px-6 text-sm font-bold text-white"
         >
           {actionLabel}
         </Button>

@@ -1,7 +1,7 @@
 "use client";
 import { useModal } from "@/context/modal.state";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect } from "react";
 const Modal = () => {
   const {
@@ -10,6 +10,8 @@ const Modal = () => {
     size,
     close,
     goBack,
+    header,
+    headerColor,
     title,
     isCloseable,
     isTransModal,
@@ -52,27 +54,19 @@ const Modal = () => {
     >
       <div
         className={cn(
-          "relative space-y-1 p-2 w-full",
+          "relative space-y-1 w-full",
           size,
           isTransModal ? "bg-transparent" : `${bgColor} shadow-lg`,
-          "rounded-2xl"
+          "rounded-2xl overflow-hidden"
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start">
-          <div
-            className="h-7 w-7 sm:h-10 sm:w-10 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center"
-            onClick={goBack}
-          >
-            <ChevronLeft size={20} />
-          </div>
-          <div className="flex-1 font-bold mx-2 text-lg overflow-x-scroll uppercase text-nowrap scrollbar-hide">
-            {title}
-          </div>
+        <div className={cn("flex items-start p-4", headerColor)}>
+          <div className="flex-1">{header}</div>
 
           {isCloseable && (
             <div
-              className="rounded-full border border-gray-200 text-gray-600 hover:text-gray-900 cursor-pointer h-7 w-7 sm:h-10 sm:w-10 flex justify-center items-center"
+              className="rounded-full bg-white border border-gray-200 text-gray-400 hover:text-gray-900 cursor-pointer h-7 w-7 sm:h-10 sm:w-10 flex justify-center items-center"
               onClick={close}
               aria-label="Close Modal"
             >
@@ -80,7 +74,7 @@ const Modal = () => {
             </div>
           )}
         </div>
-        <div className={`max-h-[70vh] overflow-y-auto scrollbar-hide`}>
+        <div className={`max-h-[70vh] overflow-y-auto scrollbar-hide p-2`}>
           {content}
         </div>
       </div>

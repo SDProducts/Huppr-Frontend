@@ -44,6 +44,14 @@ const RoleDetail = () => {
       content: <CreateRoleStep1 roleID={role?.id} />,
       size: "sm:w-5xl",
       bgColor: "bg-[#F7F9FC]",
+      header: (
+        <div className="">
+          <h2 className="text-2xl font-bold">Create Role</h2>
+          <p className="text-sm">
+            Define the foundation for this new position.
+          </p>
+        </div>
+      ),
     });
   }
   const { requirements, benefits, metrics } = role;

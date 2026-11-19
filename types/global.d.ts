@@ -14,9 +14,11 @@ interface ModalState {
   isTransModal: boolean;
   isOpen: boolean;
   content: ReactNode;
+  header: ReactNode;
   title: string;
   size: string;
   bgColor: string;
+  headerColor: string;
   // setTitle: (title: string) => void;
   goBack: () => void;
   open: (content: StateModalContent) => void;
@@ -26,8 +28,10 @@ interface ModalState {
 }
 interface StateModalContent {
   content: ReactNode;
+  header?: ReactNode;
   title?: string;
   size?: string;
+  headerColor?: string;
   bgColor?: string;
   goBack?: () => void;
 }
@@ -867,4 +871,84 @@ interface ApprovalChainForNewLeavePolicyPayload {
 interface AssignmentForNewLeavePolicyPayload {
   kind: "department" | string;
   id: string;
+}
+interface Candidate {
+  id: string;
+  avatar: string;
+  fullName: string;
+  email: string;
+  source: "linkedin" | "career_page";
+  matchScore: number;
+  status:
+    | "in_review"
+    | "interview"
+    | "assessment"
+    | "offer"
+    | "hired"
+    | "rejected";
+  appliedAt: string;
+  lastActivityAt: string;
+  jobTitle: string;
+  stageName: string;
+  currentRole: string;
+  currentCompany: string;
+  automations: [];
+}
+type candidatesFilters = {
+  jobId?: string;
+  stageId?: string;
+  status?:
+    | "in_review"
+    | "interview"
+    | "assessment"
+    | "offer"
+    | "hired"
+    | "rejected";
+  search?: string;
+  page?: number;
+  limit?: number;
+};
+
+interface AddNewCandidatePayload {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  source?: "linkedin" | "career_page";
+  currentRole?: string;
+  matchScore?: number;
+  status?:
+    | "new"
+    | "in_review"
+    | "interview"
+    | "assessment"
+    | "offer"
+    | "hired"
+    | "rejected";
+  currentCompany?: string;
+  jobId: string;
+  stageId: string;
+  resumeUrl?: string;
+}
+
+interface JobPipelineWithCandidates {
+  jobId: string;
+  stages: JobPipelineStageWithCandidate[];
+}
+interface JobPipelineStageWithCandidate {
+  stageId: string;
+  name: string;
+  description: string;
+  displayOrder: number;
+  category: string;
+  candidateCount: number;
+  candidates: Candidate[];
+  accent: string;
+}
+
+interface MoveCandidatePayload {
+  candidateId: string;
+  stageId: string;
+  status?: string;
+  note?: string;
+  rejectionReason?: string;
 }

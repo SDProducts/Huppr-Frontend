@@ -38,10 +38,6 @@ const CreateSubTeam = () => {
   };
   return (
     <div className="px-4 space-y-8">
-      <div className="space-y-1">
-        <h2 className="text-3xl font-bold">Create New Sub-team</h2>
-        <p className="text-sm">Add a specialized unit within Engineering.</p>
-      </div>
       <Formik
         initialValues={initialValues}
         validateOnMount
@@ -55,6 +51,7 @@ const CreateSubTeam = () => {
                 label="Sub-team Name"
                 name="name"
                 placeholder="e.g. Cloud Engineer"
+                className="bg-gray-200"
               />
               <Input
                 type="textarea"
@@ -62,6 +59,7 @@ const CreateSubTeam = () => {
                 name="description"
                 placeholder="Brief summary of the sub-team's focus..."
                 rows={2}
+                className="bg-gray-200"
               />
               <div className="">
                 <div className="">Department</div>

@@ -6,7 +6,9 @@ import {
 import { JobListResponse, JobsDashboardResponse } from "@/types/job";
 import {
   Applicants,
+  AutomationCatalogItem,
   JobDetailResponse,
+  JobStageDetail,
   JobStatsByIdResponse,
 } from "@/types/job_by_id";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -229,6 +231,157 @@ export const useCreatePipelineStage = (jobId: string) => {
         queryKey: ["jobs-pipeline"],
       });
       toast.success("Created new pipeline stage");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+
+export const useGetAutomations = () => {
+  return useQuery<PaginatedResponse<AutomationCatalogItem>>({
+    queryKey: ["automations"],
+    queryFn: async () => {
+      const response = await api.get(`/employer/automations/catalog`);
+      return response.data;
+    },
+  });
+};
+export const useGetCandidates = (params: candidatesFilters = {}) => {
+  const { search, stageId, jobId, page, limit, status } = params;
+  return useQuery<PaginatedResponse<Candidate>>({
+    queryKey: ["candidates", params],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+
+      if (stageId) params.append("stageId", stageId);
+      if (jobId) params.append("jobId", jobId);
+      if (status) params.append("status", status);
+      if (page) params.append("page", page.toString());
+      if (search) params.append("search", search);
+      if (limit) params.append("limit", limit.toString());
+
+      const response = await api.get(
+        `/employer/candidates?${params.toString()}`
+      );
+      return response.data;
+    },
+  });
+};
+export const useGetJobStages = (jobId: string) => {
+  return useQuery<PaginatedResponse<JobStageDetail>>({
+    queryKey: ["stages", jobId],
+    queryFn: async () => {
+      const response = await api.get(`/employer/jobs/${jobId}/stages`);
+      return response.data;
+    },
+    enabled: !!jobId,
+  });
+};
+
+export const useAddNewCandidate = (jobId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: AddNewCandidatePayload) => {
+      const response = await api.post(
+        `/employer/jobs/${jobId}/candidates`,
+        payload
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["job"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["jobs"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["candidates"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["pipeline"],
+      });
+      toast.success("New candidate added");
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      // Check if this is an Axios error with response data
+      console.log(error);
+      if (error.response) {
+        const errorData = error.response.data;
+        if (errorData.message) {
+          const messages = errorData.message;
+          if (typeof messages === "string") {
+            toast.error(messages);
+          } else {
+            for (let index = 0; index < messages.length; index++) {
+              const errorMsg = messages[index];
+              toast.error(errorMsg);
+            }
+          }
+        }
+      } else {
+        toast.error("Failed");
+      }
+    },
+  });
+};
+
+export const useGetCandidatePipeline = (jobId: string) => {
+  return useQuery<JobPipelineWithCandidates>({
+    queryKey: ["pipeline", jobId],
+    queryFn: async () => {
+      const response = await api.get(`/employer/jobs/${jobId}/pipeline`);
+      return response.data;
+    },
+    enabled: !!jobId,
+  });
+};
+
+export const useMoveCandidateStage = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: MoveCandidatePayload) => {
+      const { candidateId, ...rest } = payload;
+      const response = await api.post(
+        `/employer/candidates/${candidateId}/advance`,
+        rest
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      // Refetch relevant data if needed
+      queryClient.invalidateQueries({
+        queryKey: ["job"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["jobs"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["candidates"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["pipeline"],
+      });
+      toast.success("candidate moved");
     },
     onError: (error: AxiosError<ApiError>) => {
       // Check if this is an Axios error with response data
