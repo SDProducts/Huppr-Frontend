@@ -277,9 +277,9 @@ function PipelineColumn({
           </Badge>
         </div>
 
-        {stage.description && (
-          <p className="truncate text-xs text-slate-400">{stage.description}</p>
-        )}
+        <p className="truncate text-xs text-slate-400">
+          {stage.description || "..."}
+        </p>
       </div>
 
       {/* Drop zone */}

@@ -1,3 +1,4 @@
+import EditCandidate from "@/app/dashboard/jobs/_components/EditCandidate";
 import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import { TableRowSkeleton } from "@/components/skeletons";
@@ -19,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TaskStatusPill } from "@/components/utils/Pills";
+import { useModal } from "@/context/modal.state";
 
 import { useGetCandidates, useGetJobStages } from "@/hooks/employer/useJobs";
 import { cn, getDate, getInitials } from "@/lib/utils";
@@ -26,18 +28,19 @@ import { Form, Formik } from "formik";
 import {
   Eye,
   MoreHorizontal,
+  Pen,
   Search,
   SlidersHorizontal,
   Trash2,
   Waypoints,
 } from "lucide-react";
 
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
 export default function CandidatesTableList() {
   const { jobId } = useParams();
+  const modal = useModal();
   const [filterParams, setfilterParams] = useState<candidatesFilters>({
     jobId: String(jobId),
   });
@@ -74,6 +77,22 @@ export default function CandidatesTableList() {
     setfilterParams({
       jobId: String(jobId),
       ...params,
+    });
+  }
+  function handleEditCandidate(params: Candidate) {
+    modal.open({
+      content: <EditCandidate candidate={params} />,
+      size: "md:w-xl",
+      bgColor: "bg-slate-100",
+      headerColor: "bg-primary-heading",
+      header: (
+        <div className="">
+          <h2 className="text-2xl font-bold text-white">Edit Candidate Data</h2>
+          <p className="text-sm text-white">
+            Add new candidates, select recruitment stage and professional info.{" "}
+          </p>
+        </div>
+      ),
     });
   }
   return (
@@ -143,8 +162,12 @@ export default function CandidatesTableList() {
             {candidates.map((c) => (
               <TableRow className="" key={c.id}>
                 <TableCell>
-                  <div className="flex items-center gap-2">
-                    <div className="size-8 flex justify-center items-center bg-primary/10 border-primary/20 rounded-full">
+                  <div
+                    onClick={() => handleEditCandidate(c)}
+                    // href={`/dashboard/candidates/${c.id}`}
+                    className="flex items-center gap-2"
+                  >
+                    <div className="size-8 flex justify-center items-center bg-primary/10 border-primary/20 rounded-full text-xs p-1">
                       {getInitials(c.fullName)}
                     </div>
                     <div className="">
@@ -157,7 +180,18 @@ export default function CandidatesTableList() {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <div className="flex-1">
-                      <Progress indicatorClassName="" value={c.matchScore} />
+                      <Progress
+                        indicatorClassName={cn(
+                          c.matchScore >= 80
+                            ? "bg-green-500"
+                            : c.matchScore <= 35
+                            ? "bg-red-500"
+                            : c.matchScore <= 49
+                            ? "bg-yellow-500"
+                            : ""
+                        )}
+                        value={c.matchScore}
+                      />
                     </div>
                     <div className="text-xs">{c.matchScore}%</div>
                   </div>
@@ -182,19 +216,33 @@ export default function CandidatesTableList() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className={cn("min-w-50")}>
                       <DropdownMenuItem
+                        onClick={() => handleEditCandidate(c)}
                         className={cn(
                           "hover:bg-primary-100! hover:text-primary!"
                         )}
                       >
-                        <Link
-                          href={`/dashboard/candidates/${c.id}`}
+                        <div
+                          // href={`/dashboard/candidates/${c.id}`}
                           className="flex items-center gap-2 w-full"
                         >
-                          <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-md">
+                          <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-sm">
                             <Eye className="size-3" />
                           </div>
                           <div className="flex-1">View</div>
-                        </Link>
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => handleEditCandidate(c)}
+                        className={cn(
+                          "hover:bg-primary-100! hover:text-primary!"
+                        )}
+                      >
+                        <div className="flex items-center gap-2 w-full">
+                          <div className="h-6 w-6 bg-primary-100 flex justify-center items-center rounded-sm">
+                            <Pen className="size-3" />
+                          </div>
+                          <div className="flex-1">Edit</div>
+                        </div>
                       </DropdownMenuItem>
 
                       <DropdownMenuItem
@@ -202,7 +250,7 @@ export default function CandidatesTableList() {
                           "hover:bg-red-100! text-red-500! hover:text-red-500! flex items-center gap-1"
                         )}
                       >
-                        <div className="h-6 w-6 bg-red-100 flex justify-center items-center rounded-md">
+                        <div className="h-6 w-6 bg-red-100 flex justify-center items-center rounded-sm">
                           <Trash2 className="size-3" />
                         </div>
                         Delete

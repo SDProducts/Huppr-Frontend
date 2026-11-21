@@ -132,6 +132,7 @@ export interface JobDetailResponse {
   publicSlug: string;
   publishedAt: string;
   departmentId: string;
+  departmentName: string;
   locationCity: string;
   qualifications: RoleRequirement[];
   employmentType: EmploymentType;

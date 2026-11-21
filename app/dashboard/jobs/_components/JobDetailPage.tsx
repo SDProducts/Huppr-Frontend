@@ -5,6 +5,7 @@ import CandidatePipeline from "@/app/dashboard/jobs/_components/CandidatePipelin
 import CandidatesTableList from "@/app/dashboard/jobs/_components/CandidatesTableList";
 import JobDetail from "@/app/dashboard/jobs/_components/JobDetail";
 import { PageLoader } from "@/components/global/PageLoader";
+import { MetricsCardSkeleton } from "@/components/skeletons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -43,13 +44,13 @@ import { useState } from "react";
 const JobDetailPage = () => {
   type Tabs =
     | "job details"
-    | "canditates"
+    | "candidates"
     | "pipeline"
     | "analytics"
     | "activity";
   const TABS: Tabs[] = [
     "job details",
-    "canditates",
+    "candidates",
     "pipeline",
     "analytics",
     "activity",
@@ -89,7 +90,7 @@ const JobDetailPage = () => {
       }
       return <PageLoader text="Getting Job Details..." />;
     }
-    if (activeTab === "canditates") {
+    if (activeTab === "candidates") {
       return <CandidatesTableList />;
     }
     if (activeTab === "pipeline") {
@@ -115,7 +116,7 @@ const JobDetailPage = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Tag name={job.departmentId} icon={Building2} />
+            <Tag name={job.departmentName} icon={Building2} />
             <Tag
               name={`${job.locationCity} ${job.locationCountry}`}
               icon={MapPin}
@@ -153,7 +154,7 @@ const JobDetailPage = () => {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setactiveTab("canditates")}
+                onClick={() => setactiveTab("candidates")}
                 className={cn("hover:bg-primary-100! hover:text-primary!")}
               >
                 <div className="flex items-center gap-2 w-full">
@@ -164,7 +165,7 @@ const JobDetailPage = () => {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setactiveTab("canditates")}
+                onClick={() => setactiveTab("candidates")}
                 className={cn("hover:bg-primary-100! hover:text-primary!")}
               >
                 <div className="flex items-center gap-2 w-full">
@@ -247,32 +248,36 @@ const JobDetailPage = () => {
           </DropdownMenu>{" "}
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-2">
-        <MetricCard
-          label="Total Applications"
-          value={jobStats?.totalApplications || 0}
-          icon={Users}
-          accent="bg-primary/5 text-primary"
-        />
-        <MetricCard
-          label="Reviewed"
-          value={jobStats?.reviewed || 0}
-          icon={FileText}
-          accent="bg-green-500/5 text-green-500"
-        />
-        <MetricCard
-          label="Interviewed"
-          value={jobStats?.interviewed || 0}
-          icon={Calendar1}
-          accent="bg-purple-600/5 text-purple-600"
-        />
-        <MetricCard
-          label="Rejected"
-          value={jobStats?.totalApplications || 0}
-          icon={XCircle}
-          accent="bg-red-500/5 text-red-500"
-        />
-      </div>
+      {isGettingStats ? (
+        <MetricsCardSkeleton number={4} />
+      ) : (
+        <div className="grid grid-cols-4 gap-2">
+          <MetricCard
+            label="Total Applications"
+            value={jobStats?.totalApplications || 0}
+            icon={Users}
+            accent="bg-primary/5 text-primary"
+          />
+          <MetricCard
+            label="Reviewed"
+            value={jobStats?.reviewed || 0}
+            icon={FileText}
+            accent="bg-green-500/5 text-green-500"
+          />
+          <MetricCard
+            label="Interviewed"
+            value={jobStats?.interviewed || 0}
+            icon={Calendar1}
+            accent="bg-purple-600/5 text-purple-600"
+          />
+          <MetricCard
+            label="Rejected"
+            value={jobStats?.totalApplications || 0}
+            icon={XCircle}
+            accent="bg-red-500/5 text-red-500"
+          />
+        </div>
+      )}
       <div className="space-y-5">
         <div className="flex items-center gap-8 border-b border-gray-200">
           {TABS.map((tab) => (
@@ -323,18 +328,22 @@ interface StatsProp {
 
 function MetricCard(stats: StatsProp) {
   return (
-    <div className="flex gap-2 p-5 bg-white rounded-xl hover:shadow">
+    <div className="flex gap-2 p-5 bg-white rounded-xl hover:shadow group hover:bg-primary-heading">
       <div
         className={cn(
-          "size-10 flex justify-center items-center rounded-md",
+          "size-10 flex justify-center items-center rounded-md group-hover:bg-white",
           stats.accent
         )}
       >
         <stats.icon className="size-6" />
       </div>
       <div className="space-y-2">
-        <div className="text-gray-500">{stats.label}</div>
-        <div className="text-3xl font-extrabold">{stats.value}</div>
+        <div className="text-gray-500 group-hover:text-white">
+          {stats.label}
+        </div>
+        <div className="text-3xl font-extrabold group-hover:text-white">
+          {stats.value}
+        </div>
       </div>
     </div>
   );

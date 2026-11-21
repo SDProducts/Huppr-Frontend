@@ -877,6 +877,8 @@ interface Candidate {
   avatar: string;
   fullName: string;
   email: string;
+  phone: string;
+  resumeUrl: string;
   source: "linkedin" | "career_page";
   matchScore: number;
   status:
@@ -927,6 +929,24 @@ interface AddNewCandidatePayload {
   currentCompany?: string;
   jobId: string;
   stageId: string;
+  resumeUrl?: string;
+}
+interface EditCandidatePayload {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  source?: "linkedin" | "career_page";
+  currentRole?: string;
+  matchScore?: number;
+  status?:
+    | "new"
+    | "in_review"
+    | "interview"
+    | "assessment"
+    | "offer"
+    | "hired"
+    | "rejected";
+  currentCompany?: string;
   resumeUrl?: string;
 }
 
