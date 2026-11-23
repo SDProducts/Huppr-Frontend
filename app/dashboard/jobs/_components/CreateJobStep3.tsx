@@ -15,6 +15,7 @@ import {
   LineChart,
   MoreVertical,
   Plus,
+  SlidersHorizontal,
   Trash2,
   UserPlus2,
   Users2,
@@ -131,6 +132,16 @@ const CreateJobStep3 = () => {
           action="Pipeline Stage"
         />
       ),
+      header: (
+        <div className="flex items-center gap-2">
+          <div className="size-8 flex justify-center items-center bg-red-500/5 text-red-500 rounded-lg">
+            <Trash2 className="size-5" />
+          </div>
+          <div className="">
+            <h2 className="text-xl font-extrabold">Delete Pipeline Stage</h2>
+          </div>
+        </div>
+      ),
     });
     setactiveStage("Screening");
   }
@@ -170,6 +181,21 @@ const CreateJobStep3 = () => {
             modal.open({
               content: <CreatePipelineStage jobId={job.id} />,
               size: "sm:w-3xl",
+              header: (
+                <div className="flex items-center gap-2">
+                  <div className="size-12 flex justify-center items-center bg-primary/5 text-primary rounded-lg">
+                    <SlidersHorizontal className="size-6" />
+                  </div>
+                  <div className="">
+                    <h2 className="text-2xl font-extrabold">
+                      Create Pipeline Stage
+                    </h2>
+                    <p className="text-sm">
+                      Define the foundation for this new position.
+                    </p>
+                  </div>
+                </div>
+              ),
             });
           };
 

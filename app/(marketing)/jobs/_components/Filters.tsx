@@ -1,4 +1,7 @@
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
+import Checkbox from "@/components/form/Checkbox";
+import RangeSliderField from "@/components/form/RangeSliderField";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -6,7 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
+import { cn, getCurrency } from "@/lib/utils";
+import { Form, Formik } from "formik";
+import { SlidersHorizontal } from "lucide-react";
 import React from "react";
 
 export const TopFilter = () => {
@@ -55,107 +60,111 @@ function FilterSection({
     </div>
   );
 }
-function CheckboxRow({
-  label,
-  checked = false,
-  onCheckedChange,
-}: {
-  label: string;
-  checked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-}) {
-  return (
-    <label className="flex cursor-pointer items-center gap-3">
-      <Checkbox
-        defaultChecked={checked}
-        onCheckedChange={onCheckedChange}
-        className="h-[16px] w-[16px] rounded-[3px] border-slate-300 data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600"
-      />
-
-      <span>{label}</span>
-    </label>
-  );
-}
-export interface FilterParams {
-  employement_type?: string;
-  experience_level?: string;
-  industry?: string;
-  salary_rage?: {
-    min: number;
-    max: number;
-  };
-}
 interface Prop {
-  filter: FilterParams;
-  onSetFilter: (filter: FilterParams) => void;
+  filter: JobsFilters;
+  onSetFilter: (filter: JobsFilters) => void;
 }
 export const FilterSidebar: React.FC<Prop> = ({ filter, onSetFilter }) => {
-  const handleExperienceChange = (value: string, checked: boolean) => {
-    onSetFilter({ ...filter, experience_level: value });
+  const formData = {
+    employmentType: filter.employmentType,
+    seniorityLevel: filter.seniorityLevel,
+    workArrangement: filter.workArrangement,
+    salary_range: filter.salary_rage,
   };
+  const WORK_ARRANGEMENT = [
+    { label: "remote ", value: "remote" },
+    { label: "hybrid", value: "hybrid" },
+    { label: "On site", value: "on_site" },
+  ];
+  const LEVELS = [
+    { label: "Entry Level", value: "entry" },
+    { label: "Junior", value: "junior" },
+    { label: "Intermediate", value: "Intermediate" },
+    { label: "Senior ", value: "senior" },
+  ];
+  const TYPES = [
+    { label: "Full-time ", value: "full_time" },
+    { label: "Part-time", value: "part_time" },
+    { label: "Contract", value: "contract" },
+    { label: "Internship", value: "internship" },
+  ];
+  function handleFilter(params: typeof formData) {
+    onSetFilter({
+      ...filter,
+      seniorityLevel: params.seniorityLevel,
+      employmentType: params.employmentType,
+      workArrangement: params.workArrangement,
+    });
+  }
   return (
-    <div className="ext-[13px] text-slate-500">
-      <div className="mb-7 flex items-center justify-between">
-        <h2 className="font-semibold text-slate-500">Filters</h2>
+    <div className="text-slate-500">
+      <Formik initialValues={formData} onSubmit={handleFilter}>
+        {({ values, resetForm }) => {
+          return (
+            <Form className="space-y-6">
+              <div className="">
+                <h2 className="text-lg font-bold">Filter Jobs</h2>
+                <p className="text-xs text-gray-500">
+                  Search products by name, filter work arrangement, employment
+                  type and salary.
+                </p>
+              </div>
 
-        <button className="text-[12px] font-semibold text-blue-600 hover:text-blue-700">
-          Clear Filters
-        </button>
-      </div>
-
-      {/* Employment */}
-      <FilterSection title="Employment Type">
-        {["Full-time", "Contract", "Part-time", "Internship"].map((item) => (
-          <CheckboxRow key={item} label={item} />
-        ))}
-      </FilterSection>
-
-      {/* Experience */}
-      <FilterSection title="Experience Level">
-        {["Entry Level", "Intermediate", "Senior"].map((item) => (
-          <CheckboxRow
-            key={item}
-            label={item}
-            checked={filter.experience_level === item}
-            onCheckedChange={(checked) => handleExperienceChange(item, checked)}
-          />
-        ))}{" "}
-      </FilterSection>
-
-      {/* Salary */}
-      <FilterSection title="Salary Range">
-        <div className="px-2 pt-3">
-          <Slider
-            defaultValue={[40, 200]}
-            min={40}
-            max={200}
-            step={5}
-            className="mb-3"
-          />
-
-          <div className="flex justify-between text-[11px]">
-            <span>$40k</span>
-            <span>$200k+</span>
-          </div>
-        </div>
-      </FilterSection>
-
-      {/* Industry */}
-      <FilterSection title="Industry">
-        <Select defaultValue="all">
-          <SelectTrigger className="h-9 w-full border-slate-200 bg-white text-xs text-slate-600">
-            <SelectValue />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="all">All Industries</SelectItem>
-            <SelectItem value="technology">Technology</SelectItem>
-            <SelectItem value="finance">Finance</SelectItem>
-            <SelectItem value="marketing">Marketing</SelectItem>
-            <SelectItem value="healthcare">Healthcare</SelectItem>
-          </SelectContent>
-        </Select>
-      </FilterSection>
+              <div className="space-y-6">
+                <Checkbox
+                  type="multiple"
+                  name="employmentType"
+                  options={TYPES}
+                  orientationStyle="grid gap-0.5"
+                  size="xs"
+                  optionClassName="border-none p-1! rounded-sm"
+                  label="EMPLOYEMENT TYPE"
+                />
+                <Checkbox
+                  type="multiple"
+                  name="seniorityLevel"
+                  options={LEVELS}
+                  size="xs"
+                  orientationStyle="grid gap-0.5"
+                  optionClassName="border-none p-1! rounded-sm"
+                  label="EXPERIENCE LEVEL"
+                />
+                <Checkbox
+                  type="multiple"
+                  name="workArrangement"
+                  options={WORK_ARRANGEMENT}
+                  size="xs"
+                  orientationStyle="grid gap-0.5"
+                  optionClassName="border-none p-1! rounded-sm"
+                  label="ARRANGEMENT"
+                />
+                <RangeSliderField
+                  name="salaryRange"
+                  label="SALARY RANGE"
+                  // description="Set the minimum candidate matching percentage."
+                  min={20}
+                  max={100}
+                  step={5}
+                  formatValue={(value) => `${getCurrency(value, "NGN")}`}
+                />
+              </div>
+              <div className="flex justify-between">
+                <Button
+                  variant={"ghost"}
+                  className={cn("p-5")}
+                  onClick={() => resetForm()}
+                >
+                  <span>Reset</span>
+                </Button>
+                <Button className={cn("py-5 px-5")} type="submit">
+                  <SlidersHorizontal />
+                  <span>Filter</span>
+                </Button>
+              </div>
+            </Form>
+          );
+        }}
+      </Formik>
     </div>
   );
 };

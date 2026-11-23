@@ -136,41 +136,23 @@ type JobStatus =
 // };
 
 type Job = {
-  id?: string; //UUID
-  title?: string;
-  company_id?: string; // UUID REFERENCES public.company(id),
-  company_name?: string;
-  company_logo?: string;
-  company_website?: string;
-  location_address?: string;
-  location_city?: string;
-  location_state?: string;
-  location_country?: string;
-  description?: string;
-  responsibilities: string[];
-  requirements: string[]; //
-  preferred_qualifications: string[];
-  skills: string[]; //  -- required skills
-  salary_min: number;
-  salary_max: number;
-  salary_currency: string;
-  salary_period: string;
-  employment_type?: string; // -- full-time, part-time, etc.
-  experience_level?: string; //-- entry, junior, mid, senior, lead, etc.
-  work_mode?: string; //-- remote, onsite, hybrid
-  openings: number; // DEFAULT 1,
-  application_deadline: Date | string;
-  status?: string; // DEFAULT 'active', -- active, closed, draft
-  department: string;
-  benefits: string[];
-  contact_email?: string;
-  contact_name?: string;
-  contact_number?: string;
-  apply_url?: string;
-  internal_notes: string;
-  created_by: string; // UUID REFERENCES auth.users(id),
-  created_at: Date | string; // DEFAULT NOW(),
-  updated_at: Date | string; // DEFAULT NOW()
+  id: string;
+  title: string;
+  summary: string;
+  closesOn: string;
+  currency: string;
+  postedOn: string;
+  salaryMax: number;
+  salaryMin: number;
+  publicSlug: string;
+  locationCity: string;
+  departmentName: string;
+  employmentType: string;
+  organizationId: string;
+  seniorityLevel: string;
+  locationCountry: string;
+  workArrangement: string;
+  organizationName: string;
 };
 
 type AuthStep = "sign-up" | "verify";
@@ -575,6 +557,16 @@ type JobsFilters = {
   search?: string;
   page?: number;
   limit?: number;
+  offset?: number;
+  employmentType?: string;
+  experienceLevel?: string;
+  seniorityLevel?: string;
+  workArrangement?: string;
+  industry?: string;
+  salary_rage?: {
+    min: number;
+    max: number;
+  };
 };
 
 type ActivityCategory =

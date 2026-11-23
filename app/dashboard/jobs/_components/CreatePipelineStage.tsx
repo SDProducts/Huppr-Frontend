@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { CreatePipelineStagePayload } from "@/types/create_job_payload";
 import { Form, Formik } from "formik";
-import { Bot, Check, Loader2, SlidersHorizontal } from "lucide-react";
+import { Bot, Check, Loader2 } from "lucide-react";
 interface Props {
   jobId: string;
 }
@@ -47,17 +47,6 @@ export default function CreatePipelineStage({ jobId }: Props) {
   ];
   return (
     <div className="min-h-[400px] sm:px-4 space-y-10">
-      <div className="flex items-center gap-2">
-        <div className="size-12 flex justify-center items-center bg-primary/5 text-primary rounded-lg">
-          <SlidersHorizontal className="size-6" />
-        </div>
-        <div className="">
-          <h2 className="text-2xl font-extrabold">Create Pipeline Stage</h2>
-          <p className="text-sm">
-            Define the foundation for this new position.
-          </p>
-        </div>
-      </div>
       <Formik
         initialValues={initialValues}
         validateOnMount

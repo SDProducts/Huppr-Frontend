@@ -143,7 +143,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     return (
       <div className={`w-full ${className}`}>
         {label && (
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex flex-wrap justify-between items-center mb-2">
             <p
               className={cn(
                 "font-medium text-gray-700 text-sm",
@@ -155,13 +155,12 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
             {/* Select All / Deselect All button */}
             {options.length > 1 && !disabled && !defaultSelectAll && (
-              <button
-                type="button"
+              <div
                 onClick={handleSelectAll}
                 className="text-xs hover:text-shadow-sm font-medium"
               >
                 {isAllSelected ? "Deselect All" : "Select All"}
-              </button>
+              </div>
             )}
           </div>
         )}
@@ -204,11 +203,18 @@ const Checkbox: React.FC<CheckboxProps> = ({
                 ${optionClassName}
               `}
               >
-                <div className="flex items-center gap-3">
+                <div
+                  className={cn(
+                    "flex items-center",
+                    size === "xs" ? "gap-1.5" : "gap-3"
+                  )}
+                >
                   {/* Custom Checkbox Square */}
                   <div
                     className={`
-                    w-5 h-5 rounded-md border flex items-center justify-center transition-all
+                    ${
+                      size === "xs" ? "size-4" : "size-5"
+                    } rounded-sm border flex items-center justify-center transition-all
                     ${
                       isSelected
                         ? !hasError
@@ -221,7 +227,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
                   >
                     {isSelected && (
                       <svg
-                        className="w-3.5 h-3.5 text-white"
+                        className="size-3 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -239,6 +245,12 @@ const Checkbox: React.FC<CheckboxProps> = ({
                     <div
                       className={`text-gray-800 text-sm font-semibold capitalize ${
                         isDisabled ? "opacity-50" : ""
+                      } ${
+                        size === "xs"
+                          ? "text-xs"
+                          : size === "sm"
+                          ? "text-sm"
+                          : "text-sm"
                       }`}
                     >
                       {option.label}

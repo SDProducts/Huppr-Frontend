@@ -16,7 +16,7 @@ import {
 
 import Button from "@/components/ui/CustomButton";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
+import { cn, labelCase } from "@/lib/utils";
 import { AutomationKind } from "@/types/create_job_payload";
 
 // export type RoleRequirement = {
@@ -122,7 +122,7 @@ export default function StageAutomationToggle({
                           {activeStage} Stage
                         </div>
                         <div className="capitalize bg-primary/10 text-primary px-2 py-1 rounded-sm">
-                          {rule.kind}
+                          {labelCase(rule.kind)}
                         </div>
                       </div>
 

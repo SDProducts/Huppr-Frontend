@@ -1,11 +1,10 @@
-import { Job2 } from "@/app/(marketing)/jobs/_components/PageWrapper";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn, getInitials } from "@/lib/utils";
-import { Clock3, DollarSign, MapPin } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn, getCurrency, getInitials, labelCase } from "@/lib/utils";
+import { Banknote, Clock3, MapPin } from "lucide-react";
 import React from "react";
 
 interface Prop {
-  job: Job2;
+  job: Job;
   selected: boolean;
   onClick: () => void;
 }
@@ -30,12 +29,12 @@ const JobCard: React.FC<Prop> = ({ job, selected, onClick }) => {
         <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white">
           <span className="rounded-md p-1 bg-light *:rounded">
             <Avatar size="lg" className="rounded-md p-1 bg-light *:rounded">
-              <AvatarImage
+              {/* <AvatarImage
                 src="https://github.com/shadcn.png"
-                alt={job.company ?? "Company Name"}
-              />
+                alt={job.organizationName ?? "Company Name"}
+              /> */}
               <AvatarFallback className="bg-secondary-brand font-semibold text-white">
-                {getInitials(job.company ?? "Company Name")}
+                {getInitials(job.organizationName ?? "Company Name")}
               </AvatarFallback>
             </Avatar>
           </span>
@@ -49,36 +48,32 @@ const JobCard: React.FC<Prop> = ({ job, selected, onClick }) => {
               </h3>
 
               <p className="mt-1 text-[13px] font-medium text-blue-600">
-                {job.company}
+                {job.organizationName}
               </p>
             </div>
-
-            {job.hot && (
-              <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold uppercase text-blue-600">
-                Hot
-              </span>
-            )}
           </div>
 
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500">
             <span className="flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
-              {job.location}
+              <MapPin className="size-3" />
+              {job.locationCity}
+              {job.locationCountry && `, ${job.locationCountry}`}
             </span>
 
             <span className="flex items-center gap-1">
-              <Clock3 className="h-3 w-3" />
-              {job.employment}
+              <Clock3 className="size-3" />
+              {labelCase(job.employmentType)}
             </span>
 
-            <span className="flex items-center gap-1 font-semibold text-slate-800">
-              <DollarSign className="h-3 w-3" />
-              {job.salary}
+            <span className="flex items-center gap-1">
+              <Banknote className="size-3" />
+              {getCurrency(job.salaryMin, job.currency)} -{" "}
+              {getCurrency(job.salaryMax, job.currency)}
             </span>
           </div>
 
-          <p className="mt-3 line-clamp-2 text-[12px] leading-5 text-slate-500">
-            {job.description}
+          <p className="mt-1 line-clamp-2 text-[12px] leading-5 text-slate-500">
+            {job.summary}
           </p>
         </div>
       </div>
