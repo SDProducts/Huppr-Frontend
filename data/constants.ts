@@ -17,38 +17,6 @@ import {
   Users2,
 } from "lucide-react";
 export const token = Cookies.get("access_token");
-export const jobs: Job[] = [
-  {
-    id: "job-00001-000000",
-    title: "Senior Product Designer",
-    company_name: "Lumina Creative",
-    location_state: "New York, NY",
-    work_mode: "remote",
-
-    department: "DESIGN",
-    description: "",
-    employment_type: "Full time",
-
-    salary_min: 120000,
-    salary_max: 160000,
-    salary_currency: "NGN",
-    salary_period: "month",
-
-    requirements: [],
-    responsibilities: [],
-    preferred_qualifications: [],
-    skills: [],
-    benefits: [],
-
-    openings: 1,
-    application_deadline: "25-08-2026",
-
-    internal_notes: "",
-    created_by: "",
-    created_at: "25-07-2026",
-    updated_at: "29-08-2026",
-  },
-];
 
 class Navigation {
   workspace = [
