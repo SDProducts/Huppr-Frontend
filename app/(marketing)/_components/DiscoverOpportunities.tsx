@@ -8,7 +8,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { useGetJobs } from "@/hooks/job seeker/useJobs";
-import { getInitials } from "@/lib/utils";
+import { getInitials, labelCase } from "@/lib/utils";
 import { formatNumber } from "@/utils/currency.utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -67,7 +67,7 @@ const JobCard = (job: Job) => (
         variant="secondary"
         className="uppercase p-3 rounded-md font-semibold"
       >
-        {job.workArrangement}
+        {labelCase(job.workArrangement)}
       </Badge>
     </CardHeader>
     <CardContent>
@@ -80,7 +80,7 @@ const JobCard = (job: Job) => (
 
       <div className="flex flex-wrap gap-y-1 gap-x-2 mt-5 *:font-semibold">
         <Badge className="p-3 rounded-md uppercase bg-primary-badge/10 text-primary">
-          {job.employmentType}
+          {labelCase(job.employmentType)}
         </Badge>
         <Badge variant="secondary" className="p-3 rounded-md uppercase">
           {job.departmentName}
