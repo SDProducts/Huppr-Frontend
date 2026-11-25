@@ -137,6 +137,7 @@ export interface JobDetailResponse {
   qualifications: RoleRequirement[];
   employmentType: EmploymentType;
   organizationId: string;
+  organizationName: string;
   positionSummary: PositionSummary;
   primaryTooling: string;
   seniorityLevel: string;

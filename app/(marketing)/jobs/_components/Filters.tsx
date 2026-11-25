@@ -14,52 +14,26 @@ import { Form, Formik } from "formik";
 import { SlidersHorizontal } from "lucide-react";
 import React from "react";
 
-export const TopFilter = () => {
+export const SortingSection: React.FC<Prop> = ({ filter, onSetFilter }) => {
   return (
-    <div className="min-w-0 flex-1">
-      {/* Top bar */}
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-[13px] font-semibold text-slate-400">
-          <span className="text-slate-700">128</span> open positions
-        </h2>
+    <div className="flex items-center gap-2 text-xs">
+      <span className="text-slate-500">Sort by:</span>
 
-        <div className="flex items-center gap-2 text-[12px]">
-          <span className="text-slate-500">Sort by:</span>
+      <Select defaultValue="newest">
+        <SelectTrigger className="h-auto w-auto gap-1 border-0 bg-transparent p-0 text-xs font-semibold text-slate-700 shadow-none focus:ring-0">
+          <SelectValue />
+        </SelectTrigger>
 
-          <Select defaultValue="newest">
-            <SelectTrigger className="h-auto w-auto gap-1 border-0 bg-transparent p-0 text-xs font-semibold text-slate-700 shadow-none focus:ring-0">
-              <SelectValue />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectItem value="newest">Newest</SelectItem>
-              <SelectItem value="salary-high">Salary: High to Low</SelectItem>
-              <SelectItem value="salary-low">Salary: Low to High</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+        <SelectContent>
+          <SelectItem value="newest">Newest</SelectItem>
+          <SelectItem value="salary-high">Salary: High to Low</SelectItem>
+          <SelectItem value="salary-low">Salary: Low to High</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 };
 
-function FilterSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="mb-9">
-      <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.03em] text-slate-500">
-        {title}
-      </h3>
-
-      <div className="space-y-3">{children}</div>
-    </div>
-  );
-}
 interface Prop {
   filter: JobsFilters;
   onSetFilter: (filter: JobsFilters) => void;

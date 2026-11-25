@@ -3,72 +3,31 @@ import FileUpload from "@/components/form/FileUpload";
 import Input from "@/components/form/Input";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/context/modal.state";
-import { useAddNewCandidate, useGetJobStages } from "@/hooks/employer/useJobs";
+import { useApplyForJob } from "@/hooks/job seeker/useJobs";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
-import { ArrowRight, Loader2, User, Waypoints } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
-import {
-  FaBriefcase,
-  FaCog,
-  FaGlobe,
-  FaLinkedin,
-  FaUsers,
-} from "react-icons/fa";
-import { SiIndeed } from "react-icons/si";
 interface Props {
   propJobId?: string;
-  stageId?: string;
 }
-export default function ApplyForJob({ propJobId, stageId }: Props) {
+export default function ApplyForJob({ propJobId }: Props) {
   const { jobId } = useParams();
   const { close } = useModal();
-  const { mutate: addCandidate, isPending } = useAddNewCandidate(
+  const { mutate: apply, isPending } = useApplyForJob(
     propJobId || String(jobId)
   );
-  const { data: pipelineData, isLoading } = useGetJobStages(String(jobId));
-  const sourceOptions = [
-    {
-      label: "Career Page",
-      value: "careers_page",
-      icon: <FaBriefcase />,
-    },
-    { label: "Linkedin", value: "linkedin", icon: <FaLinkedin /> },
-    { label: "Indeed", value: "indeed", icon: <SiIndeed /> },
-    { label: "Others", value: "others", icon: <FaGlobe /> },
-    {
-      label: "Internal Mobility (referrals)",
-      value: "referral",
-      icon: <FaUsers />,
-    },
-    { label: "Manual", value: "manual", icon: <FaCog /> },
-  ];
-  const stageOptions = pipelineData?.items.map((item) => ({
-    label: item.name,
-    subText: item.description || "...",
-    icon: (
-      <div className="size-7 flex items-center justify-center rounded-sm bg-primary/10 text-primary">
-        <Waypoints className="size-4" />
-      </div>
-    ),
-    value: item.id,
-  }));
-  const formData: AddNewCandidatePayload = {
+  const formData: ApplyForJobPayload = {
     fullName: "",
     email: "",
     phone: "",
-    source: undefined,
     currentRole: "",
     currentCompany: "",
     resumeUrl: "",
-    matchScore: undefined,
-    status: "new",
-    stageId: stageId || "",
-    jobId: String(jobId),
   };
 
-  function handleAddNewCandidate(params: typeof formData) {
-    addCandidate(params, {
+  function handleApply(params: typeof formData) {
+    apply(params, {
       onSuccess() {
         close();
       },
@@ -76,25 +35,12 @@ export default function ApplyForJob({ propJobId, stageId }: Props) {
   }
   return (
     <div>
-      <Formik initialValues={formData} onSubmit={handleAddNewCandidate}>
+      <Formik initialValues={formData} onSubmit={handleApply}>
         {() => {
           return (
-            <Form className="p-2 sm:p-5 rounded-2xl space-y-10 shadow-xl border border-slate-200">
+            <Form className="space-y-10 p-4">
               <div className="space-y-4">
-                <div className="bg-white p-6 rounded-xl space-y-6 ">
-                  <div className="flex gap-2">
-                    <div className="size-10 bg-primary/5 flex items-center justify-center rounded-md">
-                      <User className="size-6 text-primary" strokeWidth={3} />
-                    </div>
-                    <div className="">
-                      <div className="text-xl font-bold">
-                        Apply for this Job
-                      </div>
-                      <p className="text-sm">
-                        Provide candidates personal informations.
-                      </p>
-                    </div>
-                  </div>
+                <div className="space-y-6 ">
                   <div className="space-y-2">
                     <Input
                       name="fullName"

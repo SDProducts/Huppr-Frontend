@@ -1,5 +1,8 @@
+"use client";
+import { JobDetailsSkeleton } from "@/components/skeletons";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useGetJobById } from "@/hooks/job seeker/useJobs";
 
 import { cn, getInitials, labelCase } from "@/lib/utils";
 import {
@@ -7,6 +10,7 @@ import {
   Bookmark,
   BriefcaseBusiness,
   Clock3,
+  Gift,
   MapPin,
   Share2,
   Sparkles,
@@ -14,7 +18,7 @@ import {
 import Link from "next/link";
 import React from "react";
 interface Prop {
-  job: Job;
+  jobId: string;
 }
 function DetailSection({
   title,
@@ -32,53 +36,58 @@ function DetailSection({
   );
 }
 
-const JobDetails: React.FC<Prop> = ({ job }) => {
+const JobDetails: React.FC<Prop> = ({ jobId }) => {
+  const { data: job, isLoading } = useGetJobById(jobId);
   const [bookmarked, setBookmarked] = React.useState(false);
-
+  if (!job || isLoading) {
+    return <JobDetailsSkeleton />;
+  }
   return (
     <div className="flex h-full flex-col bg-white">
       {/* Header */}
       <div className="border-b border-slate-100 px-7 pb-5 pt-6">
-        <div className="mb-5 flex justify-end gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-9 w-9 rounded-lg border-slate-300"
-          >
-            <Share2 className="h-4 w-4" />
-          </Button>
-
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setBookmarked(!bookmarked)}
-            className={cn(
-              "h-9 w-9 rounded-lg border-slate-300",
-              bookmarked && "bg-blue-50 text-blue-600"
-            )}
-          >
-            <Bookmark
-              className="h-4 w-4"
-              fill={bookmarked ? "currentColor" : "none"}
-            />
-          </Button>
-        </div>
-
-        <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-slate-200">
-          <span className="rounded-md p-1 bg-light *:rounded">
-            <Avatar size="lg" className="rounded-md p-1 bg-light *:rounded">
-              {/* <AvatarImage
+        <div className="flex justify-between">
+          <div className="flex size-14 items-center justify-center overflow-hidden rounded-xl border border-slate-200">
+            <span className="rounded-md p-1 bg-light *:rounded">
+              <Avatar size="lg" className="rounded-md p-1 bg-light *:rounded">
+                {/* <AvatarImage
                 src="https://github.com/shadcn.png"
                 alt={job.organizationName ?? "Company Name"}
               /> */}
-              <AvatarFallback className="bg-secondary-brand font-semibold text-white">
-                {getInitials(job.organizationName ?? "Company Name")}
-              </AvatarFallback>
-            </Avatar>
-          </span>
+                <AvatarFallback className="bg-secondary-brand font-semibold text-white">
+                  {getInitials(job.organizationName ?? "Company Name")}
+                </AvatarFallback>
+              </Avatar>
+            </span>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-9 w-9 rounded-lg border-slate-300"
+            >
+              <Share2 className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setBookmarked(!bookmarked)}
+              className={cn(
+                "h-9 w-9 rounded-lg border-slate-300",
+                bookmarked && "bg-blue-50 text-blue-600"
+              )}
+            >
+              <Bookmark
+                className="h-4 w-4"
+                fill={bookmarked ? "currentColor" : "none"}
+              />
+            </Button>
+          </div>
         </div>
 
-        <h1 className="mt-5 text-[22px] font-bold tracking-tight text-slate-900">
+        <h1 className="mt-3 text-[22px] font-bold tracking-tight text-slate-900">
           {job.title}
         </h1>
 
@@ -111,44 +120,49 @@ const JobDetails: React.FC<Prop> = ({ job }) => {
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-7 py-6">
         <DetailSection title="About the Role">
-          <p>{job.summary}</p>
+          <div
+            className="prose max-w-none text-gray-800"
+            dangerouslySetInnerHTML={{ __html: job.summary }}
+          />
         </DetailSection>
 
-        {/* {job.responsibilities.length > 0 && (
+        {job.responsibilities.length > 0 && (
           <DetailSection title="Responsibilities">
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               {job.responsibilities.map((item, index) => (
                 <li key={index} className="flex gap-3">
-                  <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
-                  <span>{item}</span>
+                  <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-blue-600" />
+                  <span>{item.body}</span>
                 </li>
               ))}
             </ul>
           </DetailSection>
-        )} */}
+        )}
 
-        {/* {job.benefits.length > 0 && (
+        {job.benefits.length > 0 && (
           <DetailSection title="Benefits">
             <div className="grid grid-cols-2 gap-3">
               {job.benefits.map((benefit) => (
                 <div
-                  key={benefit.title}
+                  key={benefit.id}
                   className="rounded-lg border border-slate-200 bg-slate-50 p-3"
                 >
-                  <div className="mb-2 text-blue-600">{benefit.icon}</div>
+                  <div className="mb-2 text-blue-600">
+                    <Gift />
+                  </div>
 
                   <p className="text-[11px] font-bold text-slate-800">
-                    {benefit.title}
+                    {benefit.label}
                   </p>
 
                   <p className="mt-0.5 text-[10px] text-slate-500">
-                    {benefit.description}
+                    {benefit.label}
                   </p>
                 </div>
               ))}
             </div>
           </DetailSection>
-        )} */}
+        )}
       </div>
 
       {/* Apply */}

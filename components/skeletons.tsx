@@ -635,3 +635,141 @@ export function MobileTableRow() {
     </div>
   );
 }
+
+export function JobDetailsSkeleton() {
+  return (
+    <div className="flex h-full flex-col bg-white">
+      {/* Header */}
+      <div className="border-b border-slate-100 px-7 pb-5 pt-6">
+        <div className="flex justify-between">
+          {/* Avatar Box */}
+          <Skeleton className="h-14 w-14 rounded-xl" />
+
+          {/* Mobile Apply Button */}
+          <Skeleton className="h-10 w-28 rounded-md lg:hidden" />
+        </div>
+
+        {/* Job Title */}
+        <Skeleton className="mt-5 h-7 w-3/4 rounded-md" />
+
+        {/* Organization Name */}
+        <Skeleton className="mt-2 h-4 w-40 rounded-md" />
+
+        {/* Metadata Pills (Location, Type, Arrangement, Seniority) */}
+        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+          <Skeleton className="h-3.5 w-24 rounded" />
+          <Skeleton className="h-3.5 w-20 rounded" />
+          <Skeleton className="h-3.5 w-24 rounded" />
+          <Skeleton className="h-3.5 w-24 rounded" />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 space-y-6 px-7 py-6">
+        {/* About the Role */}
+        <div className="space-y-2.5">
+          <Skeleton className="h-6 w-36 rounded-md" />
+          <div className="space-y-2 pt-1">
+            <Skeleton className="h-3.5 w-full rounded" />
+            <Skeleton className="h-3.5 w-full rounded" />
+            <Skeleton className="h-3.5 w-11/12 rounded" />
+            <Skeleton className="h-3.5 w-4/5 rounded" />
+          </div>
+        </div>
+
+        {/* Responsibilities */}
+        <div className="space-y-2.5">
+          <Skeleton className="h-6 w-40 rounded-md" />
+          <div className="space-y-2.5 pt-1">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Skeleton className="size-2 shrink-0 rounded-full" />
+                <Skeleton className="h-3.5 w-11/12 rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Skills */}
+        <div className="space-y-2.5">
+          <Skeleton className="h-6 w-24 rounded-md" />
+          <div className="space-y-2.5 pt-1">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <Skeleton className="size-2 shrink-0 rounded-full" />
+                <Skeleton className="h-3.5 w-48 rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Benefits */}
+        <div className="space-y-2.5">
+          <Skeleton className="h-6 w-28 rounded-md" />
+          <div className="grid grid-cols-2 gap-3 pt-1">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="rounded-lg border border-slate-200 bg-slate-50 p-3"
+              >
+                <Skeleton className="mb-2 h-6 w-6 rounded-md" />
+                <Skeleton className="h-3 w-24 rounded" />
+                <Skeleton className="mt-1.5 h-2.5 w-32 rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Apply CTA (Mobile only, matching your layout) */}
+      <div className="border-t border-slate-100 px-7 py-5 lg:hidden">
+        <Skeleton className="h-11 w-full rounded-lg" />
+        <Skeleton className="mx-auto mt-3 h-2.5 w-44 rounded" />
+      </div>
+    </div>
+  );
+}
+
+interface JobListSkeletonProps {
+  count?: number;
+}
+
+export function JobListSkeleton({ count = 5 }: JobListSkeletonProps) {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: count }).map((_, index) => (
+        <div
+          key={index}
+          className="w-full rounded-[11px] border border-slate-200 bg-white p-4"
+        >
+          <div className="flex gap-4">
+            {/* Logo */}
+            <Skeleton className="h-10 w-10 shrink-0 rounded-lg" />
+
+            {/* Body */}
+            <div className="min-w-0 flex-1">
+              {/* Job Title */}
+              <Skeleton className="h-4 w-3/4 rounded" />
+
+              {/* Organization Name */}
+              <Skeleton className="mt-1.5 h-3.5 w-36 rounded" />
+
+              {/* Metadata Row (Location, Employment Type, Salary) */}
+              <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <Skeleton className="h-3 w-24 rounded" />
+                <Skeleton className="h-3 w-20 rounded" />
+                <Skeleton className="h-3 w-28 rounded" />
+              </div>
+
+              {/* Summary Preview (2 lines) */}
+              <div className="mt-2 space-y-1.5">
+                <Skeleton className="h-3 w-full rounded" />
+                <Skeleton className="h-3 w-4/5 rounded" />
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

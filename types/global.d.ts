@@ -903,6 +903,14 @@ type candidatesFilters = {
   limit?: number;
 };
 
+interface ApplyForJobPayload {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  currentRole?: string;
+  currentCompany?: string;
+  resumeUrl?: string;
+}
 interface AddNewCandidatePayload {
   fullName?: string;
   email?: string;
