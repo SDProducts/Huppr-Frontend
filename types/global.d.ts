@@ -972,3 +972,11 @@ interface MoveCandidatePayload {
   note?: string;
   rejectionReason?: string;
 }
+
+interface AutomationCatalogWithConfig {
+  kind: string;
+  label: string;
+  isEnabled: boolean;
+  stageCategory: string;
+  config: Record<string, unknown>;
+}

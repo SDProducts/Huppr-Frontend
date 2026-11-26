@@ -256,8 +256,17 @@ export const useCreatePipelineStage = (jobId: string) => {
 };
 
 export const useGetAutomations = () => {
+  return useQuery<PaginatedResponse<AutomationCatalogWithConfig>>({
+    queryKey: ["automations-all"],
+    queryFn: async () => {
+      const response = await api.get(`/employer/automations`);
+      return response.data;
+    },
+  });
+};
+export const useGetAutomationCatalog = () => {
   return useQuery<PaginatedResponse<AutomationCatalogItem>>({
-    queryKey: ["automations"],
+    queryKey: ["automations-catalog"],
     queryFn: async () => {
       const response = await api.get(`/employer/automations/catalog`);
       return response.data;

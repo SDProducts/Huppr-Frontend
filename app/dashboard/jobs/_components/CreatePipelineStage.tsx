@@ -1,4 +1,4 @@
-import StageAutomationsField from "@/app/dashboard/jobs/_components/StageAutomationField";
+import AutomationToggle from "@/app/dashboard/jobs/_components/AutomationToggle";
 import ColorInput from "@/components/form/ColorInput";
 import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
@@ -10,7 +10,10 @@ import {
   useGetAutomations,
 } from "@/hooks/employer/useJobs";
 import { cn } from "@/lib/utils";
-import { CreatePipelineStagePayload } from "@/types/create_job_payload";
+import {
+  CreatePipelineStagePayload,
+  StageAutomation,
+} from "@/types/create_job_payload";
 import { Form, Formik } from "formik";
 import { Bot, Check, Loader2 } from "lucide-react";
 interface Props {
@@ -30,10 +33,21 @@ export default function CreatePipelineStage({ jobId }: Props) {
     category: "",
     isAssessment: false,
     // hasEnabledAutomation: false,
-    automations: [],
+    automations: automations || [],
   };
   function handleSubmit(params: typeof initialValues) {
-    createPipelineStage(params, {
+    const { automations, ...rest } = params;
+    const automationsPayload: StageAutomation[] = automations.map((item) => ({
+      kind: item.kind,
+      label: item.label,
+      isEnabled: item.isEnabled,
+      config: item.config,
+    }));
+    const payload = {
+      ...rest,
+      automations: automationsPayload,
+    };
+    createPipelineStage(payload, {
       onSuccess() {
         modal.close();
       },
@@ -113,9 +127,14 @@ export default function CreatePipelineStage({ jobId }: Props) {
                       </p>
                     </div>
                   </div>
-                  <StageAutomationsField
+                  {/* <StageAutomationsField
                     catalog={automations || []}
                     name="automations"
+                  /> */}
+                  <AutomationToggle
+                    name="automations"
+                    // stages={["screening"]}
+                    // activeStage="screening"
                   />
                 </div>
               </div>
