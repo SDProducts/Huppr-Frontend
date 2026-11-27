@@ -1,12 +1,17 @@
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import "./styles.css";
 
-export default function Home({children}) {
-    return (
-        <main className="min-h-screen overflow-x-hidden">
-            <Navbar />
-            {children}
-            <Footer />
-        </main>
-    );
+export default function MarketingLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <div className="page-layout">
+      <Header />
+      <main className="layout-body">{children}</main>
+      <Footer />
+    </div>
+  );
 }
