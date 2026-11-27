@@ -208,6 +208,7 @@ class SettingsNavigation {
       description:
         "Update your company information, logo, industry, contact details and office locations.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: Users,
@@ -216,6 +217,7 @@ class SettingsNavigation {
       description:
         "Manage departments, job titles, employment types, employee ID format and organisational structure.",
       className: "bg-green-500/10 text-green-500",
+      component: null,
     },
     {
       icon: ShieldUser,
@@ -224,6 +226,7 @@ class SettingsNavigation {
       description:
         "Create roles, manage permissions and control access to modules and data.",
       className: "bg-indigo-500/10 text-indigo-500",
+      component: null,
     },
     {
       icon: CalendarDays,
@@ -241,6 +244,7 @@ class SettingsNavigation {
       description:
         "Manage leave types, entitlement rules, accrual settings, eligibility and approval workflows.",
       className: "bg-red-500/10 text-red-500",
+      component: null,
     },
     {
       icon: ClipboardList,
@@ -249,6 +253,7 @@ class SettingsNavigation {
       description:
         "Set up approval chains for leave, expenses, recruitment, onboarding and other HR requests.",
       className: "bg-blue-500/10 text-blue-500",
+      component: null,
     },
     {
       icon: Bell,
@@ -257,6 +262,7 @@ class SettingsNavigation {
       description:
         "Configure email and in-app notifications, reminder schedules and announcement settings.",
       className: "bg-emerald-500/10 text-emerald-500",
+      component: null,
     },
     {
       icon: Plug,
@@ -265,6 +271,7 @@ class SettingsNavigation {
       description:
         "Connect Google Workspace, Google Calendar & Meet, email providers, payroll, job boards and other tools.",
       className: "bg-purple-500/10 text-purple-500",
+      component: null,
     },
     {
       icon: LockKeyhole,
@@ -273,6 +280,7 @@ class SettingsNavigation {
       description:
         "Manage authentication, multi-factor authentication, login controls, audit logs and data retention.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: FileText,
@@ -281,6 +289,7 @@ class SettingsNavigation {
       description:
         "Create and manage HR document templates, employment letters, contracts and signature settings.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: SlidersVertical,
@@ -289,6 +298,7 @@ class SettingsNavigation {
       description:
         "Set timezone, date and time formats, language, currency, fiscal year and other company-wide preferences.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: CreditCard,
@@ -297,6 +307,7 @@ class SettingsNavigation {
       description:
         "View your plan, manage billing, invoices, payment methods and usage limits.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
   ];
 
@@ -317,6 +328,7 @@ class SettingsNavigation {
       description:
         "Set up workflow templates, task lists, document requirements and clearance rules.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: LineChart,
@@ -325,6 +337,7 @@ class SettingsNavigation {
       description:
         "Configure review cycles, rating scales, competencies and appraisal templates.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: BookUser,
@@ -333,6 +346,7 @@ class SettingsNavigation {
       description:
         "Manage course catalogue, learning requirements, certifications and completion rules.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: BanknoteArrowDown,
@@ -341,6 +355,7 @@ class SettingsNavigation {
       description:
         "Configure expense categories, reimbursement rules and payroll settings.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
     {
       icon: Boxes,
@@ -349,6 +364,7 @@ class SettingsNavigation {
       description:
         "Manage asset categories, assignment rules and return procedures.",
       className: "bg-primary/10 text-primary",
+      component: null,
     },
   ];
 }
