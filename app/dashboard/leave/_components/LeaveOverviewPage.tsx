@@ -211,7 +211,7 @@ export default function LeaveOverviewPage() {
                   className={cn("hover:bg-primary-100! hover:text-primary!")}
                 >
                   <Link
-                    href={`/dashboard/leave/policies}`}
+                    href={`/dashboard/leave/report`}
                     className="flex items-center gap-2 w-full"
                   >
                     <div className="size-6 bg-primary-100 flex justify-center items-center rounded-sm">
@@ -224,7 +224,7 @@ export default function LeaveOverviewPage() {
                   className={cn("hover:bg-primary-100! hover:text-primary!")}
                 >
                   <Link
-                    href={`/dashboard/leave/policies}`}
+                    href={`/dashboard/leave/set-leave-organisation`}
                     className="flex items-center gap-2 w-full"
                   >
                     <div className="size-6 bg-primary-100 flex justify-center items-center rounded-sm">

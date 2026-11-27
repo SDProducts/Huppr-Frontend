@@ -980,3 +980,27 @@ interface AutomationCatalogWithConfig {
   stageCategory: string;
   config: Record<string, unknown>;
 }
+interface AddNewEmployeePayload {
+  fullName?: string;
+  email?: string;
+  phoneNumber?: string;
+
+  userId?: string;
+  departmentId?: string;
+  roleId?: string;
+  startsOn?: string;
+  endsOn?: string;
+  birthDate?: string;
+  probationEndsOn?: string;
+  salaryReviewOn?: string;
+  annualSalary: number;
+  currency: "USD" | "NGN";
+}
+interface SettingItem {
+  icon: LucideIcon;
+  name: string;
+  path: string;
+  description: string;
+  className: ClassNameValue;
+  component: JSX;
+}

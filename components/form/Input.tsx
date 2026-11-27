@@ -20,6 +20,7 @@ interface InputProps {
     | "text"
     | "email"
     | "tel"
+    | "time"
     | "password"
     | "number"
     | "checkbox"

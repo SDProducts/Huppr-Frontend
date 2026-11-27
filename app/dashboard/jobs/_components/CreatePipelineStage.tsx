@@ -24,7 +24,7 @@ export default function CreatePipelineStage({ jobId }: Props) {
   const { mutate: createPipelineStage, isPending } =
     useCreatePipelineStage(jobId);
   const { data: automationData, isLoading: isgettingAutomations } =
-    useGetAutomations();
+    useGetAutomations({ jobId: jobId });
   const automations = automationData?.items || [];
   const initialValues: CreatePipelineStagePayload = {
     name: "",
@@ -127,15 +127,7 @@ export default function CreatePipelineStage({ jobId }: Props) {
                       </p>
                     </div>
                   </div>
-                  {/* <StageAutomationsField
-                    catalog={automations || []}
-                    name="automations"
-                  /> */}
-                  <AutomationToggle
-                    name="automations"
-                    // stages={["screening"]}
-                    // activeStage="screening"
-                  />
+                  <AutomationToggle name="automations" />
                 </div>
               </div>
               <div className="flex justify-between items-center">

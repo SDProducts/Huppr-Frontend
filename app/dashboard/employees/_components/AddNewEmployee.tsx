@@ -5,38 +5,71 @@ import Input from "@/components/form/Input";
 import SearchableSelect from "@/components/form/SearchableSelect";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useModal } from "@/context/modal.state";
+import { useGetDepartments, useGetRoles } from "@/hooks/employer/useDepartment";
+import { useAddNewEmployee } from "@/hooks/employer/useEmployer";
 import { Form, Formik } from "formik";
-import { Info, Mail, Phone, Send, Tag, User2 } from "lucide-react";
-import toast from "react-hot-toast";
+import {
+  BriefcaseBusiness,
+  Building2,
+  Info,
+  Loader2,
+  Mail,
+  Phone,
+  Send,
+  Tag,
+  User2,
+} from "lucide-react";
 
 export default function AddNewEmployee() {
-  const initialValues = {
-    fullname: "",
-    email: "",
-    phoneNumber: "",
-    dob: "",
+  const modal = useModal();
+  const { mutate, isPending } = useAddNewEmployee();
+  const { data: deptData } = useGetDepartments();
+  const { data: roleData } = useGetRoles();
+  const departments = deptData?.items || [];
+  const roles = roleData?.items || [];
+  const deptOpt = departments.map((d) => ({
+    label: d.name,
+    value: d.id,
+    icon: (
+      <div className="size-6 bg-slate-100 flex items-center justify-center rounded-sm">
+        <Building2 className="size-4 text-slate-500" />
+      </div>
+    ),
+  }));
+  const roleOPT = roles.map((d) => ({
+    label: d.name,
+    value: d.id,
+    icon: (
+      <div className="size-6 bg-slate-100 flex items-center justify-center rounded-sm">
+        <BriefcaseBusiness className="size-4 text-slate-500" />
+      </div>
+    ),
+  }));
+  const initialValues: AddNewEmployeePayload = {
+    fullName: undefined,
+    email: undefined,
+    phoneNumber: undefined,
+    userId: undefined,
+    departmentId: undefined,
+    roleId: undefined,
+    startsOn: undefined,
+    endsOn: undefined,
+    birthDate: undefined,
+    probationEndsOn: undefined,
+    salaryReviewOn: undefined,
+    annualSalary: 0,
+    currency: "NGN",
   };
   function saveEmployee(params: typeof initialValues) {
-    toast.loading("Saving employee...");
-    setTimeout(() => {
-      toast.dismiss();
-    }, 3000);
+    mutate(params, {
+      onSuccess() {
+        modal.close();
+      },
+    });
   }
   return (
     <div className="p-4 space-y-8">
-      <div className="space-y-2">
-        <div className="flex items-center gap-1.5 bg-primary/5 border border-primary/15 py-1 px-3 rounded-full w-fit">
-          <div className="size-2 bg-primary rounded-full" />
-          <div className="text-sm text-primary font-bold">New Employee</div>
-        </div>
-        <div className="space-y-2">
-          <h2 className="text-xl font-bold">Create New Employee</h2>
-          <p className="text-sm">
-            Configure basic identity and role parameters to generate the
-            official employee record and trigger tailored onboarding workflows.
-          </p>
-        </div>
-      </div>
       <Formik initialValues={initialValues} onSubmit={saveEmployee}>
         {() => {
           return (
@@ -59,7 +92,7 @@ export default function AddNewEmployee() {
                   <Separator />
                   <div className="grid gap-y-4 sm:grid-cols-2 gap-2">
                     <Input
-                      name="fullname"
+                      name="fullName"
                       label="Fullname"
                       placeholder="e.g. Aisha Bello"
                       icon={<User2 className="size-3.5" />}
@@ -80,7 +113,7 @@ export default function AddNewEmployee() {
                       LabelClassName="text-sm"
                     />
                     <DateInput
-                      name="dob"
+                      name="birthDate"
                       label="Date of Birth"
                       labelClassName="text-sm"
                     />
@@ -103,14 +136,14 @@ export default function AddNewEmployee() {
                   <Separator />
                   <div className="grid gap-y-4 sm:grid-cols-2 gap-2">
                     <SearchableSelect
-                      name="department"
-                      options={[]}
+                      name="departmentId"
+                      options={deptOpt}
                       label="Department"
                       labelClassName="text-sm"
                     />
                     <SearchableSelect
-                      name="position"
-                      options={[]}
+                      name="roleId"
+                      options={roleOPT}
                       label="position"
                       labelClassName="text-sm"
                     />
@@ -121,7 +154,7 @@ export default function AddNewEmployee() {
                       labelClassName="text-sm"
                     />
                     <DateInput
-                      name="startDate"
+                      name="startsOn"
                       label="Start Date"
                       labelClassName="text-sm"
                     />
@@ -200,7 +233,7 @@ export default function AddNewEmployee() {
                 </div>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-5">
-                <Button variant={"outline"}>
+                <Button variant={"outline"} onClick={modal.close}>
                   {" "}
                   <span>Cancel</span>
                 </Button>
@@ -209,9 +242,15 @@ export default function AddNewEmployee() {
                     <span>Save as Draft</span>
                   </Button>
 
-                  <Button type="submit">
-                    <Send />
-                    <span>Initiate Onboarding</span>
+                  <Button type="submit" disabled={isPending}>
+                    {isPending ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <Send />
+                    )}
+                    <span>
+                      {isPending ? "Initiating" : "Initiate"} Onboarding
+                    </span>
                   </Button>
                 </div>
               </div>

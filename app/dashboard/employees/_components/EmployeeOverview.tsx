@@ -39,6 +39,23 @@ export default function EmployeeOverview() {
       content: <AddNewEmployee />,
       bgColor: "bg-slate-50",
       size: "sm:w-2xl",
+      headerColor: "border-b border-gray-200",
+      header: (
+        <div className="space-y-2">
+          <div className="flex items-center gap-1.5 bg-primary/5 border border-primary/15 py-1 px-3 rounded-full w-fit">
+            <div className="size-2 bg-primary rounded-full" />
+            <div className="text-sm text-primary font-bold">New Employee</div>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold">Create New Employee</h2>
+            <p className="text-sm">
+              Configure basic identity and role parameters to generate the
+              official employee record and trigger tailored onboarding
+              workflows.
+            </p>
+          </div>
+        </div>
+      ),
     });
   }
   return (

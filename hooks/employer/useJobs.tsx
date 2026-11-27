@@ -254,12 +254,21 @@ export const useCreatePipelineStage = (jobId: string) => {
     },
   });
 };
-
-export const useGetAutomations = () => {
+interface AutomationFilterParams {
+  jobId?: string;
+}
+export const useGetAutomations = (params: AutomationFilterParams = {}) => {
+  const { jobId } = params;
   return useQuery<PaginatedResponse<AutomationCatalogWithConfig>>({
-    queryKey: ["automations-all"],
+    queryKey: ["automations", params],
     queryFn: async () => {
-      const response = await api.get(`/employer/automations`);
+      const params = new URLSearchParams();
+      if (jobId) {
+        params.append("jobId", jobId);
+      }
+      const response = await api.get(
+        `/employer/automations?${params.toString()}`
+      );
       return response.data;
     },
   });
